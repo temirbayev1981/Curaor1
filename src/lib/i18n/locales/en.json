@@ -9,10 +9,12 @@
     "gallery": "Gallery"
   },
   "gallery": {
-    "subtitle": "Moments from events across the Carolinas"
+    "subtitle": "Moments from events across the Carolinas",
+    "empty": "Gallery coming soon — check back after our next event!"
   },
   "hero": {
     "title": "The Emerald Pour",
+    "badge": "Premium Mobile Irish Pub",
     "subtitle": "North Carolina's Premier Mobile Irish Pub Experience",
     "description": "Bring the authentic Irish pub atmosphere to your event. Premium mobile bar service for weddings, corporate events, and celebrations across the Carolinas.",
     "cta": "Book Your Event",
@@ -62,6 +64,9 @@
   },
   "booking": {
     "title": "Book Your Event",
+    "name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
     "eventType": "Event Type",
     "guestCount": "Number of Guests",
     "date": "Event Date",
@@ -72,7 +77,36 @@
     "deposit": "Deposit Option",
     "submit": "Request Booking",
     "success": "Booking request submitted! We'll confirm within 24 hours.",
-    "error": "Unable to submit booking. Please try again."
+    "error": "Unable to submit booking. Please try again.",
+    "contactSection": "Contact Information",
+    "eventSection": "Event Details",
+    "venueSection": "Venue & Payment"
+  },
+  "status": {
+    "pending": "Pending",
+    "deposit_paid": "Deposit Paid",
+    "confirmed": "Confirmed",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "phone": "Phone (optional)",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "forgotPassword": "Forgot password?",
+    "enterEmailFirst": "Enter your email first",
+    "resetSent": "Password reset link sent to {{email}}",
+    "noAccount": "No account?",
+    "createOne": "Create one",
+    "hasAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "signupSubtitle": "Access your bookings and contracts",
+    "registrationFailed": "Registration failed"
   },
   "locations": {
     "title": "Serving the Carolinas",
@@ -156,12 +190,70 @@
     "viewAll": "View all",
     "panelTitle": "Admin Panel",
     "welcomeBack": "Welcome back",
-    "lastUpdated": "Last updated"
+    "lastUpdated": "Last updated",
+    "dashboardDesc": "Business overview and recent activity",
+    "bookingsDesc": "Manage and update booking statuses",
+    "settingsDesc": "Configure pricing, notifications, and integrations",
+    "mediaDesc": "Upload and organize event photos",
+    "inventoryDesc": "Track stock and unit costs",
+    "auditDesc": "Review system activity and changes",
+    "aiDesc": "Generate SEO content with AI",
+    "bookingsTable": {
+      "event": "Event",
+      "date": "Date",
+      "city": "City",
+      "guests": "Guests",
+      "total": "Total",
+      "status": "Status",
+      "actions": "Actions",
+      "empty": "No bookings yet"
+    },
+    "settingsForm": {
+      "pricing": "Pricing",
+      "notifications": "Notifications",
+      "basePrice": "Base Event Price ($)",
+      "pricePerMile": "Price Per Mile ($)",
+      "defaultDeposit": "Default Deposit (%)",
+      "notificationEmail": "Notification Email",
+      "timezone": "Timezone",
+      "telegramChatId": "Telegram Chat ID",
+      "save": "Save Settings",
+      "saving": "Saving...",
+      "saved": "Settings saved successfully"
+    },
+    "mediaLibrary": {
+      "upload": "Upload",
+      "uploading": "Uploading...",
+      "newFolder": "New Folder",
+      "tagSelected": "Tag Selected",
+      "empty": "Drag and drop files here or click Upload"
+    },
+    "bookingsTrend": "{{completed}}/{{total}} bookings",
+    "inventoryTable": {
+      "name": "Name",
+      "sku": "SKU",
+      "category": "Category",
+      "qty": "Qty",
+      "unitCost": "Unit Cost",
+      "unitPrice": "Unit Price",
+      "empty": "No inventory items",
+      "totalCogs": "Total COGS"
+    },
+    "auditTable": {
+      "time": "Time",
+      "action": "Action",
+      "resource": "Resource",
+      "details": "Details",
+      "empty": "No audit logs yet"
+    }
   },
   "footer": {
     "rights": "All rights reserved.",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Service"
+    "terms": "Terms of Service",
+    "tagline": "Premium mobile Irish pub catering across the Carolinas",
+    "quickLinks": "Quick Links",
+    "legal": "Legal"
   },
   "language": {
     "switch": "Language",

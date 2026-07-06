@@ -17,6 +17,7 @@ import type { Booking } from '@/types/database';
 import type { Locale } from '@/lib/i18n/config';
 import { Card } from '@/components/ui/Card';
 import { Badge, statusToBadge } from '@/components/ui/Badge';
+import { BOOKING_STATUS_KEYS } from '@/lib/i18n/booking-status';
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/Progress';
 import { BookingTimeline } from '@/components/portal/BookingTimeline';
@@ -86,7 +87,7 @@ export function BookingCard({
               </div>
             </div>
             <Badge variant={statusToBadge(booking.status)}>
-              {booking.status.replace('_', ' ')}
+              {t(BOOKING_STATUS_KEYS[booking.status])}
             </Badge>
           </div>
         </div>

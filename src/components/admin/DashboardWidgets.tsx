@@ -77,7 +77,10 @@ export function DashboardWidgets({ metrics }: { metrics: DashboardMetrics }) {
         label={t('admin.conversion')}
         value={`${metrics.conversionRate}%`}
         icon={<Target className="h-4 w-4" />}
-        trend={`${metrics.completedBookings}/${metrics.totalBookings} bookings`}
+        trend={t('admin.bookingsTrend', {
+          completed: metrics.completedBookings,
+          total: metrics.totalBookings,
+        })}
         delay={0.25}
       />
     </div>

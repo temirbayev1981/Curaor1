@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Booking, BookingStatus } from '@/types/database';
 import { getNextStatuses } from '@/domain/booking/booking.state-machine';
+import { Button } from '@/components/ui/Button';
+import { BOOKING_STATUS_KEYS } from '@/lib/i18n/booking-status';
 
 interface BookingActionsProps {
   booking: Booking;
@@ -10,15 +13,8 @@ interface BookingActionsProps {
   onUpdated: (booking: Booking) => void;
 }
 
-const STATUS_LABELS: Record<BookingStatus, string> = {
-  pending: 'Pending',
-  deposit_paid: 'Deposit Paid',
-  confirmed: 'Confirmed',
-  completed: 'Completed',
-  cancelled: 'Cancelled',
-};
-
 export function BookingActions({ booking, tenantId, onUpdated }: BookingActionsProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<string | null>(null);
   const nextStatuses = getNextStatuses(booking.status);
 
@@ -39,18 +35,15 @@ export function BookingActions({ booking, tenantId, onUpdated }: BookingActionsP
   return (
     <div className="flex flex-wrap gap-1">
       {nextStatuses.map((status) => (
-        <button
+        <Button
           key={status}
+          size="sm"
+          variant={status === 'cancelled' ? 'danger' : 'outline'}
           onClick={() => handleTransition(status)}
-          disabled={loading !== null}
-          className={`rounded px-2 py-1 text-xs font-medium transition ${
-            status === 'cancelled'
-              ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
-              : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
-          } disabled:opacity-50`}
+          loading={loading === status}
         >
-          {loading === status ? '...' : STATUS_LABELS[status]}
-        </button>
+          {t(BOOKING_STATUS_KEYS[status])}
+        </Button>
       ))}
     </div>
   );

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   DndContext,
   closestCenter,
@@ -13,6 +14,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Upload, Folder, Tag } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import type { MediaAsset } from '@/types/database';
 
 function SortableAsset({ asset, url }: { asset: MediaAsset; url: string }) {
@@ -31,14 +33,14 @@ function SortableAsset({ asset, url }: { asset: MediaAsset; url: string }) {
       style={style}
       {...attributes}
       {...listeners}
-      className="group relative aspect-square overflow-hidden rounded-lg border border-admin-border bg-admin-bg"
+      className="group relative aspect-square overflow-hidden rounded-xl border border-admin-border bg-admin-bg transition hover:border-emerald-500/30"
     >
       {asset.mime_type.startsWith('image/') ? (
         <img
           src={url}
           alt={asset.alt_text ?? asset.filename}
           loading="lazy"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition group-hover:scale-105"
         />
       ) : (
         <div className="flex h-full items-center justify-center text-zinc-500">
@@ -62,6 +64,7 @@ function SortableAsset({ asset, url }: { asset: MediaAsset; url: string }) {
 }
 
 export function MediaLibrary() {
+  const { t } = useTranslation();
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -119,7 +122,7 @@ export function MediaLibrary() {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="skeleton aspect-square rounded-lg" />
+          <div key={i} className="skeleton aspect-square rounded-xl" />
         ))}
       </div>
     );
@@ -127,40 +130,48 @@ export function MediaLibrary() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center gap-4">
-        <label className="flex cursor-pointer items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600">
-          <Upload className="h-4 w-4" />
-          {uploading ? 'Uploading...' : 'Upload'}
-          <input type="file" multiple accept="image/*,.pdf" className="hidden" onChange={handleUpload} />
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <label className="inline-flex cursor-pointer">
+          <input
+            type="file"
+            multiple
+            accept="image/*,.pdf"
+            className="hidden"
+            onChange={handleUpload}
+          />
+          <span className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-400">
+            <Upload className="h-4 w-4" />
+            {uploading ? t('admin.mediaLibrary.uploading') : t('admin.mediaLibrary.upload')}
+          </span>
         </label>
-        <button className="flex items-center gap-2 rounded-lg border border-admin-border px-4 py-2 text-sm text-zinc-400 hover:text-white">
+        <Button variant="outline" size="sm" disabled>
           <Folder className="h-4 w-4" />
-          New Folder
-        </button>
-        <button className="flex items-center gap-2 rounded-lg border border-admin-border px-4 py-2 text-sm text-zinc-400 hover:text-white">
+          {t('admin.mediaLibrary.newFolder')}
+        </Button>
+        <Button variant="outline" size="sm" disabled>
           <Tag className="h-4 w-4" />
-          Tag Selected
-        </button>
+          {t('admin.mediaLibrary.tagSelected')}
+        </Button>
       </div>
 
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={assets.map((a) => a.id)} strategy={rectSortingStrategy}>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {assets.map((asset) => (
-              <SortableAsset
-                key={asset.id}
-                asset={asset}
-                url={urls[asset.id] ?? ''}
-              />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
-
-      {assets.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-admin-border py-16 text-zinc-500">
-          <Upload className="mb-4 h-12 w-12" />
-          <p>Drag and drop files here or click Upload</p>
+      {assets.length > 0 ? (
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={assets.map((a) => a.id)} strategy={rectSortingStrategy}>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {assets.map((asset) => (
+                <SortableAsset
+                  key={asset.id}
+                  asset={asset}
+                  url={urls[asset.id] ?? ''}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      ) : (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-admin-border py-16 text-zinc-500">
+          <Upload className="mb-4 h-12 w-12 text-zinc-600" />
+          <p>{t('admin.mediaLibrary.empty')}</p>
         </div>
       )}
     </div>

@@ -1,9 +1,11 @@
 import { DashboardWidgets } from '@/components/admin/DashboardWidgets';
 import { RevenueChart } from '@/components/admin/RevenueChart';
 import { RecentActivity } from '@/components/admin/RecentActivity';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { analyticsService } from '@/domain/analytics/analytics.service';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
+import { getTranslations } from '@/lib/i18n/server';
 import type { AuditLog } from '@/types/database';
 import type { Locale } from '@/lib/i18n/config';
 
@@ -13,6 +15,7 @@ export default async function AdminDashboardPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = getTranslations(locale as Locale);
 
   let metrics = {
     netProfit: 0,
@@ -56,12 +59,10 @@ export default async function AdminDashboardPage({
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold text-white">Dashboard</h2>
-        <p className="mt-1 text-sm text-zinc-500">
-          Business overview and recent activity
-        </p>
-      </div>
+      <AdminPageHeader
+        title={t.admin.dashboard}
+        description={t.admin.dashboardDesc}
+      />
 
       <DashboardWidgets metrics={metrics} />
 

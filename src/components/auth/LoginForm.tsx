@@ -3,11 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { createClient } from '@/lib/supabase/client';
-import { Beer } from 'lucide-react';
+import { AuthLayout } from '@/components/auth/AuthLayout';
+import { Button } from '@/components/ui/Button';
+import { Field, Input } from '@/components/ui/Input';
 import type { Locale } from '@/lib/i18n/config';
 
 export function LoginForm({ locale }: { locale: Locale }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
@@ -41,12 +45,12 @@ export function LoginForm({ locale }: { locale: Locale }) {
 
   async function handleForgotPassword() {
     if (!email) {
-      setError('Enter your email first');
+      setError(t('auth.enterEmailFirst'));
       return;
     }
     const supabase = createClient();
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/${locale}/login`,
+      redirectTo: `${globalThis.location.origin}/${locale}/login`,
     });
     if (resetError) {
       setError(resetError.message);
@@ -56,62 +60,52 @@ export function LoginForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-950 via-black to-emerald-900 px-4">
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-        <div className="mb-8 flex flex-col items-center">
-          <Beer className="mb-4 h-12 w-12 text-emerald-400" />
-          <h1 className="text-2xl font-bold text-white">Sign In</h1>
-        </div>
-        {resetSent ? (
-          <p className="text-center text-emerald-300">
-            Password reset link sent to {email}
-          </p>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="mb-1 block text-sm text-zinc-400">Email</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm text-zinc-400">Password</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white"
-              />
-            </div>
-            {error && <p className="text-sm text-red-400">{error}</p>}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-lg bg-emerald-500 py-2 font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              className="w-full text-sm text-zinc-400 hover:text-emerald-400"
-            >
-              Forgot password?
-            </button>
-          </form>
-        )}
-        <p className="mt-6 text-center text-sm text-zinc-400">
-          No account?{' '}
-          <Link href={`/${locale}/signup`} className="text-emerald-400 hover:underline">
-            Create one
-          </Link>
+    <AuthLayout locale={locale} title={t('auth.signIn')}>
+      {resetSent ? (
+        <p className="text-center text-emerald-300">
+          {t('auth.resetSent', { email })}
         </p>
-      </div>
-    </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Field label={t('auth.email')}>
+            <Input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Field>
+          <Field label={t('auth.password')}>
+            <Input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Field>
+          {error && (
+            <p className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2 text-sm text-red-400">
+              {error}
+            </p>
+          )}
+          <Button type="submit" loading={loading} className="w-full">
+            {loading ? t('auth.signingIn') : t('auth.signIn')}
+          </Button>
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="w-full text-sm text-zinc-400 transition hover:text-emerald-400"
+          >
+            {t('auth.forgotPassword')}
+          </button>
+        </form>
+      )}
+      <p className="mt-6 text-center text-sm text-zinc-400">
+        {t('auth.noAccount')}{' '}
+        <Link href={`/${locale}/signup`} className="text-emerald-400 hover:underline">
+          {t('auth.createOne')}
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }

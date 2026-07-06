@@ -33,7 +33,7 @@ export function HeroSection({ locale }: { locale: Locale }) {
         >
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm text-emerald-300">
             <Sparkles className="h-4 w-4" />
-            <span>Premium Mobile Irish Pub</span>
+            <span>{t('hero.badge')}</span>
           </div>
         </motion.div>
 
