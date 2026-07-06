@@ -11,6 +11,8 @@ export function PublicFooter({ locale }: { locale: Locale }) {
 
   const quickLinks = [
     { href: '/book', key: 'book' },
+    { href: '/faq', key: 'faq' },
+    { href: '/articles', key: 'articles' },
     { href: '/locations', key: 'locations' },
     { href: '/gallery', key: 'gallery' },
     { href: '/portal', key: 'portal' },

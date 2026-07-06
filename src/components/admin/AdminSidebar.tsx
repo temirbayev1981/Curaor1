@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard,
   Calendar,
+  CalendarDays,
   Package,
   Image,
   Sparkles,
@@ -13,11 +14,13 @@ import {
   Beer,
   ScrollText,
 } from 'lucide-react';
+import { AdminLogoutButton } from '@/components/admin/AdminLogoutButton';
 import { cn } from '@/lib/utils';
 import type { Locale } from '@/lib/i18n/config';
 
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, key: 'dashboard' },
+  { href: '/admin/calendar', icon: CalendarDays, key: 'calendar' },
   { href: '/admin/bookings', icon: Calendar, key: 'bookings' },
   { href: '/admin/inventory', icon: Package, key: 'inventory' },
   { href: '/admin/media', icon: Image, key: 'media' },
@@ -57,6 +60,9 @@ export function AdminSidebar({ locale }: { locale: Locale }) {
           );
         })}
       </nav>
+      <div className="border-t border-admin-border p-4">
+        <AdminLogoutButton locale={locale} />
+      </div>
     </aside>
   );
 }

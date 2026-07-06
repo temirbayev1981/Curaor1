@@ -6,7 +6,7 @@ import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { SeoArticle } from '@/types/database';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ['', '/book', '/gallery', '/locations', '/login', '/signup', '/portal'];
+  const staticPaths = ['', '/book', '/gallery', '/locations', '/faq', '/articles'];
   const locales = ['en', 'ru'] as const;
 
   const entries: MetadataRoute.Sitemap = [];

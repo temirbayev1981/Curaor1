@@ -5,6 +5,11 @@ import {
   getDepositPercent,
   resolveConfig,
 } from '@/lib/config/hierarchy';
+import {
+  calculatePackageBasePrice,
+  isPackageTierId,
+  type PackageTierId,
+} from '@/lib/booking/packages';
 import { eventBus } from '@/domain/events/event-bus';
 import { EVENT_TYPES } from '@/domain/events/event.types';
 import { assertTransition } from './booking.state-machine';
@@ -36,8 +41,18 @@ export class BookingService {
       ? calculateDeliveryCost(input.deliveryDistanceMiles, config.price_per_mile)
       : 0;
 
-    const { subtotal, depositAmount, balanceDue } = calculateBookingTotals(
+    const packageTier: PackageTierId =
+      input.packageTier && isPackageTierId(input.packageTier)
+        ? input.packageTier
+        : 'shamrock';
+    const packageBasePrice = calculatePackageBasePrice(
       config.base_event_price,
+      packageTier,
+      input.guestCount
+    );
+
+    const { subtotal, depositAmount, balanceDue } = calculateBookingTotals(
+      packageBasePrice,
       deliveryCost,
       depositPercent
     );
@@ -61,7 +76,7 @@ export class BookingService {
         deposit_percent: depositPercent,
         deposit_amount: depositAmount,
         balance_due: balanceDue,
-        notes: input.notes ?? null,
+        notes: input.notes ?? `package:${packageTier}`,
         status: 'pending',
       })
       .select()

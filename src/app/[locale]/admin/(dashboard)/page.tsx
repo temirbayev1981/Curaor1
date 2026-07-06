@@ -1,5 +1,7 @@
 import { DashboardWidgets } from '@/components/admin/DashboardWidgets';
 import { FinancialMetricsGuide } from '@/components/admin/FinancialMetricsGuide';
+import { LowStockAlerts } from '@/components/admin/LowStockAlerts';
+import { OperationsCalendar } from '@/components/admin/OperationsCalendar';
 import { RevenueChart } from '@/components/admin/RevenueChart';
 import { RecentActivity } from '@/components/admin/RecentActivity';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
@@ -67,6 +69,8 @@ export default async function AdminDashboardPage({
 
       <DashboardWidgets metrics={metrics} />
 
+      <LowStockAlerts locale={locale as Locale} />
+
       <FinancialMetricsGuide metrics={metrics} />
 
       <div className="grid gap-6 lg:grid-cols-5">
@@ -77,6 +81,8 @@ export default async function AdminDashboardPage({
           <RecentActivity logs={recentLogs} locale={locale as Locale} />
         </div>
       </div>
+
+      <OperationsCalendar locale={locale as Locale} />
     </div>
   );
 }

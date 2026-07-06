@@ -8,6 +8,8 @@
     "portal": "Customer Portal",
     "admin": "Admin",
     "gallery": "Gallery",
+    "faq": "FAQ",
+    "articles": "Resources",
     "menu": "Menu"
   },
   "gallery": {
@@ -70,6 +72,70 @@
       "festivals": "Festivals & Fairs",
       "birthdays": "Birthdays",
       "more": "And More!"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about booking our mobile Irish pub",
+      "items": {
+        "q1": { "q": "How far do you travel?", "a": "We serve all of North and South Carolina. Delivery is calculated at $2.50 per mile from our Charlotte base." },
+        "q2": { "q": "What's included in a package?", "a": "Every package includes our mobile bar setup, professional bartenders, glassware, and a curated Irish drink menu. Higher tiers add premium spirits and extended service hours." },
+        "q3": { "q": "Do you provide the alcohol?", "a": "Yes — we are fully licensed and carry liability insurance. We handle procurement, setup, service, and breakdown." },
+        "q4": { "q": "How far in advance should I book?", "a": "Peak season weekends (March–October) fill 4–8 weeks out. We recommend booking as early as possible, especially for St. Patrick's Day and wedding season." },
+        "q5": { "q": "What deposit is required?", "a": "Choose 25%, 50%, or 100% deposit at booking. The remaining balance is due before your event date." },
+        "q6": { "q": "What if it rains?", "a": "Our mobile pub operates in covered outdoor areas and tents. Weather-related rescheduling is free — we'll work with your venue to find the best setup." }
+      }
+    },
+    "trust": {
+      "licensed": { "title": "Fully Licensed", "desc": "ABC-permitted mobile bar service across NC & SC" },
+      "insured": { "title": "Insured & Bonded", "desc": "$2M liability coverage for your peace of mind" },
+      "mobile": { "title": "We Come to You", "desc": "Full setup and breakdown at your venue" },
+      "rated": { "title": "4.9★ Rated", "desc": "500+ events served across the Carolinas" }
+    },
+    "pricing": {
+      "eyebrow": "Packages",
+      "title": "Choose Your Experience",
+      "subtitle": "Transparent pricing with no hidden fees. Delivery calculated by distance.",
+      "popular": "Most Popular",
+      "cta": "Get a Quote",
+      "tiers": {
+        "shamrock": {
+          "name": "Shamrock",
+          "from": "From $1,500",
+          "guests": "Up to 50 guests included",
+          "features": { "f1": "2-hour bar service", "f2": "Guinness & domestic taps", "f3": "Basic cocktail menu", "f4": "Professional bartender" }
+        },
+        "emerald": {
+          "name": "Emerald",
+          "from": "From $2,025",
+          "guests": "Up to 100 guests included",
+          "features": { "f1": "4-hour bar service", "f2": "Premium Irish whiskey selection", "f3": "Full cocktail menu", "f4": "Custom signage", "f5": "Dedicated event coordinator" }
+        },
+        "legend": {
+          "name": "Legend",
+          "from": "From $2,625",
+          "guests": "Up to 200 guests included",
+          "features": { "f1": "6-hour bar service", "f2": "Top-shelf spirits & craft beer", "f3": "Signature cocktail creation", "f4": "LED string lighting", "f5": "Two professional bartenders", "f6": "Priority date reservation" }
+        }
+      }
+    },
+    "menu": {
+      "title": "The Drinks Menu",
+      "subtitle": "Authentic Irish favorites and craft cocktails — all included in your package",
+      "categories": {
+        "beer": { "title": "Beer & Cider", "items": { "i1": "Guinness Draught", "i2": "Smithwick's Ale", "i3": "Harp Lager", "i4": "Irish Hard Cider" } },
+        "whiskey": { "title": "Irish Whiskey", "items": { "i1": "Jameson", "i2": "Bushmills", "i3": "Tullamore D.E.W.", "i4": "Redbreast 12yr" } },
+        "cocktails": { "title": "Cocktails", "items": { "i1": "Irish Coffee", "i2": "Whiskey Sour", "i3": "Emerald Mule", "i4": "Shamrock Martini" } }
+      }
+    },
+    "contact": {
+      "title": "Get in Touch",
+      "subtitle": "Ready to bring the craic to your event? We'd love to hear from you.",
+      "area": "Serving North & South Carolina",
+      "hours": "Mon–Sat 9am–7pm EST",
+      "ctaTitle": "Ready to book?",
+      "ctaDesc": "Check availability and get an instant quote for your date.",
+      "ctaButton": "Book Your Event",
+      "faqLink": "Read our FAQ"
     }
   },
   "services": {
@@ -134,7 +200,28 @@
     "error": "Unable to submit booking. Please try again.",
     "contactSection": "Contact Information",
     "eventSection": "Event Details",
-    "venueSection": "Venue & Payment"
+    "venueSection": "Venue & Payment",
+    "package": "Package",
+    "quote": {
+      "title": "Instant Quote",
+      "subtotal": "Estimated total",
+      "delivery": "Delivery",
+      "deposit": "{{percent}}% deposit due",
+      "balance": "Balance before event",
+      "availability": {
+        "select_date": "Select a date to check availability",
+        "day_open": "Date available — book now!",
+        "day_limited": "Limited availability on this date",
+        "day_full": "This date is fully booked — try another",
+        "slot_open": "Time slot available",
+        "slot_taken": "This time slot conflicts with another event",
+        "unknown": "Checking availability..."
+      }
+    }
+  },
+  "cookies": {
+    "message": "We use essential cookies for authentication and preferences.",
+    "accept": "Accept"
   },
   "status": {
     "pending": "Pending",
@@ -190,7 +277,10 @@
     "tryAgain": "Try Again"
   },
   "articles": {
-    "backToCity": "Back to city page"
+    "backToCity": "Back to city page",
+    "indexTitle": "Resources & Guides",
+    "indexDesc": "Expert tips on mobile Irish pub catering across the Carolinas",
+    "empty": "Articles coming soon — check back after our next publish cycle."
   },
   "locations": {
     "title": "Serving the Carolinas",
@@ -288,6 +378,7 @@
   "admin": {
     "dashboard": "Dashboard",
     "bookings": "Bookings",
+    "calendar": "Calendar",
     "inventory": "Inventory",
     "media": "Media Library",
     "ai": "AI Assistant",
@@ -351,6 +442,16 @@
       "title": "Financial Metrics",
       "subtitle": "Calculated from succeeded payments, inventory valuation, and booking completion rates."
     },
+    "calendar": {
+      "title": "Operations Calendar",
+      "desc": "View upcoming events and daily booking load",
+      "upcoming": "Upcoming Events"
+    },
+    "lowStock": {
+      "title": "Low Stock Alert",
+      "reorder": "reorder at"
+    },
+    "logout": "Sign Out",
     "metricsHints": {
       "revenue": "Sum of all succeeded Stripe payments (deposits + balances).",
       "netProfit": "Total revenue minus inventory COGS valuation.",

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PACKAGE_TIER_IDS } from '@/lib/booking/packages';
 
 export const createBookingSchema = z.object({
   tenantId: z.string().uuid(),
@@ -13,6 +14,7 @@ export const createBookingSchema = z.object({
   venueZip: z.string().max(10).optional(),
   deliveryDistanceMiles: z.number().nonnegative().optional(),
   depositPercent: z.union([z.literal(25), z.literal(50), z.literal(100)]).optional(),
+  packageTier: z.enum(PACKAGE_TIER_IDS as [string, ...string[]]).optional(),
   notes: z.string().max(2000).optional(),
 });
 

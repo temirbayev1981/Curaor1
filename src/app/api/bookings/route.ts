@@ -15,6 +15,8 @@ const publicBookingSchema = createBookingSchema.extend({
   fullName: z.string().min(1).max(200),
   email: z.string().email(),
   phone: z.string().optional(),
+}).omit({ customerId: true }).extend({
+  customerId: z.string().uuid().optional(),
 });
 
 export async function POST(request: NextRequest) {
