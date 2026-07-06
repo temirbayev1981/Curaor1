@@ -23,7 +23,7 @@ export function PublicFooter({ locale }: { locale: Locale }) {
   ] as const;
 
   return (
-    <footer className="border-t border-white/5 bg-black/60">
+    <footer className="relative z-10 border-t border-white/5 bg-black/60 pb-20 md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-12 md:grid-cols-3">
           <div>

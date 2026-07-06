@@ -11,7 +11,7 @@ export function NotFoundContent({ locale }: { locale: Locale }) {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[#070b09] px-4">
-      <div className="bg-grid fixed inset-0 opacity-30" />
+      <div className="bg-grid pointer-events-none fixed inset-0 opacity-30" />
       <div className="relative z-10 text-center">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10">
           <Beer className="h-8 w-8 text-emerald-400" />
