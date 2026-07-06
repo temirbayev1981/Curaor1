@@ -4,7 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { defaultLocale, isValidLocale } from '@/lib/i18n/config';
 import { isStaffRole } from '@/lib/auth/rbac';
 import { resolveRedirect } from '@/lib/auth/safe-redirect';
-import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/config/env';
+import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from '@/lib/config/env';
 import { isApiRoute, isStaticAsset, needsLocaleRedirect } from '@/lib/middleware/paths';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { UserRole } from '@/types/database';
@@ -19,6 +19,28 @@ function redirectWithCookies(url: URL, sessionResponse: NextResponse) {
   sessionResponse.cookies.getAll().forEach((cookie) => {
     response.cookies.set(cookie.name, cookie.value, cookie);
   });
+  return response;
+}
+
+/** Skip auth guards when Supabase env is missing or still has placeholder values. */
+function finishWithoutSupabase(
+  request: NextRequest,
+  pathname: string,
+  response: NextResponse
+): NextResponse {
+  if (isApiRoute(pathname)) {
+    return response;
+  }
+
+  const segments = pathname.split('/').filter(Boolean);
+  const locale = segments[0];
+  if (locale && isValidLocale(locale)) {
+    response.cookies.set('locale', locale, {
+      path: '/',
+      maxAge: 31536000,
+    });
+  }
+
   return response;
 }
 
@@ -40,6 +62,10 @@ export async function middleware(request: NextRequest) {
   }
 
   let supabaseResponse = NextResponse.next({ request });
+
+  if (!isSupabaseConfigured()) {
+    return finishWithoutSupabase(request, pathname, supabaseResponse);
+  }
 
   const supabase = createServerClient(
     getSupabaseUrl(),

@@ -9,6 +9,35 @@ function trimTrailingSlash(url: string): string {
   return url.replace(/\/$/, '');
 }
 
+function looksLikePlaceholder(value: string): boolean {
+  const normalized = value.trim().toLowerCase();
+  return (
+    normalized.includes('your-project') ||
+    normalized.includes('your-anon') ||
+    normalized.includes('your-service') ||
+    normalized.includes('placeholder') ||
+    normalized === 'your-anon-key' ||
+    normalized === 'your-service-role-key'
+  );
+}
+
+function isValidSupabaseUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return (
+      parsed.protocol === 'https:' &&
+      parsed.hostname.endsWith('.supabase.co') &&
+      !looksLikePlaceholder(parsed.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isValidSupabaseKey(key: string): boolean {
+  return key.startsWith('eyJ') && key.length > 100;
+}
+
 export function getSiteUrl(): string {
   return trimTrailingSlash(
     process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
@@ -90,11 +119,16 @@ export function getMapboxOrigin(): { lat: number; lng: number } {
 }
 
 export function isSupabaseConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !anonKey || !serviceKey) return false;
+  if (looksLikePlaceholder(url) || looksLikePlaceholder(anonKey) || looksLikePlaceholder(serviceKey)) {
+    return false;
+  }
+
+  return isValidSupabaseUrl(url) && isValidSupabaseKey(anonKey) && isValidSupabaseKey(serviceKey);
 }
 
 export function isStripeConfigured(): boolean {

@@ -1,14 +1,32 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { absoluteUrl, getSiteUrl, getDefaultTenantId } from './env';
+import { describe, it, expect, afterEach } from 'vitest';
+import { absoluteUrl, getSiteUrl, getDefaultTenantId, isSupabaseConfigured } from './env';
 
 describe('env config', () => {
-  const original = process.env.NEXT_PUBLIC_SITE_URL;
+  const originalSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const originalSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const originalAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const originalServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   afterEach(() => {
-    if (original === undefined) {
+    if (originalSiteUrl === undefined) {
       delete process.env.NEXT_PUBLIC_SITE_URL;
     } else {
-      process.env.NEXT_PUBLIC_SITE_URL = original;
+      process.env.NEXT_PUBLIC_SITE_URL = originalSiteUrl;
+    }
+    if (originalSupabaseUrl === undefined) {
+      delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+    } else {
+      process.env.NEXT_PUBLIC_SUPABASE_URL = originalSupabaseUrl;
+    }
+    if (originalAnonKey === undefined) {
+      delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    } else {
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = originalAnonKey;
+    }
+    if (originalServiceKey === undefined) {
+      delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    } else {
+      process.env.SUPABASE_SERVICE_ROLE_KEY = originalServiceKey;
     }
   });
 
@@ -31,5 +49,20 @@ describe('env config', () => {
     expect(getDefaultTenantId()).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     );
+  });
+
+  it('rejects placeholder Supabase config', () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://your-project.supabase.co';
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'your-anon-key';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'Qaz123**';
+    expect(isSupabaseConfigured()).toBe(false);
+  });
+
+  it('accepts JWT-shaped Supabase config', () => {
+    const jwt = 'eyJ'.padEnd(120, 'x');
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://abcd1234.supabase.co';
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = jwt;
+    process.env.SUPABASE_SERVICE_ROLE_KEY = jwt;
+    expect(isSupabaseConfigured()).toBe(true);
   });
 });

@@ -158,7 +158,34 @@ Set secrets in Supabase Dashboard → Edge Functions → Secrets.
 
 ---
 
-## Production Deployment
+## Production Deployment (Vercel)
+
+Production URL: **https://curaor1.vercel.app**
+
+1. Push branch to GitHub and import repo in [Vercel](https://vercel.com)
+2. In **Vercel → Settings → Environment Variables**, add:
+
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_SITE_URL` | `https://curaor1.vercel.app` |
+| `NEXT_PUBLIC_SUPABASE_URL` | Project URL from Supabase Dashboard → Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `anon` `public` key (starts with `eyJ...`) |
+| `SUPABASE_SERVICE_ROLE_KEY` | `service_role` key (starts with `eyJ...`, keep secret!) |
+
+**Important:** Do not use placeholder values like `your-project.supabase.co` or `your-anon-key`.  
+`SUPABASE_SERVICE_ROLE_KEY` must be the full JWT from Supabase — not a short password.
+
+3. In **Supabase Dashboard → Authentication → URL Configuration**:
+   - Site URL: `https://curaor1.vercel.app`
+   - Redirect URLs: `https://curaor1.vercel.app/**`
+
+4. Redeploy after changing environment variables (required for `NEXT_PUBLIC_*`).
+
+Check deployment: `GET https://curaor1.vercel.app/api/health` — `supabase: true` means keys are valid.
+
+---
+
+## Production Deployment (general)
 
 Recommended: [Vercel](https://vercel.com)
 

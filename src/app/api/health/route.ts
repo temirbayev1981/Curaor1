@@ -1,4 +1,5 @@
 import { apiSuccess } from '@/lib/api/response';
+import { isSupabaseConfigured } from '@/lib/config/env';
 import { randomUUID } from 'crypto';
 
 export async function GET() {
@@ -9,6 +10,7 @@ export async function GET() {
         status: 'ok',
         timestamp: new Date().toISOString(),
         version: process.env.npm_package_version ?? '0.1.0',
+        supabase: isSupabaseConfigured(),
       },
       requestId
     )
