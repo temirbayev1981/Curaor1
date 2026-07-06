@@ -185,6 +185,40 @@ Check deployment: `GET https://curaor1.vercel.app/api/health` — `supabase: tru
 
 ---
 
+## Custom domain: emeraldpour.com
+
+If `https://emeraldpour.com/en` shows a GoDaddy **404 Page Not Found** instead of the Next.js app, the domain still points to **GoDaddy Website Builder**, not Vercel.
+
+### Verify
+
+```bash
+# GoDaddy (wrong for this app):
+curl -sI https://emeraldpour.com/en | grep Server
+# → Server: DPS/2.0.0  (GoDaddy)
+
+# Vercel (correct):
+curl -sI https://curaor1.vercel.app/en | grep -i server
+# → server: Vercel
+```
+
+### Fix: point domain to Vercel
+
+1. **Vercel** → your project → **Settings → Domains** → Add `emeraldpour.com` and `www.emeraldpour.com`
+2. **GoDaddy** → DNS for `emeraldpour.com`:
+   - Remove A records pointing to GoDaddy Website Builder
+   - Add Vercel records (as shown in Vercel Domains tab), typically:
+     - `A` `@` → `76.76.21.21`
+     - `CNAME` `www` → `cname.vercel-dns.com`
+3. In **GoDaddy** → Websites: disconnect or unpublish the old Website Builder site
+4. Update env on Vercel:
+   - `NEXT_PUBLIC_SITE_URL=https://emeraldpour.com`
+5. **Supabase Auth** redirect URLs: `https://emeraldpour.com/**`
+6. Redeploy and wait for DNS propagation (up to 48h, often minutes)
+
+Working app until DNS propagates: **https://curaor1.vercel.app/en**
+
+---
+
 ## Production Deployment (general)
 
 Recommended: [Vercel](https://vercel.com)
