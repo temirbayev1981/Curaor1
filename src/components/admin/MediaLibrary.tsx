@@ -13,11 +13,19 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Upload, Folder, Tag } from 'lucide-react';
+import { Upload, Folder, Tag, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import type { MediaAsset } from '@/types/database';
 
-function SortableAsset({ asset, url }: { asset: MediaAsset; url: string }) {
+function SortableAsset({
+  asset,
+  url,
+  onToggleGallery,
+}: {
+  asset: MediaAsset;
+  url: string;
+  onToggleGallery: (asset: MediaAsset) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: asset.id,
   });
@@ -47,6 +55,21 @@ function SortableAsset({ asset, url }: { asset: MediaAsset; url: string }) {
           {asset.filename}
         </div>
       )}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleGallery(asset);
+        }}
+        className={`absolute right-2 top-2 rounded-lg p-1.5 backdrop-blur-sm transition ${
+          asset.tags.includes('gallery')
+            ? 'bg-emerald-500 text-white'
+            : 'bg-black/50 text-zinc-300 hover:bg-black/70'
+        }`}
+        title="Toggle gallery"
+      >
+        <ImageIcon className="h-4 w-4" />
+      </button>
       {asset.tags.length > 0 && (
         <div className="absolute bottom-2 left-2 flex gap-1">
           {asset.tags.slice(0, 2).map((tag) => (
@@ -102,6 +125,25 @@ export function MediaLibrary() {
       setUrls(json.data.urls);
     }
     setUploading(false);
+  }
+
+  async function toggleGalleryTag(asset: MediaAsset) {
+    const hasGallery = asset.tags.includes('gallery');
+    const tags = hasGallery
+      ? asset.tags.filter((tag) => tag !== 'gallery')
+      : [...asset.tags, 'gallery'];
+
+    const res = await fetch(`/api/media/${asset.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tags }),
+    });
+    const json = (await res.json()) as { data: { asset: MediaAsset } | null };
+    if (json.data?.asset) {
+      setAssets((prev) =>
+        prev.map((a) => (a.id === asset.id ? json.data!.asset : a))
+      );
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -163,6 +205,7 @@ export function MediaLibrary() {
                   key={asset.id}
                   asset={asset}
                   url={urls[asset.id] ?? ''}
+                  onToggleGallery={toggleGalleryTag}
                 />
               ))}
             </div>

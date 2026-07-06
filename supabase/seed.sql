@@ -42,6 +42,22 @@ INSERT INTO bookings (
   )
 ON CONFLICT DO NOTHING;
 
+-- Sample payments (powers admin financial dashboard)
+INSERT INTO payments (id, tenant_id, booking_id, amount, payment_type, status, stripe_payment_intent_id) VALUES
+  (
+    'p1000000-0000-4000-8000-000000000001',
+    'a0000000-0000-4000-8000-000000000001',
+    'b1000000-0000-4000-8000-000000000001',
+    384.38, 'deposit', 'succeeded', 'pi_seed_deposit_001'
+  ),
+  (
+    'p1000000-0000-4000-8000-000000000002',
+    'a0000000-0000-4000-8000-000000000001',
+    'b1000000-0000-4000-8000-000000000001',
+    1153.12, 'balance', 'succeeded', 'pi_seed_balance_001'
+  )
+ON CONFLICT DO NOTHING;
+
 -- Note: Create auth users via Supabase Dashboard or scripts/bootstrap-dev.ts
 -- Then insert tenant_users:
 -- INSERT INTO tenant_users (tenant_id, user_id, role) VALUES

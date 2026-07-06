@@ -94,8 +94,12 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
     (b) => b.status !== 'completed' && b.status !== 'cancelled'
   ).length;
   const totalSpent = bookings.reduce((sum, b) => {
-    if (b.status === 'pending') return sum;
-    return sum + Number(b.deposit_amount);
+    if (b.status === 'pending' || b.status === 'cancelled') return sum;
+    const paid =
+      b.status === 'completed' || b.status === 'confirmed'
+        ? Number(b.subtotal)
+        : Number(b.deposit_amount);
+    return sum + paid;
   }, 0);
 
   return (

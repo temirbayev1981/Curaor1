@@ -6,7 +6,7 @@ import { Calendar, MapPin, Star, Award } from 'lucide-react';
 
 const items = [
   { key: 'events', value: '500+', icon: Calendar },
-  { key: 'cities', value: '25+', icon: MapPin },
+  { key: 'cities', value: '9+', icon: MapPin },
   { key: 'rating', value: '4.9', icon: Star },
   { key: 'years', value: '8+', icon: Award },
 ] as const;

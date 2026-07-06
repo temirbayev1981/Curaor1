@@ -11,7 +11,8 @@
   },
   "gallery": {
     "subtitle": "Moments from events across the Carolinas",
-    "empty": "Gallery coming soon — check back after our next event!"
+    "empty": "Gallery coming soon — check back after our next event!",
+    "stockNote": "Showing featured event photography. Upload tagged images in Admin → Media to customize."
   },
   "hero": {
     "title": "The Emerald Pour",
@@ -20,6 +21,25 @@
     "description": "Bring the authentic Irish pub atmosphere to your event. Premium mobile bar service for weddings, corporate events, and celebrations across the Carolinas.",
     "cta": "Book Your Event",
     "secondary": "View Gallery"
+  },
+  "landing": {
+    "about": {
+      "eyebrow": "Ireland on Wheels",
+      "title": "More Than",
+      "titleAccent": "Just a Bar",
+      "body": "We create unforgettable experiences with top-notch service, authentic Irish vibes, and a whole lot of craic.",
+      "body2": "From Guinness on tap to premium Irish whiskey, our mobile pub brings the spirit of Dublin to weddings, corporate events, and celebrations across North and South Carolina.",
+      "cta": "Learn More About Us"
+    },
+    "galleryStrip": {
+      "eyebrow": "Real Events",
+      "title": "Bringing the Party to You",
+      "viewAll": "View full gallery"
+    },
+    "experience": {
+      "title": "The Emerald Pour Experience",
+      "subtitle": "Premium mobile bar service with authentic Irish hospitality — see it in action at events across the Carolinas."
+    }
   },
   "services": {
     "title": "Our Services",
@@ -279,9 +299,23 @@
       "uploading": "Uploading...",
       "newFolder": "New Folder",
       "tagSelected": "Tag Selected",
+      "toggleGallery": "Toggle gallery",
+      "galleryTag": "gallery",
       "empty": "Drag and drop files here or click Upload"
     },
     "bookingsTrend": "{{completed}}/{{total}} bookings",
+    "metricsGuide": {
+      "title": "Financial Metrics",
+      "subtitle": "Calculated from succeeded payments, inventory valuation, and booking completion rates."
+    },
+    "metricsHints": {
+      "revenue": "Sum of all succeeded Stripe payments (deposits + balances).",
+      "netProfit": "Total revenue minus inventory COGS valuation.",
+      "roi": "Return on inventory investment: (net profit ÷ COGS) × 100.",
+      "cogs": "Current inventory value: quantity × unit cost per SKU.",
+      "ltv": "Average revenue per unique customer.",
+      "conversion": "Share of bookings marked completed vs total bookings."
+    },
     "inventoryTable": {
       "name": "Name",
       "sku": "SKU",

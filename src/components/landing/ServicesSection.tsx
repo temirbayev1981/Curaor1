@@ -1,8 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Heart, Building2, PartyPopper, Clover } from 'lucide-react';
+import { SERVICE_IMAGES } from '@/lib/media/landing-images';
 
 const services = [
   { key: 'weddings', icon: Heart, color: 'text-rose-400' },
@@ -29,20 +31,32 @@ export function ServicesSection() {
           {services.map(({ key, icon: Icon, color }, i) => (
             <motion.div
               key={key}
-              className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
+              className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm"
               initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -4, borderColor: 'rgba(16, 185, 129, 0.3)' }}
             >
-              <Icon className={`mb-4 h-8 w-8 ${color}`} />
-              <h3 className="mb-2 text-lg font-semibold text-white">
-                {t(`services.${key}`)}
-              </h3>
-              <p className="text-sm text-zinc-400">
-                {t(`services.${key}Desc`)}
-              </p>
+              <div className="relative aspect-[16/10] w-full">
+                <Image
+                  src={SERVICE_IMAGES[key]}
+                  alt={t(`services.${key}`)}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <Icon className={`absolute left-4 top-4 h-8 w-8 ${color} drop-shadow`} />
+              </div>
+              <div className="p-6">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  {t(`services.${key}`)}
+                </h3>
+                <p className="text-sm text-zinc-400">
+                  {t(`services.${key}Desc`)}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>

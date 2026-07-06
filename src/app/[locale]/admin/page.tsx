@@ -1,4 +1,5 @@
 import { DashboardWidgets } from '@/components/admin/DashboardWidgets';
+import { FinancialMetricsGuide } from '@/components/admin/FinancialMetricsGuide';
 import { RevenueChart } from '@/components/admin/RevenueChart';
 import { RecentActivity } from '@/components/admin/RecentActivity';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
@@ -65,6 +66,8 @@ export default async function AdminDashboardPage({
       />
 
       <DashboardWidgets metrics={metrics} />
+
+      <FinancialMetricsGuide metrics={metrics} />
 
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3">

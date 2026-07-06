@@ -1,5 +1,8 @@
 import { PublicHeader } from '@/components/layout/PublicHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
+import { AboutSection } from '@/components/landing/AboutSection';
+import { GalleryStripSection } from '@/components/landing/GalleryStripSection';
+import { ExperienceGridSection } from '@/components/landing/ExperienceGridSection';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { ServicesSection } from '@/components/landing/ServicesSection';
 import { StatsSection } from '@/components/landing/StatsSection';
@@ -74,7 +77,10 @@ export default async function HomePage({
       <main>
         <HeroSection locale={locale as Locale} />
         <StatsSection />
+        <AboutSection locale={locale as Locale} />
         <ServicesSection />
+        <GalleryStripSection locale={locale as Locale} />
+        <ExperienceGridSection />
         <TestimonialsSection />
         <CTASection locale={locale as Locale} />
       </main>

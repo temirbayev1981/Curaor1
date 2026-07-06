@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import Stripe from 'stripe';
 import { getStripeSecretKey, getStripeWebhookSecret } from '@/lib/config/env';
+import '@/domain/events/register-consumers';
 import { paymentService } from '@/domain/payment/payment.service';
 
 export async function POST(request: NextRequest) {

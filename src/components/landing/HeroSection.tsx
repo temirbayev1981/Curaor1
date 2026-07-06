@@ -1,9 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { LANDING_IMAGES } from '@/lib/media/landing-images';
 import type { Locale } from '@/lib/i18n/config';
 
 export function HeroSection({ locale }: { locale: Locale }) {
@@ -12,7 +14,15 @@ export function HeroSection({ locale }: { locale: Locale }) {
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden pt-16">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-black to-emerald-900" />
+      <Image
+        src={LANDING_IMAGES.hero.src}
+        alt={LANDING_IMAGES.hero.alt}
+        fill
+        priority
+        className="object-cover"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/90 via-black/75 to-emerald-900/80" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-500/20 via-transparent to-transparent" />
 
       <motion.div
@@ -27,19 +37,15 @@ export function HeroSection({ locale }: { locale: Locale }) {
       />
 
       <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-        <motion.div
-          initial={false}
-          animate={fadeUp}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm text-emerald-300">
+        <motion.div initial={false} animate={fadeUp} transition={{ duration: 0.8 }}>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-black/40 px-4 py-1.5 text-sm text-emerald-300 backdrop-blur-sm">
             <Sparkles className="h-4 w-4" />
             <span>{t('hero.badge')}</span>
           </div>
         </motion.div>
 
         <motion.h1
-          className="mb-4 text-5xl font-bold tracking-tight text-white sm:text-7xl"
+          className="mb-4 text-5xl font-bold tracking-tight text-white drop-shadow-lg sm:text-7xl"
           initial={false}
           animate={fadeUp}
           transition={{ duration: 0.8, delay: 0.1 }}
@@ -57,7 +63,7 @@ export function HeroSection({ locale }: { locale: Locale }) {
         </motion.p>
 
         <motion.p
-          className="mx-auto mb-10 max-w-2xl text-lg text-zinc-400"
+          className="mx-auto mb-10 max-w-2xl text-lg text-zinc-200"
           initial={false}
           animate={fadeUp}
           transition={{ duration: 0.8, delay: 0.3 }}
@@ -80,7 +86,7 @@ export function HeroSection({ locale }: { locale: Locale }) {
           </Link>
           <Link
             href={`/${locale}/gallery`}
-            className="rounded-xl border border-white/20 px-8 py-4 text-lg font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
+            className="rounded-xl border border-white/30 bg-black/30 px-8 py-4 text-lg font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
           >
             {t('hero.secondary')}
           </Link>

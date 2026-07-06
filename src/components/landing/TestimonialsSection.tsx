@@ -1,8 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Quote } from 'lucide-react';
+import { TESTIMONIAL_IMAGES } from '@/lib/media/landing-images';
 
 const testimonials = ['t1', 't2', 't3'] as const;
 
@@ -33,8 +35,19 @@ export function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="glass-card flex flex-col rounded-2xl p-6"
+              className="glass-card overflow-hidden rounded-2xl"
             >
+              <div className="relative h-40 w-full">
+                <Image
+                  src={TESTIMONIAL_IMAGES[key]}
+                  alt={t(`testimonials.${key}.event`)}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent" />
+              </div>
+              <div className="flex flex-col p-6">
               <Quote className="mb-4 h-8 w-8 text-emerald-500/40" />
               <p className="mb-6 flex-1 text-sm leading-relaxed text-zinc-300">
                 &ldquo;{t(`testimonials.${key}.quote`)}&rdquo;
@@ -46,6 +59,7 @@ export function TestimonialsSection() {
                 <p className="text-xs text-zinc-500">
                   {t(`testimonials.${key}.event`)}
                 </p>
+              </div>
               </div>
             </motion.div>
           ))}
