@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   CATALOG,
   FOOD_IMAGES,
@@ -6,6 +8,8 @@ import {
   MENU_CATEGORY_IMAGES,
   STOCK_GALLERY_IMAGES,
 } from './landing-images';
+
+const PUBLIC_DIR = join(process.cwd(), 'public');
 
 describe('landing-images', () => {
   it('uses unique image IDs across landing page sections', () => {
@@ -23,16 +27,19 @@ describe('landing-images', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('uses Unsplash Irish pub photography', () => {
+  it('serves locally hosted Irish pub photography', () => {
     const all = [
       ...Object.values(CATALOG),
       ...FOOD_IMAGES,
       ...Object.values(MENU_CATEGORY_IMAGES),
     ];
+
     for (const image of all) {
-      expect(image.src).toContain('images.unsplash.com');
+      expect(image.src).toMatch(/^\/images\/irish-pub\/.+\.jpg$/);
+      const filePath = join(PUBLIC_DIR, image.src);
+      expect(existsSync(filePath), `missing asset ${image.src}`).toBe(true);
       expect(image.alt.toLowerCase()).toMatch(
-        /guinness|whiskey|whisky|irish|pub|stout|beer|bar|pint|ale|fish|chips|breakfast|banger|shepherd|platter|spirits|draft|cocktail/
+        /guinness|whiskey|whisky|irish|pub|stout|beer|bar|pint|ale|fish|chips|breakfast|banger|shepherd|jameson|cocktail|sausage|burger|gravy|mash/
       );
     }
   });
