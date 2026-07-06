@@ -3,13 +3,22 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 
-interface NotificationPayload {
+interface DirectPayload {
   tenantId: string;
-  to: string;
-  subject: string;
+  to?: string;
+  subject?: string;
   bookingId: string;
-  template: 'confirmation' | 'invoice' | 'reminder';
+  template?: 'confirmation' | 'invoice' | 'reminder';
 }
+
+interface EventBusPayload {
+  eventId?: string;
+  tenantId: string;
+  eventType?: string;
+  payload?: Record<string, unknown>;
+}
+
+type RequestBody = DirectPayload & EventBusPayload;
 
 serve(async (req: Request) => {
   if (req.method !== 'POST') {
@@ -22,7 +31,22 @@ serve(async (req: Request) => {
     });
   }
 
-  const body = (await req.json()) as NotificationPayload;
+  const body = (await req.json()) as RequestBody;
+
+  let bookingId = body.bookingId;
+  let template: 'confirmation' | 'invoice' | 'reminder' = body.template ?? 'confirmation';
+
+  if (body.eventType) {
+    bookingId = (body.payload?.bookingId as string) ?? bookingId;
+    if (body.eventType === 'payment.succeeded.v1') template = 'invoice';
+    else if (body.eventType === 'booking.created.v1') template = 'confirmation';
+  }
+
+  if (!bookingId) {
+    return new Response(JSON.stringify({ error: 'bookingId required' }), {
+      status: 400,
+    });
+  }
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
@@ -32,14 +56,27 @@ serve(async (req: Request) => {
   const { data: booking } = await supabase
     .from('bookings')
     .select('*, customers(full_name, email)')
-    .eq('id', body.bookingId)
+    .eq('id', bookingId)
+    .eq('tenant_id', body.tenantId)
     .single();
 
   if (!booking) {
     return new Response(JSON.stringify({ error: 'Booking not found' }), { status: 404 });
   }
 
-  const html = generateEmailHtml(body.template, booking);
+  const customer = booking.customers as Record<string, string> | null;
+  const to = body.to ?? customer?.email;
+  if (!to) {
+    return new Response(JSON.stringify({ error: 'No recipient email' }), { status: 400 });
+  }
+
+  const subject =
+    body.subject ??
+    (template === 'invoice'
+      ? 'Payment received — The Emerald Pour'
+      : 'Booking confirmation — The Emerald Pour');
+
+  const html = generateEmailHtml(template, booking);
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -49,8 +86,8 @@ serve(async (req: Request) => {
     },
     body: JSON.stringify({
       from: 'The Emerald Pour <bookings@emeraldpour.com>',
-      to: body.to,
-      subject: body.subject,
+      to,
+      subject,
       html,
     }),
   });

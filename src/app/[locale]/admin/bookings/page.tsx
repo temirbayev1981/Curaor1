@@ -17,7 +17,7 @@ export default async function AdminBookingsPage({
         title={t.admin.bookings}
         description={t.admin.bookingsDesc}
       />
-      <AdminBookingsTable />
+      <AdminBookingsTable locale={locale as Locale} />
     </div>
   );
 }

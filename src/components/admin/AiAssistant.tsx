@@ -74,7 +74,7 @@ export function AiAssistant({ locale }: { locale: Locale }) {
           >
             {Object.entries(CAROLINA_CITIES).map(([slug, city]) => (
               <option key={slug} value={slug}>
-                {city.en}, {city.state}
+                {city[articleLocale]}, {city.state}
               </option>
             ))}
           </AdminSelect>

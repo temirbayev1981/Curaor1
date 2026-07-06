@@ -1,10 +1,19 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-interface CalendarPayload {
+interface DirectPayload {
   tenantId: string;
   bookingId: string;
 }
+
+interface EventBusPayload {
+  eventId?: string;
+  tenantId: string;
+  eventType?: string;
+  payload?: Record<string, unknown>;
+}
+
+type RequestBody = DirectPayload & EventBusPayload;
 
 serve(async (req: Request) => {
   if (req.method !== 'POST') {
@@ -21,7 +30,22 @@ serve(async (req: Request) => {
     });
   }
 
-  const body = (await req.json()) as CalendarPayload;
+  const body = (await req.json()) as RequestBody;
+  const bookingId = body.bookingId ?? (body.payload?.bookingId as string | undefined);
+  const tenantId = body.tenantId;
+
+  if (!bookingId || !tenantId) {
+    return new Response(JSON.stringify({ error: 'bookingId and tenantId required' }), {
+      status: 400,
+    });
+  }
+
+  if (body.payload?.to === 'cancelled') {
+    return new Response(JSON.stringify({ skipped: true, reason: 'cancelled' }), {
+      status: 200,
+    });
+  }
+
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -30,8 +54,8 @@ serve(async (req: Request) => {
   const { data: booking } = await supabase
     .from('bookings')
     .select('*')
-    .eq('id', body.bookingId)
-    .eq('tenant_id', body.tenantId)
+    .eq('id', bookingId)
+    .eq('tenant_id', tenantId)
     .single();
 
   if (!booking) {
@@ -70,7 +94,7 @@ serve(async (req: Request) => {
   await supabase
     .from('bookings')
     .update({ google_calendar_event_id: calEvent.id })
-    .eq('id', body.bookingId);
+    .eq('id', bookingId);
 
   return new Response(JSON.stringify({ eventId: calEvent.id }), { status: 200 });
 });

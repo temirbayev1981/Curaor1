@@ -31,6 +31,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
     endTime: '23:00',
     venueAddress: '',
     venueCity: searchParams.get('city') ?? '',
+    venueState: 'NC' as 'NC' | 'SC',
     depositPercent: 25 as 25 | 50 | 100,
   });
 
@@ -56,7 +57,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
           guestCount: form.guestCount,
           venueAddress: form.venueAddress,
           venueCity: form.venueCity,
-          venueState: 'NC',
+          venueState: form.venueState,
           depositPercent: form.depositPercent,
         }),
       });
@@ -205,6 +206,17 @@ export function BookingForm({ locale }: { locale: Locale }) {
                       value={form.venueCity}
                       onChange={(e) => setForm({ ...form, venueCity: e.target.value })}
                     />
+                  </Field>
+                  <Field label={t('booking.state')}>
+                    <Select
+                      value={form.venueState}
+                      onChange={(e) =>
+                        setForm({ ...form, venueState: e.target.value as 'NC' | 'SC' })
+                      }
+                    >
+                      <option value="NC">North Carolina</option>
+                      <option value="SC">South Carolina</option>
+                    </Select>
                   </Field>
                   <Field label={t('booking.deposit')}>
                     <Select

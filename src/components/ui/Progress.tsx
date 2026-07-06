@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 export function Progress({
@@ -11,13 +14,14 @@ export function Progress({
   className?: string;
   showLabel?: boolean;
 }) {
+  const { t } = useTranslation();
   const percent = Math.min(100, Math.round((value / max) * 100));
 
   return (
     <div className={cn('w-full', className)}>
       {showLabel && (
         <div className="mb-1.5 flex justify-between text-xs text-zinc-400">
-          <span>Payment progress</span>
+          <span>{t('portal.paymentProgress')}</span>
           <span>{percent}%</span>
         </div>
       )}

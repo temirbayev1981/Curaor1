@@ -2,6 +2,8 @@ import OpenAI from 'openai';
 import DOMPurify from 'isomorphic-dompurify';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { checkAiRateLimit } from '@/lib/api/rate-limit';
+import { eventBus } from '@/domain/events/event-bus';
+import { EVENT_TYPES } from '@/domain/events/event.types';
 import type { Locale, SeoArticle } from '@/types/database';
 
 const CAROLINA_CITIES: Record<string, { en: string; ru: string; state: string }> = {
@@ -118,6 +120,21 @@ export class AiContentService {
       .single();
 
     if (error || !data) throw new Error('Article not found or not pending approval');
+
+    await eventBus.publish({
+      tenantId,
+      eventType: EVENT_TYPES.ARTICLE_PUBLISHED,
+      aggregateId: articleId,
+      aggregateType: 'seo_article',
+      payload: {
+        articleId,
+        slug: data.slug,
+        locale: data.locale,
+        citySlug: data.city_slug,
+      },
+      idempotencyKey: `article.published:${articleId}`,
+    });
+
     return data as SeoArticle;
   }
 }

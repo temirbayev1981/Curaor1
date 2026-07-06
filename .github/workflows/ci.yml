@@ -34,3 +34,17 @@ jobs:
           STRIPE_WEBHOOK_SECRET: whsec_placeholder
           OPENAI_API_KEY: sk-placeholder
           MAPBOX_ACCESS_TOKEN: pk.placeholder
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: E2E smoke tests
+        run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: placeholder-service-role-key
+          STRIPE_SECRET_KEY: sk_test_placeholder
+          STRIPE_WEBHOOK_SECRET: whsec_placeholder
+          OPENAI_API_KEY: sk-placeholder
+          MAPBOX_ACCESS_TOKEN: pk.placeholder

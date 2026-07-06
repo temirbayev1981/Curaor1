@@ -72,7 +72,7 @@ export function SeoArticleManager() {
             {t('admin.seo.pendingApproval')}
           </h3>
           <p className="text-sm text-zinc-500">
-            {pending.length} {pending.length === 1 ? 'article' : 'articles'}
+            {t('admin.seo.articleCount', { count: pending.length })}
           </p>
         </div>
       </div>

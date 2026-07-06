@@ -52,7 +52,7 @@ export function PublicHeader({ locale }: { locale: Locale }) {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-white md:hidden"
-            aria-label="Menu"
+            aria-label={t('nav.menu')}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>

@@ -6,7 +6,8 @@
     "book": "Book Now",
     "portal": "Customer Portal",
     "admin": "Admin",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "menu": "Menu"
   },
   "gallery": {
     "subtitle": "Moments from events across the Carolinas",
@@ -74,6 +75,7 @@
     "endTime": "End Time",
     "venue": "Venue Address",
     "city": "City",
+    "state": "State",
     "deposit": "Deposit Option",
     "submit": "Request Booking",
     "success": "Booking request submitted! We'll confirm within 24 hours.",
@@ -106,7 +108,26 @@
     "hasAccount": "Already have an account?",
     "signInLink": "Sign in",
     "signupSubtitle": "Access your bookings and contracts",
-    "registrationFailed": "Registration failed"
+    "registrationFailed": "Registration failed",
+    "resetPassword": "Reset Password",
+    "resetPasswordDesc": "Enter your new password below",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "updatePassword": "Update Password",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "resetLinkInvalid": "This reset link is invalid or has expired. Please request a new one."
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundDesc": "The page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to Home",
+    "genericTitle": "Something went wrong",
+    "genericDesc": "An unexpected error occurred. Please try again.",
+    "tryAgain": "Try Again"
+  },
+  "articles": {
+    "backToCity": "Back to city page"
   },
   "locations": {
     "title": "Serving the Carolinas",
@@ -157,6 +178,7 @@
     "datesUpdated": "Event dates updated successfully.",
     "paymentSuccess": "Payment completed successfully!",
     "paymentError": "Payment could not be processed. Please try again.",
+    "paymentProgress": "Payment progress",
     "guests": "guests",
     "total": "Total",
     "depositPaid": "Deposit Paid",
@@ -236,7 +258,8 @@
       "total": "Total",
       "status": "Status",
       "actions": "Actions",
-      "empty": "No bookings yet"
+      "empty": "No bookings yet",
+      "fetchError": "Failed to load bookings"
     },
     "settingsForm": {
       "pricing": "Pricing",
@@ -291,8 +314,36 @@
       "aiGenerated": "AI Generated",
       "preview": "Preview",
       "approve": "Approve",
-      "reject": "Reject"
+      "reject": "Reject",
+      "articleCount": "{{count}} articles",
+      "articleCount_one": "{{count}} article"
     }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: January 2026",
+    "s1Title": "Information We Collect",
+    "s1Body": "We collect information you provide when booking our mobile Irish pub services, including your name, email, phone number, event details, and payment information processed securely through Stripe.",
+    "s2Title": "How We Use Your Data",
+    "s2Body": "Your data is used to process bookings, send confirmations, manage contracts, and improve our services. We do not sell your personal information to third parties.",
+    "s3Title": "Data Security",
+    "s3Body": "All data is stored with tenant-level isolation using PostgreSQL Row Level Security. Payment data is handled exclusively by Stripe and never stored on our servers.",
+    "s4Title": "Cookies",
+    "s4Body": "We use essential cookies for authentication and locale preferences. We do not use third-party advertising cookies.",
+    "s5Title": "Your Rights",
+    "s5Body": "You may request access, correction, or deletion of your personal data by contacting bookings@emeraldpour.com."
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: January 2026",
+    "s1Title": "Booking & Deposits",
+    "s1Body": "A deposit of 25%, 50%, or 100% is required to secure your event date. The remaining balance is due before the event date unless otherwise agreed in writing.",
+    "s2Title": "Cancellation Policy",
+    "s2Body": "Cancellations made more than 30 days before the event receive a full deposit refund. Cancellations within 30 days forfeit the deposit. Weather-related cancellations will be rescheduled at no additional cost.",
+    "s3Title": "Service Area",
+    "s3Body": "The Emerald Pour serves North and South Carolina. Delivery costs are calculated based on distance from our Charlotte base at $2.50 per mile.",
+    "s4Title": "Liability",
+    "s4Body": "We carry full liability insurance. Clients are responsible for obtaining any required venue permits. Guests must be 21+ for alcohol service with valid ID."
   },
   "footer": {
     "rights": "All rights reserved.",

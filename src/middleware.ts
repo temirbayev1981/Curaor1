@@ -3,9 +3,11 @@ import { createServerClient } from '@supabase/ssr';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { defaultLocale, isValidLocale } from '@/lib/i18n/config';
 import { isStaffRole } from '@/lib/auth/rbac';
+import { resolveRedirect } from '@/lib/auth/safe-redirect';
+import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { UserRole } from '@/types/database';
 
-const PUBLIC_PATHS = ['/api/webhooks', '/api/gallery', '/api/bookings'];
+const PUBLIC_PATHS = ['/api/webhooks', '/api/gallery', '/api/bookings', '/api/health'];
 const AUTH_PATHS = ['/portal'];
 const ADMIN_PATHS = ['/admin'];
 const AUTH_PAGES = ['/login', '/signup'];
@@ -73,7 +75,7 @@ export async function middleware(request: NextRequest) {
       .from('tenant_users')
       .select('role')
       .eq('user_id', user.id)
-      .limit(1)
+      .eq('tenant_id', DEFAULT_TENANT_ID)
       .maybeSingle();
     role = (membership as { role: UserRole } | null)?.role ?? null;
   }
@@ -101,10 +103,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (AUTH_PAGES.some((p) => pathWithoutLocale.startsWith(p)) && user && role) {
+  if (AUTH_PAGES.some((p) => pathWithoutLocale.startsWith(p)) && user) {
     const redirect = request.nextUrl.searchParams.get('redirect');
+    const fallback = role && isStaffRole(role)
+      ? `/${locale}/admin`
+      : `/${locale}/portal`;
     const url = request.nextUrl.clone();
-    url.pathname = redirect ?? (isStaffRole(role) ? `/${locale}/admin` : `/${locale}/portal`);
+    url.pathname = resolveRedirect(redirect, fallback);
     url.search = '';
     return NextResponse.redirect(url);
   }

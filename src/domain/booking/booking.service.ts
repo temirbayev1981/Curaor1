@@ -124,7 +124,7 @@ export class BookingService {
       eventType: EVENT_TYPES.BOOKING_STATUS_CHANGED,
       aggregateId: bookingId,
       aggregateType: 'booking',
-      payload: { from: typedBooking.status, to: newStatus },
+      payload: { bookingId, from: typedBooking.status, to: newStatus },
       idempotencyKey: `booking.status:${bookingId}:${newStatus}`,
     });
 

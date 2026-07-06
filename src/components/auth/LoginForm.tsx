@@ -50,7 +50,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
     }
     const supabase = createClient();
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${globalThis.location.origin}/${locale}/login`,
+      redirectTo: `${globalThis.location.origin}/${locale}/reset-password`,
     });
     if (resetError) {
       setError(resetError.message);
