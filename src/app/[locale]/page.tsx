@@ -87,7 +87,6 @@ export default async function HomePage({
       'Charleston, SC',
       'Columbia, SC',
     ],
-    priceRange: '$$$',
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.9',

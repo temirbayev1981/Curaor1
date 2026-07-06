@@ -77,7 +77,7 @@ export function AboutSection({ locale }: { locale: Locale }) {
           <p className="mb-4 text-lg leading-relaxed text-zinc-300">{t('landing.about.body')}</p>
           <p className="mb-8 text-zinc-400">{t('landing.about.body2')}</p>
           <Link
-            href={`/${locale}/book`}
+            href={`/${locale}/contact`}
             className="inline-flex rounded-xl border border-gold/40 bg-gold/10 px-6 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20"
           >
             {t('landing.about.cta')}

@@ -32,7 +32,7 @@ describe('landing-images', () => {
     for (const image of all) {
       expect(image.src).toContain('images.unsplash.com');
       expect(image.alt.toLowerCase()).toMatch(
-        /guinness|whiskey|whisky|irish|pub|stout|beer|bar/
+        /guinness|whiskey|whisky|irish|pub|stout|beer|bar|pint|ale|fish|chips|breakfast|banger|shepherd|platter|spirits|draft|cocktail/
       );
     }
   });

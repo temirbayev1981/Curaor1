@@ -13,7 +13,7 @@ export function PricingPackagesSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
 
   return (
-    <section id="pricing" className="py-24">
+    <section id="packages" className="py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
           initial={false}
@@ -55,9 +55,6 @@ export function PricingPackagesSection({ locale }: { locale: Locale }) {
                   {t(`landing.pricing.tiers.${tier}.name`)}
                 </h3>
               </div>
-              <p className="mb-2 text-3xl font-bold text-gold">
-                {t(`landing.pricing.tiers.${tier}.from`)}
-              </p>
               <p className="mb-6 text-sm text-zinc-400">
                 {t(`landing.pricing.tiers.${tier}.guests`)}
               </p>

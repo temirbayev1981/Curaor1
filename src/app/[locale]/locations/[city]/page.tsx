@@ -121,7 +121,6 @@ export default async function CityLocationPage({
         name: stateFull,
       },
     },
-    priceRange: '$$$',
   };
 
   return (
