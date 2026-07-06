@@ -51,7 +51,9 @@
     "downloadInvoice": "Download Invoice",
     "signContract": "Sign Contract",
     "changeDates": "Change Dates",
-    "noBookings": "You have no bookings yet."
+    "noBookings": "You have no bookings yet.",
+    "contractSigned": "Contract signed successfully!",
+    "datesUpdated": "Event dates updated successfully."
   },
   "admin": {
     "dashboard": "Dashboard",

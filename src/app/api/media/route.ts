@@ -84,6 +84,24 @@ export async function POST(request: NextRequest) {
       });
 
       uploaded.push(asset);
+
+      if (file.type.startsWith('image/') && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+        void fetch(
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/process-media`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+            },
+            body: JSON.stringify({
+              tenantId,
+              assetId: asset.id,
+              storagePath,
+            }),
+          }
+        );
+      }
     }
 
     return Response.json(apiSuccess(uploaded, requestId), { status: 201 });

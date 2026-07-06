@@ -1,9 +1,45 @@
 import { createAdminClient } from '@/lib/supabase/admin';
-import type { Contract, ContractStatus } from '@/types/database';
-import { eventBus } from '@/domain/events/event-bus';
-import { EVENT_TYPES } from '@/domain/events/event.types';
+import type { Contract } from '@/types/database';
 
 export class ContractService {
+  async getByBooking(tenantId: string, bookingId: string): Promise<Contract | null> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('contracts')
+      .select('*')
+      .eq('tenant_id', tenantId)
+      .eq('booking_id', bookingId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    return (data as Contract) ?? null;
+  }
+
+  async createForBooking(tenantId: string, bookingId: string): Promise<Contract> {
+    const supabase = createAdminClient();
+
+    const existing = await this.getByBooking(tenantId, bookingId);
+    if (existing) return existing;
+
+    const storagePath = `${tenantId}/${bookingId}/contract.pdf`;
+
+    const { data, error } = await supabase
+      .from('contracts')
+      .insert({
+        tenant_id: tenantId,
+        booking_id: bookingId,
+        storage_path: storagePath,
+        status: 'sent',
+      })
+      .select()
+      .single();
+
+    if (error || !data) throw new Error(error?.message ?? 'Failed to create contract');
+    return data as Contract;
+  }
+
   async sign(
     tenantId: string,
     contractId: string,
@@ -14,24 +50,27 @@ export class ContractService {
     const { data, error } = await supabase
       .from('contracts')
       .update({
-        status: 'signed' as ContractStatus,
+        status: 'signed',
         signed_at: new Date().toISOString(),
         signature_data: signatureData,
       })
       .eq('id', contractId)
       .eq('tenant_id', tenantId)
-      .eq('status', 'sent')
+      .in('status', ['draft', 'sent'])
       .select()
       .single();
 
     if (error || !data) throw new Error('Contract not found or already signed');
+
+    const { eventBus } = await import('@/domain/events/event-bus');
+    const { EVENT_TYPES } = await import('@/domain/events/event.types');
 
     await eventBus.publish({
       tenantId,
       eventType: EVENT_TYPES.CONTRACT_SIGNED,
       aggregateId: contractId,
       aggregateType: 'contract',
-      payload: { contractId, bookingId: data.booking_id },
+      payload: { contractId, bookingId: (data as Contract).booking_id },
       idempotencyKey: `contract.signed:${contractId}`,
     });
 
@@ -51,7 +90,7 @@ export class ContractService {
 
     const { data: urlData, error: urlError } = await supabase.storage
       .from('contracts')
-      .createSignedUrl(contract.storage_path, 3600);
+      .createSignedUrl((contract as { storage_path: string }).storage_path, 3600);
 
     if (urlError || !urlData?.signedUrl) {
       throw new Error('Failed to generate contract URL');

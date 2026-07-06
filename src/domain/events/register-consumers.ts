@@ -58,6 +58,13 @@ export function registerEventConsumers(): void {
       EVENT_TYPES.BOOKING_STATUS_CHANGED,
     ])
   );
+
+  eventBus.register(
+    createEdgeConsumer('sms-sender', 'send-sms', [
+      EVENT_TYPES.BOOKING_CREATED,
+      EVENT_TYPES.PAYMENT_SUCCEEDED,
+    ])
+  );
 }
 
 registerEventConsumers();
