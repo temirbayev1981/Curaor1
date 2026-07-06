@@ -4,42 +4,39 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { defaultLocale, isValidLocale } from '@/lib/i18n/config';
 import { isStaffRole } from '@/lib/auth/rbac';
 import { resolveRedirect } from '@/lib/auth/safe-redirect';
+import { isApiRoute, isStaticAsset, needsLocaleRedirect } from '@/lib/middleware/paths';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { UserRole } from '@/types/database';
 
-const PUBLIC_PATHS = ['/api/webhooks', '/api/gallery', '/api/bookings', '/api/health'];
 const AUTH_PATHS = ['/portal'];
 const ADMIN_PATHS = ['/admin'];
 const AUTH_PAGES = ['/login', '/signup'];
 
+/** Preserve Supabase session cookies when returning a redirect. */
+function redirectWithCookies(url: URL, sessionResponse: NextResponse) {
+  const response = NextResponse.redirect(url);
+  sessionResponse.cookies.getAll().forEach((cookie) => {
+    response.cookies.set(cookie.name, cookie.value, cookie);
+  });
+  return response;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (
-    PUBLIC_PATHS.some((p) => pathname.startsWith(p)) ||
-    pathname.startsWith('/_next') ||
-    pathname.includes('.')
-  ) {
+  if (isStaticAsset(pathname)) {
     return NextResponse.next();
   }
 
-  const segments = pathname.split('/').filter(Boolean);
-  const firstSegment = segments[0];
-
-  if (!firstSegment || !isValidLocale(firstSegment)) {
+  if (needsLocaleRedirect(pathname)) {
+    const localeCookie = request.cookies.get('locale')?.value;
     const locale =
-      request.cookies.get('locale')?.value &&
-      isValidLocale(request.cookies.get('locale')!.value)
-        ? request.cookies.get('locale')!.value
-        : defaultLocale;
+      localeCookie && isValidLocale(localeCookie) ? localeCookie : defaultLocale;
 
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
     return NextResponse.redirect(url);
   }
-
-  const locale = firstSegment;
-  const pathWithoutLocale = '/' + segments.slice(1).join('/');
 
   let supabaseResponse = NextResponse.next({ request });
 
@@ -68,6 +65,15 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // API routes: refresh session cookies only — no locale prefix, no page guards
+  if (isApiRoute(pathname)) {
+    return supabaseResponse;
+  }
+
+  const segments = pathname.split('/').filter(Boolean);
+  const locale = segments[0]!;
+  const pathWithoutLocale = '/' + segments.slice(1).join('/');
+
   let role: UserRole | null = null;
   if (user) {
     const admin = createAdminClient();
@@ -85,12 +91,12 @@ export async function middleware(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}/login`;
       url.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(url);
+      return redirectWithCookies(url, supabaseResponse);
     }
     if (!role || !isStaffRole(role)) {
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}/portal`;
-      return NextResponse.redirect(url);
+      return redirectWithCookies(url, supabaseResponse);
     }
   }
 
@@ -99,19 +105,18 @@ export async function middleware(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}/login`;
       url.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(url);
+      return redirectWithCookies(url, supabaseResponse);
     }
   }
 
   if (AUTH_PAGES.some((p) => pathWithoutLocale.startsWith(p)) && user) {
     const redirect = request.nextUrl.searchParams.get('redirect');
-    const fallback = role && isStaffRole(role)
-      ? `/${locale}/admin`
-      : `/${locale}/portal`;
+    const fallback =
+      role && isStaffRole(role) ? `/${locale}/admin` : `/${locale}/portal`;
     const url = request.nextUrl.clone();
     url.pathname = resolveRedirect(redirect, fallback);
     url.search = '';
-    return NextResponse.redirect(url);
+    return redirectWithCookies(url, supabaseResponse);
   }
 
   supabaseResponse.cookies.set('locale', locale, {
