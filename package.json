@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "bootstrap": "tsx --env-file=.env.local scripts/bootstrap-dev.ts",
+    "db:push": "tsx --env-file=.env.local scripts/db-push.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -52,6 +53,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "jsdom": "^29.1.1",
+    "pg": "^8.22.0",
+    "supabase": "^2.109.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
     "typescript": "^5",
