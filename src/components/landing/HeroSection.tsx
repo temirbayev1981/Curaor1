@@ -4,13 +4,11 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { useHydrated } from '@/lib/hooks/use-hydrated';
 import type { Locale } from '@/lib/i18n/config';
 
 export function HeroSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
-  const hydrated = useHydrated();
-  const fadeUp = hydrated ? { opacity: 0, y: 30 } : false;
+  const fadeUp = { opacity: 1, y: 0 };
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden pt-16">
@@ -30,8 +28,8 @@ export function HeroSection({ locale }: { locale: Locale }) {
 
       <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
         <motion.div
-          initial={fadeUp}
-          animate={{ opacity: 1, y: 0 }}
+          initial={false}
+          animate={fadeUp}
           transition={{ duration: 0.8 }}
         >
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm text-emerald-300">
@@ -42,8 +40,8 @@ export function HeroSection({ locale }: { locale: Locale }) {
 
         <motion.h1
           className="mb-4 text-5xl font-bold tracking-tight text-white sm:text-7xl"
-          initial={fadeUp}
-          animate={{ opacity: 1, y: 0 }}
+          initial={false}
+          animate={fadeUp}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
           {t('hero.title')}
@@ -51,8 +49,8 @@ export function HeroSection({ locale }: { locale: Locale }) {
 
         <motion.p
           className="mb-2 text-xl text-emerald-300 sm:text-2xl"
-          initial={fadeUp}
-          animate={{ opacity: 1, y: 0 }}
+          initial={false}
+          animate={fadeUp}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           {t('hero.subtitle')}
@@ -60,8 +58,8 @@ export function HeroSection({ locale }: { locale: Locale }) {
 
         <motion.p
           className="mx-auto mb-10 max-w-2xl text-lg text-zinc-400"
-          initial={fadeUp}
-          animate={{ opacity: 1, y: 0 }}
+          initial={false}
+          animate={fadeUp}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           {t('hero.description')}
@@ -69,8 +67,8 @@ export function HeroSection({ locale }: { locale: Locale }) {
 
         <motion.div
           className="flex flex-col items-center justify-center gap-4 sm:flex-row"
-          initial={fadeUp}
-          animate={{ opacity: 1, y: 0 }}
+          initial={false}
+          animate={fadeUp}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <Link

@@ -16,7 +16,7 @@ export function CTASection({ locale }: { locale: Locale }) {
 
       <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >

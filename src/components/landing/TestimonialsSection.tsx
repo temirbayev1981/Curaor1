@@ -14,7 +14,7 @@ export function TestimonialsSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
           className="mb-16 text-center"
-          initial={{ opacity: 0 }}
+          initial={false}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
@@ -29,7 +29,7 @@ export function TestimonialsSection() {
           {testimonials.map((key, i) => (
             <motion.div
               key={key}
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}

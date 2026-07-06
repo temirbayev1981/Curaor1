@@ -21,7 +21,7 @@ export function StatsSection() {
           {items.map(({ key, value, icon: Icon }, i) => (
             <motion.div
               key={key}
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}

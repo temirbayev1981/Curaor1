@@ -19,7 +19,7 @@ export function ServicesSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <motion.h2
           className="mb-16 text-center text-3xl font-bold text-white sm:text-4xl"
-          initial={{ opacity: 0 }}
+          initial={false}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
@@ -30,7 +30,7 @@ export function ServicesSection() {
             <motion.div
               key={key}
               className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
