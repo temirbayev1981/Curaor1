@@ -118,8 +118,8 @@ const CATALOG = {
     'Bangers and mash with gravy served pub-style on a plate'
   ),
   shepherdPie: img(
-    'plate-wooden.jpg',
-    'Shepherd\'s pie with mashed potato topping served pub-style'
+    'shepherds-pie.jpg',
+    'Classic Irish shepherd\'s pie with golden mashed potato crust in a cast-iron skillet'
   ),
   potatoGravy: img(
     'potato-gravy.jpg',
@@ -153,17 +153,17 @@ export const EXPERIENCE_IMAGES: LandingImage[] = [
 ];
 
 export const FOOD_IMAGES: LandingImage[] = [
+  CATALOG.shepherdPie,
   CATALOG.fishAndChips,
   CATALOG.irishBreakfast,
   CATALOG.bangersMash,
-  CATALOG.shepherdPie,
 ];
 
 export const MENU_CATEGORY_IMAGES = {
   beer: CATALOG.guinnessTable,
   whiskey: CATALOG.whiskeyNeat,
   cocktails: CATALOG.whiskeyCocktail,
-  food: CATALOG.fishAndChips,
+  food: CATALOG.shepherdPie,
 } as const;
 
 export const SERVICE_IMAGES = {
