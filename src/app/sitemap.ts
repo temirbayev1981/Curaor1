@@ -1,10 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { CAROLINA_CITIES } from '@/domain/ai/ai-content.service';
+import { absoluteUrl } from '@/lib/config/env';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { SeoArticle } from '@/types/database';
-
-const BASE = 'https://emeraldpour.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = ['', '/book', '/gallery', '/locations', '/login', '/signup', '/portal'];
@@ -15,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of locales) {
     for (const path of staticPaths) {
       entries.push({
-        url: `${BASE}/${locale}${path}`,
+        url: absoluteUrl(`/${locale}${path}`),
         lastModified: new Date(),
         changeFrequency: path === '' ? 'weekly' : 'monthly',
         priority: path === '' ? 1 : 0.8,
@@ -24,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     for (const city of Object.keys(CAROLINA_CITIES)) {
       entries.push({
-        url: `${BASE}/${locale}/locations/${city}`,
+        url: absoluteUrl(`/${locale}/locations/${city}`),
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.7,
@@ -42,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     for (const article of (data ?? []) as Pick<SeoArticle, 'slug' | 'locale' | 'updated_at'>[]) {
       entries.push({
-        url: `${BASE}/${article.locale}/articles/${article.slug}`,
+        url: absoluteUrl(`/${article.locale}/articles/${article.slug}`),
         lastModified: new Date(article.updated_at),
         changeFrequency: 'monthly',
         priority: 0.6,

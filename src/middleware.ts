@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { defaultLocale, isValidLocale } from '@/lib/i18n/config';
 import { isStaffRole } from '@/lib/auth/rbac';
 import { resolveRedirect } from '@/lib/auth/safe-redirect';
+import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/config/env';
 import { isApiRoute, isStaticAsset, needsLocaleRedirect } from '@/lib/middleware/paths';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { UserRole } from '@/types/database';
@@ -41,8 +42,8 @@ export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    getSupabaseUrl(),
+    getSupabaseAnonKey(),
     {
       cookies: {
         getAll() {

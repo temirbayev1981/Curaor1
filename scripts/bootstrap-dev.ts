@@ -12,8 +12,12 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import {
+  getDefaultTenantId,
+  getSupabaseServiceRoleKey,
+  getSupabaseUrl,
+} from '../src/lib/config/env';
 
-const TENANT_ID = 'a0000000-0000-4000-8000-000000000001';
 const PASSWORD = 'DevPassword123!';
 
 const USERS = [
@@ -32,14 +36,9 @@ const USERS = [
 ];
 
 async function main() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !serviceKey) {
-    console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
-    console.error('Load .env.local: export $(grep -v "^#" .env.local | xargs)');
-    process.exit(1);
-  }
+  const url = getSupabaseUrl();
+  const serviceKey = getSupabaseServiceRoleKey();
+  const tenantId = getDefaultTenantId();
 
   const supabase = createClient(url, serviceKey, {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -73,14 +72,14 @@ async function main() {
     }
 
     await supabase.from('tenant_users').upsert(
-      { tenant_id: TENANT_ID, user_id: userId, role: user.role },
+      { tenant_id: tenantId, user_id: userId, role: user.role },
       { onConflict: 'tenant_id,user_id' }
     );
 
     const { data: customer } = await supabase
       .from('customers')
       .select('id')
-      .eq('tenant_id', TENANT_ID)
+      .eq('tenant_id', tenantId)
       .eq('email', user.email)
       .maybeSingle();
 
@@ -91,7 +90,7 @@ async function main() {
         .eq('id', customer.id);
     } else if (user.role === 'customer') {
       await supabase.from('customers').insert({
-        tenant_id: TENANT_ID,
+        tenant_id: tenantId,
         user_id: userId,
         email: user.email,
         full_name: user.fullName,

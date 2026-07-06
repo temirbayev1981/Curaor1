@@ -1,4 +1,5 @@
 import type { TenantSettings } from '@/types/database';
+import { getSupportEmail } from '@/lib/config/env';
 
 export const SYSTEM_DEFAULTS: TenantSettings = {
   price_per_mile: 2.5,
@@ -6,7 +7,7 @@ export const SYSTEM_DEFAULTS: TenantSettings = {
   base_event_price: 1500,
   currency: 'USD',
   timezone: 'America/New_York',
-  notification_email: 'bookings@emeraldpour.com',
+  notification_email: getSupportEmail(),
   telegram_chat_id: null,
 };
 

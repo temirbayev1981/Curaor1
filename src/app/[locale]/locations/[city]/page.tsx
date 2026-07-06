@@ -3,6 +3,7 @@ import { PublicHeader } from '@/components/layout/PublicHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
 import { CityPageContent } from '@/components/landing/CityPageContent';
 import { CAROLINA_CITIES } from '@/domain/ai/ai-content.service';
+import { absoluteUrl } from '@/lib/config/env';
 import { getTranslations } from '@/lib/i18n/server';
 import { getStateName, interpolate } from '@/lib/i18n/city-content';
 import type { Locale } from '@/lib/i18n/config';
@@ -58,10 +59,10 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `https://emeraldpour.com/${locale}/locations/${citySlug}`,
+      canonical: absoluteUrl(`/${locale}/locations/${citySlug}`),
       languages: {
-        en: `https://emeraldpour.com/en/locations/${citySlug}`,
-        ru: `https://emeraldpour.com/ru/locations/${citySlug}`,
+        en: absoluteUrl(`/en/locations/${citySlug}`),
+        ru: absoluteUrl(`/ru/locations/${citySlug}`),
       },
     },
     openGraph: { title, description },
@@ -91,7 +92,7 @@ export default async function CityLocationPage({
       state: city.state,
       stateFull,
     }),
-    url: `https://emeraldpour.com/${locale}/locations/${citySlug}`,
+    url: absoluteUrl(`/${locale}/locations/${citySlug}`),
     areaServed: {
       '@type': 'City',
       name: cityName,

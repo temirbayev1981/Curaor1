@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { PublicHeader } from '@/components/layout/PublicHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { absoluteUrl } from '@/lib/config/env';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import { getTranslations } from '@/lib/i18n/server';
 import type { SeoArticle } from '@/types/database';
@@ -22,7 +23,7 @@ export async function generateMetadata({
     title: article.title,
     description: article.meta_description ?? undefined,
     alternates: {
-      canonical: `https://emeraldpour.com/${locale}/articles/${slug}`,
+      canonical: absoluteUrl(`/${locale}/articles/${slug}`),
     },
     openGraph: {
       title: article.title,

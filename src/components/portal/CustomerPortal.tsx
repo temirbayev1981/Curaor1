@@ -13,6 +13,7 @@ import {
 } from '@/components/portal/PortalLayout';
 import { BookingCard, EmptyBookings } from '@/components/portal/BookingCard';
 import { useToast } from '@/components/ui/Toast';
+import { absoluteUrl } from '@/lib/config/env';
 import type { Booking } from '@/types/database';
 import type { Locale } from '@/lib/i18n/config';
 
@@ -51,8 +52,8 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
       body: JSON.stringify({
         bookingId,
         paymentType: type,
-        successUrl: `${window.location.origin}/${locale}/portal?paid=true`,
-        cancelUrl: `${window.location.origin}/${locale}/portal`,
+        successUrl: absoluteUrl(`/${locale}/portal?paid=true`),
+        cancelUrl: absoluteUrl(`/${locale}/portal`),
       }),
     });
     const json = (await res.json()) as { data: { url: string } | null; error: { message: string } | null };

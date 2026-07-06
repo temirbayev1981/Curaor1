@@ -2,6 +2,11 @@ import { NextRequest } from 'next/server';
 import { randomUUID } from 'crypto';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { requireStaff, AuthError } from '@/lib/auth/rbac';
+import {
+  getSupabaseServiceRoleKey,
+  getSupabaseUrl,
+  isSupabaseConfigured,
+} from '@/lib/config/env';
 import { mediaService } from '@/domain/media/media.service';
 import { createAdminClient } from '@/lib/supabase/admin';
 
@@ -85,15 +90,13 @@ export async function POST(request: NextRequest) {
 
       uploaded.push(asset);
 
-      if (file.type.startsWith('image/') && process.env.NEXT_PUBLIC_SUPABASE_URL) {
-        void fetch(
-          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/process-media`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-            },
+      if (file.type.startsWith('image/') && isSupabaseConfigured()) {
+        void fetch(`${getSupabaseUrl()}/functions/v1/process-media`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getSupabaseServiceRoleKey()}`,
+          },
             body: JSON.stringify({
               tenantId: ctx.tenantId,
               assetId: asset.id,

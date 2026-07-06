@@ -1,6 +1,6 @@
 # API Reference
 
-Base URL: `https://emeraldpour.com` (production) or `http://localhost:3000` (dev)
+Base URL: set `NEXT_PUBLIC_SITE_URL` (default `http://localhost:3000` in dev, production domain in prod)
 
 All API responses follow: `{ data, error, meta: { timestamp, requestId } }`
 

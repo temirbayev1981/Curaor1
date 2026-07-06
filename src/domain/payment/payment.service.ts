@@ -5,8 +5,10 @@ import { EVENT_TYPES } from '@/domain/events/event.types';
 import { bookingService } from '@/domain/booking/booking.service';
 import type { Payment, PaymentType } from '@/types/database';
 
+import { getStripeSecretKey } from '@/lib/config/env';
+
 function getStripe(): Stripe {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  return new Stripe(getStripeSecretKey(), {
     apiVersion: '2026-06-24.dahlia',
   });
 }

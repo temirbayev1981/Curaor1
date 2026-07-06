@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { createClient } from '@/lib/supabase/client';
+import { absoluteUrl } from '@/lib/config/env';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 import { Button } from '@/components/ui/Button';
 import { Field, Input } from '@/components/ui/Input';
@@ -50,7 +51,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
     }
     const supabase = createClient();
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${globalThis.location.origin}/${locale}/reset-password`,
+      redirectTo: absoluteUrl(`/${locale}/reset-password`),
     });
     if (resetError) {
       setError(resetError.message);

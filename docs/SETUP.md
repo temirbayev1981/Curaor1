@@ -24,13 +24,24 @@ npm install
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your Supabase credentials from **Dashboard → Settings → API**:
+Edit `.env.local` with your credentials:
+
+**Required (Supabase)** — from **Dashboard → Settings → API**:
 
 | Variable | Where to find |
 |----------|---------------|
 | `NEXT_PUBLIC_SUPABASE_URL` | Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public key |
 | `SUPABASE_SERVICE_ROLE_KEY` | service_role key (keep secret!) |
+
+**Recommended (app config)**:
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` | Canonical URLs, sitemap, Stripe redirects |
+| `NEXT_PUBLIC_APP_NAME` | `The Emerald Pour` | Branding |
+| `NEXT_PUBLIC_SUPPORT_EMAIL` | `bookings@emeraldpour.com` | Notifications default |
+| `NEXT_PUBLIC_DEFAULT_TENANT_ID` | seed tenant UUID | Multi-tenant default |
 
 Optional (for full features):
 
@@ -40,6 +51,7 @@ Optional (for full features):
 | `STRIPE_WEBHOOK_SECRET` | Payment webhooks |
 | `OPENAI_API_KEY` | AI SEO articles |
 | `MAPBOX_ACCESS_TOKEN` | Delivery distance |
+| `MAPBOX_ORIGIN_LAT` / `MAPBOX_ORIGIN_LNG` | Distance origin (default: Charlotte, NC) |
 
 ## Step 3: Database Setup
 
@@ -63,11 +75,8 @@ Copy contents of `supabase/migrations/20260101000000_initial_schema.sql` into Su
 ## Step 4: Create Dev Users
 
 ```bash
-# Load env vars (Linux/Mac)
-export $(grep -v '^#' .env.local | xargs)
-
-# Create owner + customer test accounts
-npx tsx scripts/bootstrap-dev.ts
+# Reads .env.local automatically
+npm run bootstrap
 ```
 
 This creates:

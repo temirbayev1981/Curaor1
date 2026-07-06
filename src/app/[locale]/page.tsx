@@ -6,6 +6,7 @@ import { StatsSection } from '@/components/landing/StatsSection';
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
 import { CTASection } from '@/components/landing/CTASection';
 import type { Locale } from '@/lib/i18n/config';
+import { absoluteUrl } from '@/lib/config/env';
 import { getTranslations } from '@/lib/i18n/server';
 
 export async function generateMetadata({
@@ -20,10 +21,10 @@ export async function generateMetadata({
     title: t.hero.title,
     description: t.hero.description,
     alternates: {
-      canonical: `https://emeraldpour.com/${locale}`,
+      canonical: absoluteUrl(`/${locale}`),
       languages: {
-        en: 'https://emeraldpour.com/en',
-        ru: 'https://emeraldpour.com/ru',
+        en: absoluteUrl('/en'),
+        ru: absoluteUrl('/ru'),
       },
     },
     openGraph: {
@@ -46,7 +47,7 @@ export default async function HomePage({
     '@type': 'LocalBusiness',
     name: 'The Emerald Pour',
     description: 'Mobile Irish Pub catering across North and South Carolina',
-    url: `https://emeraldpour.com/${locale}`,
+    url: absoluteUrl(`/${locale}`),
     telephone: '+1-704-555-0199',
     address: {
       '@type': 'PostalAddress',

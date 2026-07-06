@@ -1,2 +1,4 @@
-export const DEFAULT_TENANT_ID = 'a0000000-0000-4000-8000-000000000001';
+import { getDefaultTenantId } from '@/lib/config/env';
+
+export const DEFAULT_TENANT_ID = getDefaultTenantId();
 export const DEFAULT_TENANT_SLUG = 'emerald-pour';

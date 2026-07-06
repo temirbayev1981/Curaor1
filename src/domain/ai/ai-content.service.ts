@@ -1,5 +1,6 @@
-import OpenAI from 'openai';
+import { getOpenAiApiKey } from '@/lib/config/env';
 import DOMPurify from 'isomorphic-dompurify';
+import OpenAI from 'openai';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { checkAiRateLimit } from '@/lib/api/rate-limit';
 import { eventBus } from '@/domain/events/event-bus';
@@ -37,7 +38,7 @@ export class AiContentService {
     const cityName = city[locale];
     const lang = locale === 'ru' ? 'Russian' : 'English';
 
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const openai = new OpenAI({ apiKey: getOpenAiApiKey() });
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
