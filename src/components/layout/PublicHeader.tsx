@@ -54,8 +54,14 @@ export function PublicHeader({ locale }: { locale: Locale }) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
+          <Link
+            href={`/${locale}/admin/login`}
+            className="hidden rounded-md border border-white/20 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-200 transition hover:border-gold/40 hover:text-gold md:inline-flex"
+          >
+            {t('nav.admin')}
+          </Link>
           <Link
             href={`/${locale}/book`}
             className="hidden rounded-md bg-gold px-4 py-2 text-xs font-bold uppercase tracking-wider text-emerald-950 transition hover:bg-gold/90 sm:inline-flex"
@@ -93,6 +99,13 @@ export function PublicHeader({ locale }: { locale: Locale }) {
                   {t(`nav.${key}`)}
                 </Link>
               ))}
+              <Link
+                href={`/${locale}/admin/login`}
+                onClick={() => setMobileOpen(false)}
+                className="block rounded-xl px-4 py-3 text-sm text-zinc-300 transition hover:bg-white/5 hover:text-white"
+              >
+                {t('nav.admin')}
+              </Link>
               <Link
                 href={`/${locale}/book`}
                 onClick={() => setMobileOpen(false)}

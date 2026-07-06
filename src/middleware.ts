@@ -3,6 +3,11 @@ import { createServerClient } from '@supabase/ssr';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { defaultLocale, isValidLocale } from '@/lib/i18n/config';
 import { isStaffRole } from '@/lib/auth/rbac';
+import {
+  ADMIN_CHANGE_PASSWORD_PATH,
+  ADMIN_LOGIN_PATH,
+  userMustChangePassword,
+} from '@/lib/auth/admin-auth';
 import { resolveRedirect } from '@/lib/auth/safe-redirect';
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from '@/lib/config/env';
 import { isApiRoute, isStaticAsset, needsLocaleRedirect } from '@/lib/middleware/paths';
@@ -10,7 +15,6 @@ import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { UserRole } from '@/types/database';
 
 const AUTH_PATHS = ['/portal'];
-const ADMIN_PATHS = ['/admin'];
 const AUTH_PAGES = ['/login', '/signup'];
 
 /** Preserve Supabase session cookies when returning a redirect. */
@@ -113,17 +117,58 @@ export async function middleware(request: NextRequest) {
     role = (membership as { role: UserRole } | null)?.role ?? null;
   }
 
-  if (ADMIN_PATHS.some((p) => pathWithoutLocale.startsWith(p))) {
-    if (!user) {
-      const url = request.nextUrl.clone();
-      url.pathname = `/${locale}/login`;
-      url.searchParams.set('redirect', pathname);
-      return redirectWithCookies(url, supabaseResponse);
-    }
-    if (!role || !isStaffRole(role)) {
-      const url = request.nextUrl.clone();
-      url.pathname = `/${locale}/portal`;
-      return redirectWithCookies(url, supabaseResponse);
+  const mustChangePassword = userMustChangePassword(user);
+
+  if (pathWithoutLocale.startsWith('/admin')) {
+    const onLoginPage =
+      pathWithoutLocale === ADMIN_LOGIN_PATH ||
+      pathWithoutLocale.startsWith(`${ADMIN_LOGIN_PATH}/`);
+    const onChangePasswordPage =
+      pathWithoutLocale === ADMIN_CHANGE_PASSWORD_PATH ||
+      pathWithoutLocale.startsWith(`${ADMIN_CHANGE_PASSWORD_PATH}/`);
+
+    if (onLoginPage) {
+      if (user && role && isStaffRole(role)) {
+        const url = request.nextUrl.clone();
+        url.pathname = mustChangePassword
+          ? `/${locale}${ADMIN_CHANGE_PASSWORD_PATH}`
+          : `/${locale}/admin`;
+        url.search = '';
+        return redirectWithCookies(url, supabaseResponse);
+      }
+    } else if (onChangePasswordPage) {
+      if (!user) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${locale}${ADMIN_LOGIN_PATH}`;
+        return redirectWithCookies(url, supabaseResponse);
+      }
+      if (!role || !isStaffRole(role)) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${locale}/portal`;
+        return redirectWithCookies(url, supabaseResponse);
+      }
+      if (!mustChangePassword) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${locale}/admin`;
+        return redirectWithCookies(url, supabaseResponse);
+      }
+    } else {
+      if (!user) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${locale}${ADMIN_LOGIN_PATH}`;
+        url.searchParams.set('redirect', pathname);
+        return redirectWithCookies(url, supabaseResponse);
+      }
+      if (mustChangePassword) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${locale}${ADMIN_CHANGE_PASSWORD_PATH}`;
+        return redirectWithCookies(url, supabaseResponse);
+      }
+      if (!role || !isStaffRole(role)) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${locale}/portal`;
+        return redirectWithCookies(url, supabaseResponse);
+      }
     }
   }
 
@@ -138,8 +183,11 @@ export async function middleware(request: NextRequest) {
 
   if (AUTH_PAGES.some((p) => pathWithoutLocale.startsWith(p)) && user) {
     const redirect = request.nextUrl.searchParams.get('redirect');
+    const staffFallback = mustChangePassword
+      ? `/${locale}${ADMIN_CHANGE_PASSWORD_PATH}`
+      : `/${locale}/admin`;
     const fallback =
-      role && isStaffRole(role) ? `/${locale}/admin` : `/${locale}/portal`;
+      role && isStaffRole(role) ? staffFallback : `/${locale}/portal`;
     const url = request.nextUrl.clone();
     url.pathname = resolveRedirect(redirect, fallback);
     url.search = '';

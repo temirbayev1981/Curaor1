@@ -7,7 +7,8 @@
  *   npx tsx scripts/bootstrap-dev.ts
  *
  * Creates:
- *   - owner@emeraldpour.com (owner) — admin access
+ *   - admin@emeraldpour.com (owner) — Admin / 12345678, must change password on first login
+ *   - owner@emeraldpour.com (owner) — legacy dev owner
  *   - customer@example.com (customer) — portal access, linked to seed booking
  */
 
@@ -17,21 +18,35 @@ import {
   getSupabaseServiceRoleKey,
   getSupabaseUrl,
 } from '../src/lib/config/env';
+import { ADMIN_EMAIL } from '../src/lib/auth/admin-auth';
 
-const PASSWORD = 'DevPassword123!';
+const DEV_PASSWORD = 'DevPassword123!';
+const ADMIN_PASSWORD = '12345678';
 
 const USERS = [
+  {
+    email: ADMIN_EMAIL,
+    role: 'owner' as const,
+    fullName: 'Admin',
+    phone: '+17045550199',
+    password: ADMIN_PASSWORD,
+    userMetadata: { must_change_password: true },
+  },
   {
     email: 'owner@emeraldpour.com',
     role: 'owner' as const,
     fullName: 'Dev Owner',
     phone: '+17045550100',
+    password: DEV_PASSWORD,
+    userMetadata: { must_change_password: false },
   },
   {
     email: 'customer@example.com',
     role: 'customer' as const,
     fullName: 'Sarah Mitchell',
     phone: '+17045550101',
+    password: DEV_PASSWORD,
+    userMetadata: { must_change_password: false },
   },
 ];
 
@@ -54,13 +69,33 @@ async function main() {
 
     if (found) {
       userId = found.id;
-      console.log(`  ✓ ${user.email} already exists (${userId})`);
+      const { error: updateError } = await supabase.auth.admin.updateUserById(
+        userId,
+        {
+          password: user.password,
+          user_metadata: {
+            ...found.user_metadata,
+            full_name: user.fullName,
+            phone: user.phone,
+            ...user.userMetadata,
+          },
+        }
+      );
+      if (updateError) {
+        console.error(`  ✗ Failed to update ${user.email}:`, updateError.message);
+        continue;
+      }
+      console.log(`  ✓ ${user.email} updated (${userId})`);
     } else {
       const { data, error } = await supabase.auth.admin.createUser({
         email: user.email,
-        password: PASSWORD,
+        password: user.password,
         email_confirm: true,
-        user_metadata: { full_name: user.fullName, phone: user.phone },
+        user_metadata: {
+          full_name: user.fullName,
+          phone: user.phone,
+          ...user.userMetadata,
+        },
       });
 
       if (error || !data.user) {
@@ -102,9 +137,11 @@ async function main() {
   }
 
   console.log('\n─────────────────────────────────────────');
-  console.log('Dev credentials (password for all):');
-  console.log(`  ${PASSWORD}`);
-  console.log('\nAccounts:');
+  console.log('Admin panel:');
+  console.log('  Username: Admin');
+  console.log(`  Password: ${ADMIN_PASSWORD} (change on first login)`);
+  console.log('  URL:      /en/admin/login');
+  console.log('\nOther dev accounts (password: DevPassword123!):');
   console.log('  owner@emeraldpour.com  → /en/admin');
   console.log('  customer@example.com   → /en/portal');
   console.log('─────────────────────────────────────────\n');

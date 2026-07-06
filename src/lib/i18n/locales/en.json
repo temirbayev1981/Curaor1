@@ -168,7 +168,18 @@
     "updatePassword": "Update Password",
     "passwordMismatch": "Passwords do not match",
     "passwordTooShort": "Password must be at least 8 characters",
-    "resetLinkInvalid": "This reset link is invalid or has expired. Please request a new one."
+    "resetLinkInvalid": "This reset link is invalid or has expired. Please request a new one.",
+    "admin": {
+      "title": "Admin Sign In",
+      "subtitle": "Manage bookings, media, and business settings",
+      "username": "Username",
+      "signIn": "Sign In to Admin",
+      "invalidUsername": "Unknown admin username",
+      "invalidCredentials": "Invalid username or password",
+      "changePasswordTitle": "Set a New Password",
+      "changePasswordDesc": "For security, choose a new password before accessing the admin panel.",
+      "mustUseNewPassword": "Please choose a password different from the default one"
+    }
   },
   "errors": {
     "notFoundTitle": "Page not found",
