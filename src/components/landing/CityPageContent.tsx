@@ -70,7 +70,7 @@ export function CityPageContent({
 
   return (
     <div className="relative">
-      <div className="bg-grid fixed inset-0 opacity-20" />
+      <div className="bg-grid pointer-events-none fixed inset-0 opacity-20" />
 
       <div className="relative mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6">
         <motion.div

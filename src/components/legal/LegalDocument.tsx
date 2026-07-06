@@ -14,7 +14,7 @@ export function LegalDocument({ namespace }: { namespace: 'privacy' | 'terms' })
 
   return (
     <div className="relative">
-      <div className="bg-grid fixed inset-0 opacity-20" />
+      <div className="bg-grid pointer-events-none fixed inset-0 opacity-20" />
       <div className="relative mx-auto max-w-3xl px-4 pt-24 pb-16 sm:px-6">
         <h1 className="mb-2 text-4xl font-bold text-white">{t(`${namespace}.title`)}</h1>
         <p className="mb-10 text-sm text-zinc-500">{t(`${namespace}.lastUpdated`)}</p>
