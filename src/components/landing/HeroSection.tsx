@@ -19,6 +19,7 @@ export function HeroSection({ locale }: { locale: Locale }) {
         alt={LANDING_IMAGES.hero.alt}
         fill
         priority
+        unoptimized
         className="object-cover"
         sizes="100vw"
       />

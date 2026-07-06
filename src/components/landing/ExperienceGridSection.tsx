@@ -32,6 +32,7 @@ export function ExperienceGridSection() {
                 src={image.src}
                 alt={image.alt}
                 fill
+                unoptimized
                 className="object-cover transition duration-500 hover:scale-105"
                 sizes="(max-width: 768px) 100vw, 33vw"
               />

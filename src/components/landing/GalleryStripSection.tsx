@@ -40,6 +40,7 @@ export function GalleryStripSection({ locale }: { locale: Locale }) {
                 src={image.src}
                 alt={image.alt}
                 fill
+                unoptimized
                 className="object-cover transition duration-500 hover:scale-105"
                 sizes="384px"
               />

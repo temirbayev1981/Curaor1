@@ -28,6 +28,7 @@ export function AboutSection({ locale }: { locale: Locale }) {
             src={LANDING_IMAGES.guinness.src}
             alt={LANDING_IMAGES.guinness.alt}
             fill
+            unoptimized
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />

@@ -42,8 +42,9 @@ export function ServicesSection() {
                 <Image
                   src={SERVICE_IMAGES[key]}
                   alt={t(`services.${key}`)}
-                  fill
-                  className="object-cover"
+                fill
+                unoptimized
+                className="object-cover"
                   sizes="(max-width: 768px) 100vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />

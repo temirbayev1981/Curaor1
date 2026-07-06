@@ -42,6 +42,7 @@ export function TestimonialsSection() {
                   src={TESTIMONIAL_IMAGES[key]}
                   alt={t(`testimonials.${key}.event`)}
                   fill
+                  unoptimized
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
