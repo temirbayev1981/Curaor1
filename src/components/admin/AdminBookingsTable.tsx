@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import type { Booking } from '@/types/database';
 import { BookingActions } from '@/components/admin/BookingActions';
@@ -105,7 +106,12 @@ export function AdminBookingsTable({ locale }: { locale: Locale }) {
                 className="border-b border-admin-border transition hover:bg-white/[0.02]"
               >
                 <td className="px-4 py-3 font-medium text-white">
-                  {t(EVENT_TYPE_KEYS[booking.event_type] ?? booking.event_type)}
+                  <Link
+                    href={`/${locale}/admin/bookings/${booking.id}`}
+                    className="transition hover:text-emerald-400"
+                  >
+                    {t(EVENT_TYPE_KEYS[booking.event_type] ?? booking.event_type)}
+                  </Link>
                 </td>
                 <td className="px-4 py-3 text-zinc-300">
                   {new Date(booking.booking_start).toLocaleDateString(dateLocale)}

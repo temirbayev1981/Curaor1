@@ -47,6 +47,32 @@ export class InventoryService {
   calculateCogs(items: InventoryItem[]): number {
     return items.reduce((sum, item) => sum + item.quantity * item.unit_cost, 0);
   }
+
+  /** Deduct standard supplies when an event is marked completed. */
+  async consumeForEvent(tenantId: string, guestCount: number): Promise<void> {
+    const items = await this.list(tenantId);
+    const kegs = Math.max(1, Math.ceil(guestCount / 40));
+    const whiskey = Math.max(1, Math.ceil(guestCount / 60));
+    const glassPacks = Math.max(1, Math.ceil(guestCount / 50));
+    const bunting = Math.max(1, Math.ceil(guestCount / 80));
+
+    const deductions: Array<{ sku: string; delta: number }> = [
+      { sku: 'BEER-001', delta: -kegs },
+      { sku: 'SPIR-001', delta: -whiskey },
+      { sku: 'SUPP-001', delta: -glassPacks },
+      { sku: 'DECO-001', delta: -bunting },
+    ];
+
+    for (const { sku, delta } of deductions) {
+      const item = items.find((i) => i.sku === sku);
+      if (!item) continue;
+      try {
+        await this.adjustQuantity(tenantId, item.id, delta);
+      } catch {
+        // Skip if insufficient stock — admin can reconcile manually
+      }
+    }
+  }
 }
 
 export const inventoryService = new InventoryService();

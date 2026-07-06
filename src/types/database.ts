@@ -112,6 +112,7 @@ export interface MediaAsset {
   webp_path: string | null;
   tags: string[];
   alt_text: string | null;
+  sort_order: number;
   created_at: string;
 }
 

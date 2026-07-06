@@ -111,7 +111,10 @@ export class PaymentService {
       .eq('id', paymentId);
 
     if (paymentType === 'deposit' || paymentType === 'full') {
-      await bookingService.transition(tenantId, bookingId, 'deposit_paid');
+      const booking = await bookingService.transition(tenantId, bookingId, 'deposit_paid');
+      if (booking.status === 'deposit_paid') {
+        await bookingService.transition(tenantId, bookingId, 'confirmed');
+      }
     }
 
     await eventBus.publish({
@@ -134,6 +137,60 @@ export class PaymentService {
 
     if (error) throw new Error(error.message);
     return (data ?? []) as Payment[];
+  }
+
+  async getById(tenantId: string, paymentId: string): Promise<Payment> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('payments')
+      .select('*')
+      .eq('id', paymentId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    if (error || !data) throw new Error('Payment not found');
+    return data as Payment;
+  }
+
+  async refund(tenantId: string, paymentId: string): Promise<Payment> {
+    const payment = await this.getById(tenantId, paymentId);
+
+    if (payment.status !== 'succeeded') {
+      throw new Error('Only succeeded payments can be refunded');
+    }
+
+    if (!payment.stripe_payment_intent_id) {
+      throw new Error('Payment has no Stripe payment intent');
+    }
+
+    const stripe = getStripe();
+    await stripe.refunds.create({
+      payment_intent: payment.stripe_payment_intent_id,
+    });
+
+    const supabase = createAdminClient();
+    const { data: updated, error } = await supabase
+      .from('payments')
+      .update({ status: 'refunded' })
+      .eq('id', paymentId)
+      .eq('tenant_id', tenantId)
+      .select()
+      .single();
+
+    if (error || !updated) {
+      throw new Error(error?.message ?? 'Failed to update payment');
+    }
+
+    await eventBus.publish({
+      tenantId,
+      eventType: EVENT_TYPES.PAYMENT_FAILED,
+      aggregateId: paymentId,
+      aggregateType: 'payment',
+      payload: { bookingId: payment.booking_id, paymentType: payment.payment_type, refunded: true },
+      idempotencyKey: `payment.refunded:${paymentId}`,
+    });
+
+    return updated as Payment;
   }
 }
 

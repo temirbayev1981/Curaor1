@@ -12,6 +12,7 @@ import {
 } from '@/lib/booking/packages';
 import { eventBus } from '@/domain/events/event-bus';
 import { EVENT_TYPES } from '@/domain/events/event.types';
+import { inventoryService } from '@/domain/inventory/inventory.service';
 import { assertTransition } from './booking.state-machine';
 import type { CreateBookingInput, UpdateBookingDatesInput } from './booking.schema';
 import type { Booking, BookingStatus, Tenant } from '@/types/database';
@@ -143,7 +144,42 @@ export class BookingService {
       idempotencyKey: `booking.status:${bookingId}:${newStatus}`,
     });
 
+    if (newStatus === 'completed') {
+      await inventoryService.consumeForEvent(tenantId, typedBooking.guest_count);
+    }
+
     return updated as Booking;
+  }
+
+  async getById(tenantId: string, bookingId: string): Promise<Booking> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('id', bookingId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    if (error || !data) throw new Error('Booking not found');
+    return data as Booking;
+  }
+
+  async updateNotes(
+    tenantId: string,
+    bookingId: string,
+    notes: string
+  ): Promise<Booking> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ notes })
+      .eq('id', bookingId)
+      .eq('tenant_id', tenantId)
+      .select()
+      .single();
+
+    if (error || !data) throw new Error(error?.message ?? 'Failed to update notes');
+    return data as Booking;
   }
 
   async updateDates(

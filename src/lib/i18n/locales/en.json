@@ -91,6 +91,24 @@
       "mobile": { "title": "We Come to You", "desc": "Full setup and breakdown at your venue" },
       "rated": { "title": "4.9★ Rated", "desc": "500+ events served across the Carolinas" }
     },
+    "googleReviews": {
+      "title": "Loved by Event Hosts",
+      "subtitle": "See what couples, companies, and families say about The Emerald Pour",
+      "count": "500+ reviews",
+      "cta": "Read more on Google",
+      "r1": {
+        "text": "Absolutely phenomenal! Our wedding guests are still talking about the Guinness and the atmosphere.",
+        "name": "Sarah M. — Charlotte"
+      },
+      "r2": {
+        "text": "Professional team, incredible whiskey selection. Best corporate event we've ever hosted.",
+        "name": "Mike J. — Raleigh"
+      },
+      "r3": {
+        "text": "Made our St. Patrick's Day party unforgettable. Setup was flawless and the craic was real!",
+        "name": "The O'Brien Family — Charleston"
+      }
+    },
     "pricing": {
       "eyebrow": "Packages",
       "title": "Choose Your Experience",
@@ -223,6 +241,21 @@
         "slot_taken": "This time slot conflicts with another event",
         "unknown": "Checking availability..."
       }
+    },
+    "addressPlaceholder": "Start typing your venue address...",
+    "calendar": {
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "legend": {
+        "open": "Available",
+        "limited": "Limited",
+        "full": "Fully booked"
+      },
+      "status": {
+        "open": "Available",
+        "limited": "Limited availability",
+        "full": "Fully booked"
+      }
     }
   },
   "cookies": {
@@ -301,6 +334,7 @@
     "servicesTitle": "Our Services in {{city}}",
     "whyTitle": "Why Choose The Emerald Pour",
     "relatedCities": "We Also Serve",
+    "articlesTitle": "Guides & Resources",
     "ctaTitle": "Book Your Event in {{city}}",
     "ctaDesc": "Limited weekend availability — reserve your date today.",
     "ctaButton": "Book in {{city}}",
@@ -501,6 +535,79 @@
       "reject": "Reject",
       "articleCount": "{{count}} articles",
       "articleCount_one": "{{count}} article"
+    },
+    "bookingDetail": {
+      "title": "Booking Details",
+      "desc": "CRM view with payments, notes, and status actions",
+      "back": "Back to bookings",
+      "fetchError": "Failed to load booking",
+      "eventInfo": "Event Information",
+      "customer": "Customer",
+      "noCustomer": "Customer record not found",
+      "payments": "Payments",
+      "noPayments": "No payments recorded",
+      "refund": "Refund",
+      "crmNotes": "CRM Notes",
+      "notesPlaceholder": "Internal notes about this booking...",
+      "saveNotes": "Save Notes"
+    }
+  },
+  "eventPages": {
+    "wedding": {
+      "metaTitle": "Mobile Irish Pub for Weddings — The Emerald Pour",
+      "metaDesc": "Premium mobile Irish pub catering for wedding receptions across the Carolinas.",
+      "h1": "Irish Pub Wedding Catering",
+      "intro": "Give your guests an unforgettable reception with Guinness on tap, premium whiskey, and the warmth of a Dublin pub — at your wedding venue.",
+      "includesTitle": "What's Included",
+      "includes": [
+        "Professional bartenders and full mobile bar setup",
+        "Guinness draught and curated Irish whiskey selection",
+        "Elegant glassware and custom signage options",
+        "Setup, service, and breakdown at your venue"
+      ],
+      "cta": "Book Your Wedding"
+    },
+    "corporate": {
+      "metaTitle": "Corporate Event Mobile Bar — The Emerald Pour",
+      "metaDesc": "Impress clients and teams with premium mobile Irish pub catering.",
+      "h1": "Corporate Event Bar Service",
+      "intro": "Elevate holiday parties, product launches, and team celebrations with an authentic Irish pub experience brought to your office or venue.",
+      "includesTitle": "What's Included",
+      "includes": [
+        "Licensed and insured mobile bar service",
+        "Premium cocktails and Irish whiskey menu",
+        "Flexible packages for 50–500 guests",
+        "Coordinated setup with your event planner"
+      ],
+      "cta": "Book a Corporate Event"
+    },
+    "private": {
+      "metaTitle": "Private Party Mobile Pub — The Emerald Pour",
+      "metaDesc": "Birthdays, anniversaries, and backyard parties with a mobile Irish pub.",
+      "h1": "Private Party Catering",
+      "intro": "From backyard birthdays to milestone celebrations — we bring the craic, the pints, and the full pub experience to your door.",
+      "includesTitle": "What's Included",
+      "includes": [
+        "Compact or full-scale mobile pub setup",
+        "Beer, whiskey, and cocktail packages",
+        "Professional bartending staff",
+        "Delivery across NC and SC"
+      ],
+      "cta": "Book Your Party"
+    },
+    "stpatricks": {
+      "metaTitle": "St. Patrick's Day Party Bar — The Emerald Pour",
+      "metaDesc": "The ultimate St. Patrick's Day mobile pub experience in the Carolinas.",
+      "h1": "St. Patrick's Day Parties",
+      "intro": "Go beyond green beer. Our mobile Irish pub delivers authentic Guinness, live-energy atmosphere, and the best Paddy's Day party your guests have ever seen.",
+      "includesTitle": "What's Included",
+      "includes": [
+        "Guinness taps and Irish whiskey flights",
+        "Festive décor and themed cocktail menu",
+        "High-capacity service for peak demand",
+        "Book early — March dates sell out fast"
+      ],
+      "cta": "Book St. Patrick's Day"
     }
   },
   "privacy": {

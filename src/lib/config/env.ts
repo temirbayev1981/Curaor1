@@ -105,10 +105,26 @@ export function getOpenAiApiKey(): string {
   return key;
 }
 
+export function isMapboxConfigured(): boolean {
+  return Boolean(process.env.MAPBOX_ACCESS_TOKEN);
+}
+
 export function getMapboxToken(): string {
   const token = process.env.MAPBOX_ACCESS_TOKEN;
   if (!token) throw new Error('MAPBOX_ACCESS_TOKEN is not set');
   return token;
+}
+
+export function getGooglePlaceId(): string | undefined {
+  return process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID;
+}
+
+export function getGoogleReviewsUrl(): string {
+  const placeId = getGooglePlaceId();
+  if (placeId) {
+    return `https://search.google.com/local/writereview?placeid=${placeId}`;
+  }
+  return 'https://www.google.com/maps/search/The+Emerald+Pour+mobile+Irish+pub';
 }
 
 export function getMapboxOrigin(): { lat: number; lng: number } {

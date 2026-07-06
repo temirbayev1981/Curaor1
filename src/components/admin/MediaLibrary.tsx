@@ -21,14 +21,18 @@ function SortableAsset({
   asset,
   url,
   onToggleGallery,
+  onAltTextChange,
 }: {
   asset: MediaAsset;
   url: string;
   onToggleGallery: (asset: MediaAsset) => void;
+  onAltTextChange: (asset: MediaAsset, altText: string) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: asset.id,
   });
+  const [editingAlt, setEditingAlt] = useState(false);
+  const [altDraft, setAltDraft] = useState(asset.alt_text ?? '');
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -70,6 +74,43 @@ function SortableAsset({
       >
         <ImageIcon className="h-4 w-4" />
       </button>
+      {editingAlt ? (
+        <div
+          className="absolute inset-x-0 bottom-0 bg-black/80 p-2"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <input
+            value={altDraft}
+            onChange={(e) => setAltDraft(e.target.value)}
+            onBlur={() => {
+              setEditingAlt(false);
+              if (altDraft !== (asset.alt_text ?? '')) {
+                onAltTextChange(asset, altDraft);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setEditingAlt(false);
+                onAltTextChange(asset, altDraft);
+              }
+            }}
+            className="w-full rounded border border-white/20 bg-black/50 px-2 py-1 text-xs text-white"
+            placeholder="Alt text"
+            autoFocus
+          />
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditingAlt(true);
+          }}
+          className="absolute bottom-2 right-2 rounded bg-black/60 px-1.5 py-0.5 text-xs text-zinc-300 opacity-0 transition group-hover:opacity-100"
+        >
+          Alt
+        </button>
+      )}
       {asset.tags.length > 0 && (
         <div className="absolute bottom-2 left-2 flex gap-1">
           {asset.tags.slice(0, 2).map((tag) => (
@@ -146,6 +187,20 @@ export function MediaLibrary() {
     }
   }
 
+  async function updateAltText(asset: MediaAsset, altText: string) {
+    const res = await fetch(`/api/media/${asset.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ alt_text: altText || null }),
+    });
+    const json = (await res.json()) as { data: { asset: MediaAsset } | null };
+    if (json.data?.asset) {
+      setAssets((prev) =>
+        prev.map((a) => (a.id === asset.id ? json.data!.asset : a))
+      );
+    }
+  }
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -156,6 +211,13 @@ export function MediaLibrary() {
       const reordered = [...items];
       const [moved] = reordered.splice(oldIndex, 1);
       if (moved) reordered.splice(newIndex, 0, moved);
+
+      void fetch('/api/media/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderedIds: reordered.map((a) => a.id) }),
+      });
+
       return reordered;
     });
   }
@@ -206,6 +268,7 @@ export function MediaLibrary() {
                   asset={asset}
                   url={urls[asset.id] ?? ''}
                   onToggleGallery={toggleGalleryTag}
+                  onAltTextChange={updateAltText}
                 />
               ))}
             </div>

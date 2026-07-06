@@ -15,6 +15,7 @@ import { PricingPackagesSection } from '@/components/landing/PricingPackagesSect
 import { ServicesSection } from '@/components/landing/ServicesSection';
 import { StatsSection } from '@/components/landing/StatsSection';
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
+import { GoogleReviewsSection } from '@/components/landing/GoogleReviewsSection';
 import { TrustBadgesSection } from '@/components/landing/TrustBadgesSection';
 import { CTASection } from '@/components/landing/CTASection';
 import type { Locale } from '@/lib/i18n/config';
@@ -132,6 +133,7 @@ export default async function HomePage({
         <GalleryStripSection locale={locale as Locale} />
         <ExperienceGridSection />
         <TestimonialsSection />
+        <GoogleReviewsSection />
         <FAQSection />
         <ContactSection locale={locale as Locale} />
         <CTASection locale={locale as Locale} />

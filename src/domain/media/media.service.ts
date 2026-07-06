@@ -25,6 +25,7 @@ export class MediaService {
       .from('media_assets')
       .select('*', { count: 'exact' })
       .eq('tenant_id', tenantId)
+      .order('sort_order', { ascending: true })
       .order('created_at', { ascending: false })
       .range(page * pageSize, (page + 1) * pageSize - 1);
 
@@ -98,6 +99,37 @@ export class MediaService {
 
     if (error || !data) throw new Error(error?.message ?? 'Update failed');
     return data as MediaAsset;
+  }
+
+  async updateAsset(
+    tenantId: string,
+    assetId: string,
+    updates: { tags?: string[]; alt_text?: string | null }
+  ): Promise<MediaAsset> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('media_assets')
+      .update(updates)
+      .eq('id', assetId)
+      .eq('tenant_id', tenantId)
+      .select()
+      .single();
+
+    if (error || !data) throw new Error(error?.message ?? 'Update failed');
+    return data as MediaAsset;
+  }
+
+  async updateSortOrder(tenantId: string, orderedIds: string[]): Promise<void> {
+    const supabase = createAdminClient();
+    await Promise.all(
+      orderedIds.map((id, index) =>
+        supabase
+          .from('media_assets')
+          .update({ sort_order: index })
+          .eq('id', id)
+          .eq('tenant_id', tenantId)
+      )
+    );
   }
 
   async listPublicGallery(

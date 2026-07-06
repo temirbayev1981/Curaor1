@@ -10,6 +10,8 @@ import { PublicHeader } from '@/components/layout/PublicHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
 import { PublicSiteExtras } from '@/components/layout/PublicSiteExtras';
 import { QuotePreview } from '@/components/booking/QuotePreview';
+import { AvailabilityCalendar } from '@/components/booking/AvailabilityCalendar';
+import { AddressAutocomplete } from '@/components/booking/AddressAutocomplete';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Field, Input, Select } from '@/components/ui/Input';
@@ -192,13 +194,18 @@ export function BookingForm({ locale }: { locale: Locale }) {
                     </div>
                     <div className="grid gap-4 sm:grid-cols-3">
                       <Field label={t('booking.date')}>
-                        <Input
-                          required
-                          type="date"
-                          value={form.date}
-                          onChange={(e) => setForm({ ...form, date: e.target.value })}
-                        />
-                      </Field>
+                      <AvailabilityCalendar
+                        selectedDate={form.date}
+                        onSelectDate={(date) => setForm({ ...form, date })}
+                      />
+                      <Input
+                        required
+                        type="date"
+                        className="mt-2"
+                        value={form.date}
+                        onChange={(e) => setForm({ ...form, date: e.target.value })}
+                      />
+                    </Field>
                       <Field label={t('booking.startTime')}>
                         <Input
                           required
@@ -226,10 +233,18 @@ export function BookingForm({ locale }: { locale: Locale }) {
                   </div>
                   <div className="space-y-4">
                     <Field label={t('booking.venue')}>
-                      <Input
+                      <AddressAutocomplete
                         required
                         value={form.venueAddress}
-                        onChange={(e) => setForm({ ...form, venueAddress: e.target.value })}
+                        onChange={(venueAddress) => setForm({ ...form, venueAddress })}
+                        onSelect={(s) =>
+                          setForm({
+                            ...form,
+                            venueAddress: s.address,
+                            venueCity: s.city || form.venueCity,
+                            venueState: (s.state === 'SC' ? 'SC' : 'NC') as 'NC' | 'SC',
+                          })
+                        }
                       />
                     </Field>
                     <Field label={t('booking.city')}>

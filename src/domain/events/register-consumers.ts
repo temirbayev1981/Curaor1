@@ -55,6 +55,7 @@ export function registerEventConsumers(): void {
     createEdgeConsumer('email-sender', 'send-email', [
       EVENT_TYPES.BOOKING_CREATED,
       EVENT_TYPES.PAYMENT_SUCCEEDED,
+      EVENT_TYPES.BOOKING_STATUS_CHANGED,
     ])
   );
 
@@ -68,6 +69,7 @@ export function registerEventConsumers(): void {
     createEdgeConsumer('sms-sender', 'send-sms', [
       EVENT_TYPES.BOOKING_CREATED,
       EVENT_TYPES.PAYMENT_SUCCEEDED,
+      EVENT_TYPES.BOOKING_STATUS_CHANGED,
     ])
   );
 }

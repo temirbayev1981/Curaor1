@@ -40,6 +40,12 @@ interface RelatedCity {
   state: string;
 }
 
+interface CityArticle {
+  slug: string;
+  title: string;
+  updated_at: string;
+}
+
 interface CityPageContentProps {
   locale: Locale;
   citySlug: string;
@@ -47,6 +53,7 @@ interface CityPageContentProps {
   state: string;
   stateFull: string;
   relatedCities: RelatedCity[];
+  articles?: CityArticle[];
 }
 
 export function CityPageContent({
@@ -56,6 +63,7 @@ export function CityPageContent({
   state,
   stateFull,
   relatedCities,
+  articles = [],
 }: CityPageContentProps) {
   const { t } = useTranslation();
   const vars = { city: cityName, state, stateFull };
@@ -140,6 +148,26 @@ export function CityPageContent({
                 })}
               </div>
             </section>
+
+            {articles.length > 0 && (
+              <section>
+                <h2 className="mb-4 text-xl font-semibold text-white">
+                  {t('cityPage.articlesTitle')}
+                </h2>
+                <div className="space-y-3">
+                  {articles.map((article) => (
+                    <Link
+                      key={article.slug}
+                      href={`/${locale}/articles/${article.slug}`}
+                      className="glass-card flex items-center justify-between rounded-xl p-4 transition hover:border-emerald-500/20"
+                    >
+                      <span className="font-medium text-white">{article.title}</span>
+                      <ArrowRight className="h-4 w-4 text-emerald-400" />
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {relatedCities.length > 0 && (
               <section>

@@ -3,10 +3,12 @@ import { PublicHeader } from '@/components/layout/PublicHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
 import { CityPageContent } from '@/components/landing/CityPageContent';
 import { CAROLINA_CITIES } from '@/domain/ai/ai-content.service';
-import { absoluteUrl } from '@/lib/config/env';
+import { absoluteUrl, isSupabaseConfigured } from '@/lib/config/env';
 import { getTranslations } from '@/lib/i18n/server';
 import { getStateName, interpolate } from '@/lib/i18n/city-content';
+import { createAdminClient } from '@/lib/supabase/admin';
 import type { Locale } from '@/lib/i18n/config';
+import type { SeoArticle } from '@/types/database';
 
 export function generateStaticParams() {
   return Object.keys(CAROLINA_CITIES).flatMap((city) => [
@@ -83,6 +85,24 @@ export default async function CityLocationPage({
   const stateFull = getStateName(city.state, loc);
   const t = getTranslations(loc);
 
+  let articles: Pick<SeoArticle, 'slug' | 'title' | 'updated_at'>[] = [];
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = createAdminClient();
+      const { data } = await supabase
+        .from('seo_articles')
+        .select('slug, title, updated_at')
+        .eq('city_slug', citySlug)
+        .eq('locale', loc)
+        .eq('status', 'published')
+        .order('updated_at', { ascending: false })
+        .limit(5);
+      articles = (data ?? []) as typeof articles;
+    } catch {
+      articles = [];
+    }
+  }
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -119,6 +139,7 @@ export default async function CityLocationPage({
           state={city.state}
           stateFull={stateFull}
           relatedCities={getRelatedCities(citySlug, loc)}
+          articles={articles}
         />
       </main>
       <PublicFooter locale={loc} />

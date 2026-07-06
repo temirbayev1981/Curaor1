@@ -86,6 +86,7 @@ export async function POST(request: NextRequest) {
         webp_path: file.type.startsWith('image/') ? storagePath : null,
         tags: [],
         alt_text: null,
+        sort_order: 0,
       });
 
       uploaded.push(asset);
