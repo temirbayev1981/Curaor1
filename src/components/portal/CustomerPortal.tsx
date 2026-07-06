@@ -1,26 +1,40 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { PublicHeader } from '@/components/layout/PublicHeader';
-import { PublicFooter } from '@/components/layout/PublicFooter';
+import { AnimatePresence } from 'framer-motion';
 import { SignaturePad } from '@/components/portal/SignaturePad';
 import { ChangeDatesModal } from '@/components/portal/ChangeDatesModal';
+import {
+  PortalLayout,
+  PortalWelcome,
+  PortalStatsBar,
+} from '@/components/portal/PortalLayout';
+import { BookingCard, EmptyBookings } from '@/components/portal/BookingCard';
+import { useToast } from '@/components/ui/Toast';
 import type { Booking } from '@/types/database';
 import type { Locale } from '@/lib/i18n/config';
-import { Calendar, CreditCard, FileText, Pen, CalendarClock } from 'lucide-react';
 
 export function CustomerPortal({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [signingBookingId, setSigningBookingId] = useState<string | null>(null);
   const [signerName, setSignerName] = useState('');
   const [datesBooking, setDatesBooking] = useState<Booking | null>(null);
-  const [message, setMessage] = useState('');
+  const [payingId, setPayingId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/portal/bookings`)
+    if (searchParams.get('paid') === 'true') {
+      toast(t('portal.paymentSuccess'), 'success');
+    }
+  }, [searchParams, t, toast]);
+
+  useEffect(() => {
+    fetch('/api/portal/bookings')
       .then((res) => res.json())
       .then((json: { data: Booking[] | null }) => {
         setBookings(json.data ?? []);
@@ -30,6 +44,7 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
   }, []);
 
   async function handlePay(bookingId: string, type: 'deposit' | 'balance') {
+    setPayingId(bookingId);
     const res = await fetch('/api/payments/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -40,160 +55,100 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
         cancelUrl: `${window.location.origin}/${locale}/portal`,
       }),
     });
-    const json = (await res.json()) as { data: { url: string } | null };
+    const json = (await res.json()) as { data: { url: string } | null; error: { message: string } | null };
     if (json.data?.url) {
       globalThis.location.assign(json.data.url);
+    } else {
+      toast(json.error?.message ?? t('portal.paymentError'), 'error');
+      setPayingId(null);
     }
   }
 
   function handleDownloadInvoice(bookingId: string) {
-    const url = `/api/portal/invoices/${bookingId}`;
-    window.open(url, '_blank');
+    window.open(`/api/portal/invoices/${bookingId}`, '_blank');
   }
 
   async function handleSign(bookingId: string, signatureDataUrl: string) {
     const res = await fetch(`/api/portal/contracts/${bookingId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        signatureDataUrl,
-        signerName,
-      }),
+      body: JSON.stringify({ signatureDataUrl, signerName }),
     });
     const json = (await res.json()) as { error: { message: string } | null };
     if (json.error) {
-      setMessage(json.error.message);
+      toast(json.error.message, 'error');
       return;
     }
     setSigningBookingId(null);
     setSignerName('');
-    setMessage(t('portal.contractSigned'));
+    toast(t('portal.contractSigned'), 'success');
   }
 
   function handleDatesUpdated(updated: Booking) {
     setBookings((prev) => prev.map((b) => (b.id === updated.id ? updated : b)));
-    setMessage(t('portal.datesUpdated'));
+    toast(t('portal.datesUpdated'), 'success');
   }
 
-  const canChangeDates = (status: string) =>
-    status === 'pending' || status === 'deposit_paid';
+  const upcoming = bookings.filter(
+    (b) => b.status !== 'completed' && b.status !== 'cancelled'
+  ).length;
+  const totalSpent = bookings.reduce((sum, b) => {
+    if (b.status === 'pending') return sum;
+    return sum + Number(b.deposit_amount);
+  }, 0);
 
   return (
-    <>
-      <PublicHeader locale={locale} />
-      <main className="min-h-screen pt-24 pb-16">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <h1 className="mb-8 text-3xl font-bold text-white">{t('portal.title')}</h1>
+    <PortalLayout locale={locale}>
+      <PortalWelcome />
+      {!loading && bookings.length > 0 && (
+        <PortalStatsBar
+          total={bookings.length}
+          upcoming={upcoming}
+          totalSpent={totalSpent}
+          locale={locale}
+        />
+      )}
 
-          {message && (
-            <div className="mb-6 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-emerald-300">
-              {message}
-            </div>
-          )}
-
-          {loading ? (
-            <div className="space-y-4">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="skeleton h-32 rounded-xl" />
-              ))}
-            </div>
-          ) : bookings.length === 0 ? (
-            <p className="text-zinc-400">{t('portal.noBookings')}</p>
-          ) : (
-            <div className="space-y-4">
-              {bookings.map((booking) => (
-                <div key={booking.id}>
-                  <div className="rounded-xl border border-white/10 bg-white/5 p-6">
-                    <div className="mb-4 flex items-start justify-between">
-                      <div>
-                        <h3 className="text-lg font-semibold text-white capitalize">
-                          {booking.event_type}
-                        </h3>
-                        <p className="text-sm text-zinc-400">
-                          {booking.venue_city}, {booking.venue_state}
-                        </p>
-                      </div>
-                      <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400 capitalize">
-                        {booking.status.replace('_', ' ')}
-                      </span>
-                    </div>
-
-                    <div className="mb-4 flex items-center gap-2 text-sm text-zinc-300">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(booking.booking_start).toLocaleDateString(locale)} —{' '}
-                      {new Date(booking.booking_end).toLocaleTimeString(locale, {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {booking.status === 'pending' && (
-                        <button
-                          onClick={() => handlePay(booking.id, 'deposit')}
-                          className="flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm text-white hover:bg-emerald-600"
-                        >
-                          <CreditCard className="h-4 w-4" />
-                          Pay Deposit (${booking.deposit_amount})
-                        </button>
-                      )}
-                      {booking.status === 'deposit_paid' && booking.balance_due > 0 && (
-                        <button
-                          onClick={() => handlePay(booking.id, 'balance')}
-                          className="flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm text-white hover:bg-emerald-600"
-                        >
-                          <CreditCard className="h-4 w-4" />
-                          {t('portal.payBalance')} (${booking.balance_due})
-                        </button>
-                      )}
-                      {canChangeDates(booking.status) && (
-                        <button
-                          onClick={() => setDatesBooking(booking)}
-                          className="flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm text-zinc-300 hover:bg-white/5"
-                        >
-                          <CalendarClock className="h-4 w-4" />
-                          {t('portal.changeDates')}
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleDownloadInvoice(booking.id)}
-                        className="flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm text-zinc-300 hover:bg-white/5"
-                      >
-                        <FileText className="h-4 w-4" />
-                        {t('portal.downloadInvoice')}
-                      </button>
-                      {booking.status !== 'cancelled' && (
-                        <button
-                          onClick={() => setSigningBookingId(booking.id)}
-                          className="flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm text-zinc-300 hover:bg-white/5"
-                        >
-                          <Pen className="h-4 w-4" />
-                          {t('portal.signContract')}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {signingBookingId === booking.id && (
-                    <div className="mt-4">
-                      <SignaturePad
-                        signerName={signerName}
-                        onSignerNameChange={setSignerName}
-                        onSign={(dataUrl) => handleSign(booking.id, dataUrl)}
-                        onCancel={() => {
-                          setSigningBookingId(null);
-                          setSignerName('');
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+      {loading ? (
+        <div className="space-y-6">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="skeleton h-64 rounded-2xl" />
+          ))}
         </div>
-      </main>
-      <PublicFooter locale={locale} />
+      ) : bookings.length === 0 ? (
+        <EmptyBookings locale={locale} />
+      ) : (
+        <div className="space-y-6 pb-20 lg:pb-0">
+          <AnimatePresence>
+            {bookings.map((booking) => (
+              <div key={booking.id}>
+                <BookingCard
+                  booking={booking}
+                  locale={locale}
+                  onPay={handlePay}
+                  onDownloadInvoice={handleDownloadInvoice}
+                  onChangeDates={setDatesBooking}
+                  onSign={setSigningBookingId}
+                  paying={payingId === booking.id}
+                />
+                {signingBookingId === booking.id && (
+                  <div className="mt-4">
+                    <SignaturePad
+                      signerName={signerName}
+                      onSignerNameChange={setSignerName}
+                      onSign={(dataUrl) => handleSign(booking.id, dataUrl)}
+                      onCancel={() => {
+                        setSigningBookingId(null);
+                        setSignerName('');
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
 
       {datesBooking && (
         <ChangeDatesModal
@@ -202,6 +157,6 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
           onSuccess={handleDatesUpdated}
         />
       )}
-    </>
+    </PortalLayout>
   );
 }

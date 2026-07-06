@@ -2,6 +2,9 @@ import { PublicHeader } from '@/components/layout/PublicHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { ServicesSection } from '@/components/landing/ServicesSection';
+import { StatsSection } from '@/components/landing/StatsSection';
+import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
+import { CTASection } from '@/components/landing/CTASection';
 import type { Locale } from '@/lib/i18n/config';
 import { getTranslations } from '@/lib/i18n/server';
 
@@ -69,7 +72,10 @@ export default async function HomePage({
       <PublicHeader locale={locale as Locale} />
       <main>
         <HeroSection locale={locale as Locale} />
+        <StatsSection />
         <ServicesSection />
+        <TestimonialsSection />
+        <CTASection locale={locale as Locale} />
       </main>
       <PublicFooter locale={locale as Locale} />
     </>

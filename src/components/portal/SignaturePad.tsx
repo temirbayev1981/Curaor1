@@ -1,7 +1,9 @@
 'use client';
 
 import { useRef, useState, useCallback } from 'react';
-import { Eraser, Check } from 'lucide-react';
+import { Eraser, Check, Pen } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/Button';
 
 interface SignaturePadProps {
   onSign: (dataUrl: string) => void;
@@ -16,6 +18,7 @@ export function SignaturePad({
   signerName,
   onSignerNameChange,
 }: SignaturePadProps) {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -84,50 +87,54 @@ export function SignaturePad({
   }
 
   return (
-    <div className="rounded-xl border border-white/10 bg-black/40 p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">Digital Signature</h3>
+    <div className="glass-card rounded-2xl p-6">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
+          <Pen className="h-5 w-5 text-emerald-400" />
+        </div>
+        <h3 className="text-lg font-semibold text-white">
+          {t('portal.signature.title')}
+        </h3>
+      </div>
       <input
         type="text"
-        placeholder="Full legal name"
+        placeholder={t('portal.signature.namePlaceholder')}
         value={signerName}
         onChange={(e) => onSignerNameChange(e.target.value)}
-        className="mb-4 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white"
+        className="mb-4 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30"
       />
-      <canvas
-        ref={canvasRef}
-        width={500}
-        height={200}
-        className="w-full cursor-crosshair rounded-lg border border-white/20 bg-white"
-        onMouseDown={startDraw}
-        onMouseMove={draw}
-        onMouseUp={endDraw}
-        onMouseLeave={endDraw}
-        onTouchStart={startDraw}
-        onTouchMove={draw}
-        onTouchEnd={endDraw}
-      />
-      <div className="mt-4 flex gap-2">
-        <button
-          onClick={clear}
-          className="flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm text-zinc-300 hover:bg-white/5"
-        >
+      <div className="overflow-hidden rounded-xl border border-white/10">
+        <canvas
+          ref={canvasRef}
+          width={500}
+          height={200}
+          className="w-full cursor-crosshair bg-white"
+          onMouseDown={startDraw}
+          onMouseMove={draw}
+          onMouseUp={endDraw}
+          onMouseLeave={endDraw}
+          onTouchStart={startDraw}
+          onTouchMove={draw}
+          onTouchEnd={endDraw}
+        />
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Button variant="outline" size="sm" onClick={clear}>
           <Eraser className="h-4 w-4" />
-          Clear
-        </button>
-        <button
-          onClick={onCancel}
-          className="rounded-lg border border-white/10 px-4 py-2 text-sm text-zinc-300 hover:bg-white/5"
-        >
-          Cancel
-        </button>
-        <button
+          {t('portal.signature.clear')}
+        </Button>
+        <Button variant="outline" size="sm" onClick={onCancel}>
+          {t('portal.signature.cancel')}
+        </Button>
+        <Button
+          size="sm"
           onClick={handleSign}
           disabled={!signerName.trim()}
-          className="ml-auto flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm text-white hover:bg-emerald-600 disabled:opacity-50"
+          className="ml-auto"
         >
           <Check className="h-4 w-4" />
-          Sign Contract
-        </button>
+          {t('portal.signature.submit')}
+        </Button>
       </div>
     </div>
   );

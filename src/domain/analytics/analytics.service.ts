@@ -12,6 +12,11 @@ export interface DashboardMetrics {
   totalRevenue: number;
 }
 
+export interface MonthlyRevenue {
+  month: string;
+  revenue: number;
+}
+
 export class AnalyticsService {
   async getDashboardMetrics(tenantId: string): Promise<DashboardMetrics> {
     const supabase = createAdminClient();
@@ -57,6 +62,39 @@ export class AnalyticsService {
       completedBookings,
       totalRevenue: Math.round(totalRevenue * 100) / 100,
     };
+  }
+
+  async getMonthlyRevenue(tenantId: string): Promise<MonthlyRevenue[]> {
+    const supabase = createAdminClient();
+    const { data } = await supabase
+      .from('payments')
+      .select('amount, created_at')
+      .eq('tenant_id', tenantId)
+      .eq('status', 'succeeded')
+      .order('created_at', { ascending: true });
+
+    const payments = (data ?? []) as Pick<Payment, 'amount' | 'created_at'>[];
+    const buckets = new Map<string, number>();
+
+    for (const p of payments) {
+      const d = new Date(p.created_at);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      buckets.set(key, (buckets.get(key) ?? 0) + Number(p.amount));
+    }
+
+    const months: MonthlyRevenue[] = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const label = d.toLocaleDateString('en-US', { month: 'short' });
+      months.push({
+        month: label,
+        revenue: Math.round((buckets.get(key) ?? 0) * 100) / 100,
+      });
+    }
+
+    return months;
   }
 }
 

@@ -29,6 +29,37 @@
     "stpatricks": "St. Patrick's Day",
     "stpatricksDesc": "The ultimate St. Paddy's celebration with traditional Irish fare and drinks."
   },
+  "stats": {
+    "events": "Events Served",
+    "cities": "Cities Covered",
+    "rating": "Average Rating",
+    "years": "Years of Excellence"
+  },
+  "testimonials": {
+    "title": "What Our Clients Say",
+    "subtitle": "Trusted by couples, companies, and celebration planners across the Carolinas",
+    "t1": {
+      "quote": "The Emerald Pour transformed our wedding reception. Guests are still talking about the Guinness taps and Irish whiskey selection six months later.",
+      "name": "Sarah & Michael",
+      "event": "Wedding — Charlotte, NC"
+    },
+    "t2": {
+      "quote": "Professional from start to finish. Our corporate holiday party felt like a premium Dublin pub — without leaving Raleigh.",
+      "name": "James Whitfield",
+      "event": "Corporate Event — Raleigh, NC"
+    },
+    "t3": {
+      "quote": "Best St. Patrick's Day party we've ever hosted. The team handled everything — setup, service, and breakdown flawlessly.",
+      "name": "The O'Brien Family",
+      "event": "Private Party — Charleston, SC"
+    }
+  },
+  "cta": {
+    "title": "Ready to Bring the Pub to Your Event?",
+    "subtitle": "Book your date today — limited availability for peak season weekends.",
+    "button": "Get Started",
+    "call": "Or call us at (704) 555-0199"
+  },
   "booking": {
     "title": "Book Your Event",
     "eventType": "Event Type",
@@ -50,14 +81,60 @@
   },
   "portal": {
     "title": "Customer Portal",
+    "subtitle": "Your event dashboard",
     "myBookings": "My Bookings",
     "payBalance": "Pay Balance",
+    "payDeposit": "Pay Deposit",
     "downloadInvoice": "Download Invoice",
     "signContract": "Sign Contract",
     "changeDates": "Change Dates",
     "noBookings": "You have no bookings yet.",
     "contractSigned": "Contract signed successfully!",
-    "datesUpdated": "Event dates updated successfully."
+    "datesUpdated": "Event dates updated successfully.",
+    "paymentSuccess": "Payment completed successfully!",
+    "paymentError": "Payment could not be processed. Please try again.",
+    "guests": "guests",
+    "total": "Total",
+    "depositPaid": "Deposit Paid",
+    "balance": "Balance Due",
+    "emptyTitle": "No events yet",
+    "emptyDesc": "When you book with The Emerald Pour, your events will appear here. Manage payments, contracts, and dates in one place.",
+    "bookNow": "Book Your First Event",
+    "logout": "Sign Out",
+    "welcome": "Welcome back, {{name}}",
+    "welcomeDesc": "Manage your bookings, payments, and contracts in one place.",
+    "nav": {
+      "overview": "Overview",
+      "newBooking": "New Booking"
+    },
+    "stats": {
+      "bookings": "Total Bookings",
+      "upcoming": "Upcoming",
+      "spent": "Total Paid"
+    },
+    "timeline": {
+      "pending": "Requested",
+      "deposit": "Deposit",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "This booking has been cancelled."
+    },
+    "signature": {
+      "title": "Digital Signature",
+      "namePlaceholder": "Full legal name",
+      "clear": "Clear",
+      "cancel": "Cancel",
+      "submit": "Sign Contract"
+    },
+    "changeDatesModal": {
+      "title": "Change Event Dates",
+      "date": "Date",
+      "start": "Start",
+      "end": "End",
+      "saving": "Saving...",
+      "save": "Save New Dates",
+      "error": "Failed to update dates"
+    }
   },
   "admin": {
     "dashboard": "Dashboard",
@@ -71,7 +148,15 @@
     "roi": "ROI",
     "cogs": "COGS",
     "ltv": "Customer LTV",
-    "conversion": "Conversion Rate"
+    "conversion": "Conversion Rate",
+    "totalRevenue": "Total Revenue",
+    "revenueChart": "Revenue Overview",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No recent activity",
+    "viewAll": "View all",
+    "panelTitle": "Admin Panel",
+    "welcomeBack": "Welcome back",
+    "lastUpdated": "Last updated"
   },
   "footer": {
     "rights": "All rights reserved.",
