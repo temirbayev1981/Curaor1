@@ -1,12 +1,10 @@
 import { NextRequest } from 'next/server';
 import { randomUUID } from 'crypto';
-import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
+import { requireStaff, AuthError } from '@/lib/auth/rbac';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { createClient } from '@/lib/supabase/server';
+import { auditService } from '@/domain/audit/audit.service';
 import type { SeoArticle } from '@/types/database';
-
-const bodySchema = z.object({ tenantId: z.string().uuid() });
 
 export async function POST(
   request: NextRequest,
@@ -14,31 +12,16 @@ export async function POST(
 ) {
   const requestId = randomUUID();
   const { id: articleId } = await params;
-
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return Response.json(apiError('UNAUTHORIZED', 'Authentication required', requestId), {
-      status: 401,
-    });
-  }
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
 
   try {
-    const body: unknown = await request.json();
-    const parsed = bodySchema.safeParse(body);
-    if (!parsed.success) {
-      return Response.json(apiError('VALIDATION_ERROR', parsed.error.message, requestId), {
-        status: 400,
-      });
-    }
-
+    const ctx = await requireStaff();
     const admin = createAdminClient();
     const { data, error } = await admin
       .from('seo_articles')
       .update({ status: 'rejected' })
       .eq('id', articleId)
-      .eq('tenant_id', parsed.data.tenantId)
+      .eq('tenant_id', ctx.tenantId)
       .eq('status', 'pending_approval')
       .select()
       .single();
@@ -49,8 +32,22 @@ export async function POST(
       });
     }
 
+    await auditService.log({
+      tenantId: ctx.tenantId,
+      actorId: ctx.userId,
+      action: 'article.rejected',
+      resourceType: 'seo_article',
+      resourceId: articleId,
+      ipAddress: ip,
+    });
+
     return Response.json(apiSuccess(data as SeoArticle, requestId));
   } catch (err) {
+    if (err instanceof AuthError) {
+      return Response.json(apiError(err.code, err.message, requestId), {
+        status: err.code === 'FORBIDDEN' ? 403 : 401,
+      });
+    }
     const message = err instanceof Error ? err.message : 'Rejection failed';
     return Response.json(apiError('REJECT_ERROR', message, requestId), { status: 500 });
   }

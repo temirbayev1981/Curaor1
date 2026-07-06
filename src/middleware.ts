@@ -1,10 +1,14 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { defaultLocale, isValidLocale } from '@/lib/i18n/config';
+import { isStaffRole } from '@/lib/auth/rbac';
+import type { UserRole } from '@/types/database';
 
-const PUBLIC_PATHS = ['/api/webhooks'];
-const AUTH_PATHS = ['/portal', '/login'];
+const PUBLIC_PATHS = ['/api/webhooks', '/api/gallery', '/api/bookings'];
+const AUTH_PATHS = ['/portal'];
 const ADMIN_PATHS = ['/admin'];
+const AUTH_PAGES = ['/login', '/signup'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -62,7 +66,33 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  let role: UserRole | null = null;
+  if (user) {
+    const admin = createAdminClient();
+    const { data: membership } = await admin
+      .from('tenant_users')
+      .select('role')
+      .eq('user_id', user.id)
+      .limit(1)
+      .maybeSingle();
+    role = (membership as { role: UserRole } | null)?.role ?? null;
+  }
+
   if (ADMIN_PATHS.some((p) => pathWithoutLocale.startsWith(p))) {
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}/login`;
+      url.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(url);
+    }
+    if (!role || !isStaffRole(role)) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}/portal`;
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (AUTH_PATHS.some((p) => pathWithoutLocale.startsWith(p))) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}/login`;
@@ -71,12 +101,12 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (AUTH_PATHS.some((p) => pathWithoutLocale.startsWith(p)) && pathWithoutLocale !== '/login') {
-    if (!user) {
-      const url = request.nextUrl.clone();
-      url.pathname = `/${locale}/login`;
-      return NextResponse.redirect(url);
-    }
+  if (AUTH_PAGES.some((p) => pathWithoutLocale.startsWith(p)) && user && role) {
+    const redirect = request.nextUrl.searchParams.get('redirect');
+    const url = request.nextUrl.clone();
+    url.pathname = redirect ?? (isStaffRole(role) ? `/${locale}/admin` : `/${locale}/portal`);
+    url.search = '';
+    return NextResponse.redirect(url);
   }
 
   supabaseResponse.cookies.set('locale', locale, {

@@ -64,6 +64,9 @@ cp .env.example .env.local
 # Run database migrations (requires Supabase CLI)
 npx supabase db push
 
+# Or reset with seed data
+npx supabase db reset
+
 # Start development server
 npm run dev
 

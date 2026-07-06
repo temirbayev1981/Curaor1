@@ -1,7 +1,7 @@
 import { DashboardWidgets } from '@/components/admin/DashboardWidgets';
 import { analyticsService } from '@/domain/analytics/analytics.service';
 
-const DEFAULT_TENANT_ID = 'a0000000-0000-4000-8000-000000000001';
+import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 
 export default async function AdminDashboardPage() {
   let metrics = {

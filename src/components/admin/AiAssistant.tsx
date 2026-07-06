@@ -6,8 +6,6 @@ import { Sparkles } from 'lucide-react';
 import { CAROLINA_CITIES } from '@/domain/ai/ai-content.service';
 import type { Locale } from '@/lib/i18n/config';
 
-const DEFAULT_TENANT_ID = 'a0000000-0000-4000-8000-000000000001';
-
 export function AiAssistant({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
   const [citySlug, setCitySlug] = useState('charlotte');
@@ -24,7 +22,6 @@ export function AiAssistant({ locale }: { locale: Locale }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          tenantId: DEFAULT_TENANT_ID,
           citySlug,
           locale: articleLocale,
         }),

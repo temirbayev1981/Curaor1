@@ -11,6 +11,7 @@ import {
   Sparkles,
   Settings,
   Beer,
+  ScrollText,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Locale } from '@/lib/i18n/config';
@@ -21,6 +22,7 @@ const navItems = [
   { href: '/admin/inventory', icon: Package, key: 'inventory' },
   { href: '/admin/media', icon: Image, key: 'media' },
   { href: '/admin/ai', icon: Sparkles, key: 'ai' },
+  { href: '/admin/audit', icon: ScrollText, key: 'audit' },
   { href: '/admin/settings', icon: Settings, key: 'settings' },
 ] as const;
 

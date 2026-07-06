@@ -1,6 +1,6 @@
 import { inventoryService } from '@/domain/inventory/inventory.service';
 
-const DEFAULT_TENANT_ID = 'a0000000-0000-4000-8000-000000000001';
+import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 
 export default async function AdminInventoryPage() {
   let items: Awaited<ReturnType<typeof inventoryService.list>> = [];

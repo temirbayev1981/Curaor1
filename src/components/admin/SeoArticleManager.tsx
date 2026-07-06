@@ -4,15 +4,13 @@ import { useEffect, useState } from 'react';
 import { Check, X, Eye } from 'lucide-react';
 import type { SeoArticle } from '@/types/database';
 
-const DEFAULT_TENANT_ID = 'a0000000-0000-4000-8000-000000000001';
-
 export function SeoArticleManager() {
   const [articles, setArticles] = useState<SeoArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState<SeoArticle | null>(null);
 
   useEffect(() => {
-    fetch(`/api/admin/seo-articles?tenantId=${DEFAULT_TENANT_ID}`)
+    fetch('/api/admin/seo-articles')
       .then((res) => res.json())
       .then((json: { data: SeoArticle[] | null }) => {
         setArticles(json.data ?? []);
@@ -25,7 +23,7 @@ export function SeoArticleManager() {
     await fetch(`/api/admin/seo-articles/${articleId}/approve`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tenantId: DEFAULT_TENANT_ID }),
+      body: JSON.stringify({}),
     });
     setArticles((prev) =>
       prev.map((a) =>
@@ -38,7 +36,7 @@ export function SeoArticleManager() {
     await fetch(`/api/admin/seo-articles/${articleId}/reject`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tenantId: DEFAULT_TENANT_ID }),
+      body: JSON.stringify({}),
     });
     setArticles((prev) =>
       prev.map((a) =>

@@ -61,32 +61,25 @@ function SortableAsset({ asset, url }: { asset: MediaAsset; url: string }) {
   );
 }
 
-export function MediaLibrary({ tenantId }: { tenantId: string }) {
+export function MediaLibrary() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function fetchAssets() {
-      const res = await fetch(`/api/media?tenantId=${tenantId}`);
+    void (async () => {
+      const res = await fetch('/api/media');
       const json = (await res.json()) as {
         data: { assets: MediaAsset[]; urls: Record<string, string> } | null;
       };
-      if (!cancelled && json.data) {
+      if (json.data) {
         setAssets(json.data.assets);
         setUrls(json.data.urls);
         setLoading(false);
       }
-    }
-
-    void fetchAssets();
-    return () => {
-      cancelled = true;
-    };
-  }, [tenantId]);
+    })();
+  }, []);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
@@ -94,11 +87,10 @@ export function MediaLibrary({ tenantId }: { tenantId: string }) {
     setUploading(true);
 
     const formData = new FormData();
-    formData.append('tenantId', tenantId);
     Array.from(files).forEach((file) => formData.append('files', file));
 
     await fetch('/api/media', { method: 'POST', body: formData });
-    const res = await fetch(`/api/media?tenantId=${tenantId}`);
+    const res = await fetch('/api/media');
     const json = (await res.json()) as {
       data: { assets: MediaAsset[]; urls: Record<string, string> } | null;
     };

@@ -8,6 +8,8 @@ import { bookingService } from '@/domain/booking/booking.service';
 import { createBookingSchema } from '@/domain/booking/booking.schema';
 import { calculateDistance } from '@/domain/maps/distance.service';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
+import { linkCustomerToUser } from '@/lib/auth/rbac';
 
 const publicBookingSchema = createBookingSchema.extend({
   fullName: z.string().min(1).max(200),
@@ -40,17 +42,29 @@ export async function POST(request: NextRequest) {
 
     const input = parsed.data;
     const supabase = createAdminClient();
+    const authSupabase = await createClient();
+    const { data: { user } } = await authSupabase.auth.getUser();
+
+    if (user) {
+      await linkCustomerToUser(input.tenantId, user.id, input.email);
+    }
 
     let customerId: string;
     const { data: existingCustomer } = await supabase
       .from('customers')
-      .select('id')
+      .select('id, user_id')
       .eq('tenant_id', input.tenantId)
       .eq('email', input.email)
       .maybeSingle();
 
     if (existingCustomer?.id) {
       customerId = existingCustomer.id as string;
+      if (user && !(existingCustomer as { user_id: string | null }).user_id) {
+        await supabase
+          .from('customers')
+          .update({ user_id: user.id })
+          .eq('id', customerId);
+      }
     } else {
       const { data: newCustomer, error: customerError } = await supabase
         .from('customers')

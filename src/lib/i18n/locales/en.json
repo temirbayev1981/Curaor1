@@ -5,7 +5,11 @@
     "locations": "Locations",
     "book": "Book Now",
     "portal": "Customer Portal",
-    "admin": "Admin"
+    "admin": "Admin",
+    "gallery": "Gallery"
+  },
+  "gallery": {
+    "subtitle": "Moments from events across the Carolinas"
   },
   "hero": {
     "title": "The Emerald Pour",
@@ -61,6 +65,7 @@
     "inventory": "Inventory",
     "media": "Media Library",
     "ai": "AI Assistant",
+    "audit": "Audit Log",
     "settings": "Settings",
     "netProfit": "Net Profit",
     "roi": "ROI",

@@ -78,7 +78,7 @@ export function HeroSection({ locale }: { locale: Locale }) {
             <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
           </Link>
           <Link
-            href={`/${locale}/locations`}
+            href={`/${locale}/gallery`}
             className="rounded-xl border border-white/20 px-8 py-4 text-lg font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
           >
             {t('hero.secondary')}

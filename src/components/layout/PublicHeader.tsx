@@ -23,6 +23,9 @@ export function PublicHeader({ locale }: { locale: Locale }) {
           <Link href={`/${locale}/locations`} className="text-sm text-zinc-300 hover:text-white">
             {t('nav.locations')}
           </Link>
+          <Link href={`/${locale}/gallery`} className="text-sm text-zinc-300 hover:text-white">
+            {t('nav.gallery')}
+          </Link>
           <Link href={`/${locale}/book`} className="text-sm text-zinc-300 hover:text-white">
             {t('nav.book')}
           </Link>

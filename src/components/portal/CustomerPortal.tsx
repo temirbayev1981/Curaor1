@@ -10,7 +10,7 @@ import type { Booking } from '@/types/database';
 import type { Locale } from '@/lib/i18n/config';
 import { Calendar, CreditCard, FileText, Pen, CalendarClock } from 'lucide-react';
 
-const DEFAULT_TENANT_ID = 'a0000000-0000-4000-8000-000000000001';
+import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 
 export function CustomerPortal({ locale }: { locale: Locale }) {
   const { t } = useTranslation();

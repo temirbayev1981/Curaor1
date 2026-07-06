@@ -2,11 +2,10 @@ import { NextRequest } from 'next/server';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
+import { requireStaff, AuthError } from '@/lib/auth/rbac';
 import { aiContentService } from '@/domain/ai/ai-content.service';
-import { createClient } from '@/lib/supabase/server';
 
 const generateSchema = z.object({
-  tenantId: z.string().uuid(),
   citySlug: z.string().min(1),
   locale: z.enum(['en', 'ru']),
 });
@@ -14,16 +13,8 @@ const generateSchema = z.object({
 export async function POST(request: NextRequest) {
   const requestId = randomUUID();
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return Response.json(apiError('UNAUTHORIZED', 'Authentication required', requestId), {
-      status: 401,
-    });
-  }
-
   try {
+    const ctx = await requireStaff();
     const body: unknown = await request.json();
     const parsed = generateSchema.safeParse(body);
 
@@ -35,13 +26,18 @@ export async function POST(request: NextRequest) {
     }
 
     const article = await aiContentService.generateSeoArticle(
-      parsed.data.tenantId,
+      ctx.tenantId,
       parsed.data.citySlug,
       parsed.data.locale
     );
 
     return Response.json(apiSuccess(article, requestId), { status: 201 });
   } catch (err) {
+    if (err instanceof AuthError) {
+      return Response.json(apiError(err.code, err.message, requestId), {
+        status: err.code === 'FORBIDDEN' ? 403 : 401,
+      });
+    }
     const message = err instanceof Error ? err.message : 'AI generation failed';
     return Response.json(apiError('AI_ERROR', message, requestId), { status: 500 });
   }

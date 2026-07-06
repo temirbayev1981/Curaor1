@@ -99,6 +99,37 @@ export class MediaService {
     if (error || !data) throw new Error(error?.message ?? 'Update failed');
     return data as MediaAsset;
   }
+
+  async listPublicGallery(
+    tenantId: string
+  ): Promise<{ assets: MediaAsset[]; urls: Record<string, string> }> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('media_assets')
+      .select('*')
+      .eq('tenant_id', tenantId)
+      .contains('tags', ['gallery'])
+      .order('created_at', { ascending: false })
+      .limit(48);
+
+    if (error) throw new Error(error.message);
+
+    const assets = (data ?? []) as MediaAsset[];
+    const urls: Record<string, string> = {};
+
+    await Promise.all(
+      assets.map(async (asset) => {
+        try {
+          const path = asset.thumbnail_path ?? asset.webp_path ?? asset.storage_path;
+          urls[asset.id] = await this.getSignedUrl(path);
+        } catch {
+          urls[asset.id] = '';
+        }
+      })
+    );
+
+    return { assets, urls };
+  }
 }
 
 export const mediaService = new MediaService();
