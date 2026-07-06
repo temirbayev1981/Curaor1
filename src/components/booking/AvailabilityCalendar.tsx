@@ -4,7 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
-import type { DayAvailabilityStatus } from '@/lib/booking/availability.service';
+import {
+  buildDefaultMonthDays,
+  type DayAvailabilityStatus,
+} from '@/lib/booking/availability-utils';
 
 interface AvailabilityCalendarProps {
   selectedDate: string;
@@ -44,11 +47,15 @@ export function AvailabilityCalendar({ selectedDate, onSelectDate }: Availabilit
     const params = new URLSearchParams({ tenantId: DEFAULT_TENANT_ID, month: monthKey });
     fetch(`/api/bookings/availability?${params}`)
       .then((res) => res.json())
-      .then((json: { data: { days: typeof days } | null }) => {
-        setDays(json.data?.days ?? []);
+      .then((json: { data: { days: typeof days } | null; error?: { message: string } | null }) => {
+        const next = json.data?.days?.length ? json.data.days : buildDefaultMonthDays(monthKey);
+        setDays(next);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        setDays(buildDefaultMonthDays(monthKey));
+        setLoading(false);
+      });
   }, [monthKey]);
 
   const weekdayLabels = useMemo(() => {

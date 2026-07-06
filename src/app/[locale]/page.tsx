@@ -50,7 +50,7 @@ export async function generateMetadata({
       url: absoluteUrl(`/${locale}`),
       images: [
         {
-          url: 'https://images.unsplash.com/photo-1720110919165-49df0e4f5d49?w=1200&q=85',
+          url: absoluteUrl('/images/irish-pub/guinness-macro.jpg'),
           width: 1200,
           height: 630,
           alt: 'Pint of Guinness stout',
@@ -87,7 +87,6 @@ export default async function HomePage({
       'Charleston, SC',
       'Columbia, SC',
     ],
-    priceRange: '$$$',
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.9',

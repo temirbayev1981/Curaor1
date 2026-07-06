@@ -1,10 +1,7 @@
 /**
- * Premium Irish pub photography — Unsplash (Guinness, whiskey, interiors, food).
- * Each image ID is used once across the entire site.
+ * Irish pub photography — locally hosted assets verified for theme accuracy.
+ * Unsplash CDN IDs are unreliable (same slug can serve unrelated images).
  */
-
-const unsplash = (slug: string, w = 1400) =>
-  `https://images.unsplash.com/${slug}?w=${w}&q=85&auto=format&fit=crop`;
 
 export interface LandingImage {
   id: string;
@@ -12,147 +9,121 @@ export interface LandingImage {
   alt: string;
 }
 
-function img(slug: string, alt: string, w = 1400): LandingImage {
-  return { id: slug, src: unsplash(slug, w), alt };
+const BASE = '/images/irish-pub';
+
+function img(file: string, alt: string): LandingImage {
+  return { id: file.replace(/\.jpg$/, ''), src: `${BASE}/${file}`, alt };
 }
 
-/** Master catalog — authentic Irish pub, Guinness, whiskey & hearty food. */
+/** Master catalog — each file verified visually for Irish pub theme. */
 const CATALOG = {
-  /** Cozy traditional pub interior with wood & warm light */
   pubInteriorHero: img(
-    'photo-1757695099881-c890996d9e39',
-    'Cozy Irish pub interior with wooden benches and warm ambient lighting',
-    1920
+    'hero-pub-interior.jpg',
+    'Cozy Irish pub interior with wooden benches and warm ambient lighting'
   ),
-  /** Macro Guinness pint with creamy head */
   guinnessMacro: img(
-    'photo-1720110919165-49df0e4f5d49',
+    'guinness-macro.jpg',
     'Close-up of a perfect pint of Guinness stout with creamy white head'
   ),
-  /** Guinness on rustic wooden table */
   guinnessWood: img(
-    'photo-1642191572834-256807f846b7',
-    'Pint of Guinness on a rustic wooden pub table'
+    'guinness-wood.jpg',
+    'Pint of Guinness on a rustic wooden pub table with tartan seating'
   ),
-  /** Guinness in traditional pub by candlelight */
   guinnessCandlelit: img(
-    'photo-1563396983631-2f8cf576bb36',
-    'Guinness draught in a glass beside candlelight in an English-style pub'
+    'guinness-candlelit.jpg',
+    'Guinness draught in a glass beside candlelight in a traditional pub'
   ),
-  /** Guinness in Dublin, Ireland */
   guinnessDublin: img(
-    'photo-1743634424925-bd6a37c38bcc',
+    'guinness-dublin.jpg',
     'Glass of Guinness beside a can in Dublin, Ireland'
   ),
-  /** Guinness on dark table */
   guinnessTable: img(
-    'photo-1632293416349-4a3ff46e3572',
-    'Glass of Guinness sitting on a dark wooden table'
+    'guinness-table.jpg',
+    'Glass of Guinness on a dark wooden pub bar with bottle display'
   ),
-  /** Vintage bar with whiskey bottles */
+  guinnessGarden: img(
+    'guinness-garden.jpg',
+    'Pint of Guinness on a table outside an Irish pub'
+  ),
+  guinnessSign: img(
+    'guinness-sign.jpg',
+    'Guinness brewery sign on a brick building in Dublin'
+  ),
+  guinnessPour: img(
+    'beer-tap-pour.jpg',
+    'Draft stout being poured from brass beer taps at the bar'
+  ),
   vintageWhiskeyBar: img(
-    'photo-1759373247456-49cc5f02b408',
+    'vintage-whiskey-bar.jpg',
     'Antique wooden bar counter lined with whiskey and liquor bottles'
   ),
-  /** Irish whiskey shopfront */
   irishWhiskeyStore: img(
-    'photo-1706483524268-597b1ea01ed1',
+    'irish-whiskey-store.jpg',
     'Traditional Irish storefront with whiskey bottles in the window'
   ),
-  /** Whiskey on the rocks */
-  whiskeyRocks: img(
-    'photo-1436076863939-06870fe779c2',
-    'Premium Irish whiskey served on the rocks in a crystal tumbler'
+  beerCheers: img(
+    'beer-cheers.jpg',
+    'Friends toasting with beer bottles at golden hour'
   ),
-  /** Whiskey cocktail at the bar */
   whiskeyCocktail: img(
-    'photo-1470337458703-46ad1756a187',
-    'Handcrafted whiskey cocktail on a polished wooden bar'
+    'whiskey-cocktail.jpg',
+    'Handcrafted whiskey cocktail poured at a polished pub bar'
   ),
-  /** Neat whiskey pour */
   whiskeyNeat: img(
-    'photo-1601925260368-ae2f83cf8b7f',
-    'Amber Irish whiskey poured into a glass at the bar'
+    'jameson-bottle.jpg',
+    'Jameson Irish whiskey bottle beside a glass on the rocks'
   ),
-  /** Whiskey tasting lineup */
-  whiskeyFlight: img(
-    'photo-1629203851122-3726ecdf080e',
-    'Flight of Irish whiskeys lined up for tasting'
+  jamesonPour: img(
+    'jameson-pour.jpg',
+    'Irish whiskey poured into a glass at the bar'
   ),
-  /** Back bar bottle display */
-  barBottleWall: img(
-    'photo-1535958636474-b021ee887b13',
-    'Backlit wall of whiskey and spirits behind a pub bar'
+  whiskeyWall: img(
+    'jameson-bottles.jpg',
+    'Jameson Irish whiskey bottles lined up on the bar'
   ),
-  /** Classic pub atmosphere */
-  pubDiningRoom: img(
-    'photo-1555396273-367ea4eb4db5',
-    'Warm-lit pub dining room with wooden tables and bottles'
+  irishWhiskeyTray: img(
+    'irish-whiskey-tray.jpg',
+    'Irish whiskey bottle and glass served on a wooden tray'
   ),
-  /** Evening bar scene */
-  barEvening: img(
-    'photo-1514933651103-005eec06c04b',
-    'Evening atmosphere inside a traditional pub bar'
+  irishPubExterior: img(
+    'irish-pub-exterior.jpg',
+    'Mulligan and Haines Irish pub with Guinness signage in Dublin'
   ),
-  /** Craft beer taps */
-  beerTaps: img(
-    'photo-1551218808-94e220e084d2',
-    'Row of brass beer taps ready to pour draft stout and ale'
+  pubBarEvening: img(
+    'pub-bar-evening.jpg',
+    'Evening atmosphere inside a traditional Irish pub bar'
   ),
-  /** Friends toasting at the bar */
-  barToast: img(
-    'photo-1513475382585-d06e58bcb0e0',
-    'Friends raising glasses in a toast at a cozy pub bar'
+  stoutOnBar: img(
+    'stout-on-bar.jpg',
+    'Two pints of dark stout beneath brass beer taps on the bar'
   ),
-  /** Intimate bar corner */
-  barCorner: img(
-    'photo-1578662996442-48f60103fc96',
-    'Intimate corner of an Irish pub with drinks on the counter'
+  pubSausages: img(
+    'sausages-mustard.jpg',
+    'Pub sausages served with mustard on a wooden table'
   ),
-  /** Bartender detail */
-  barCraft: img(
-    'photo-1559339352-11d035aa65de',
-    'Bartender craft and bottles behind a wooden pub bar'
-  ),
-  /** Hearty pub plating */
-  pubPlatter: img(
-    'photo-1414235077428-338989a2e8c0',
-    'Hearty plated pub fare served at a candlelit table'
-  ),
-  /** Classic pub burger & fries */
   pubBurger: img(
-    'photo-1551782450-17144efb9c50',
-    'Gourmet pub burger with fries on a wooden board'
+    'pub-burger.jpg',
+    'Gourmet pub burger with fries served at an Irish bar'
   ),
-  /** Full Irish breakfast */
   irishBreakfast: img(
-    'photo-1567620905732-2d1ec7ab7445',
-    'Traditional full Irish breakfast with eggs, sausage and soda bread'
+    'breakfast-plate.jpg',
+    'Full Irish breakfast with eggs, bacon, black pudding and soda bread'
   ),
-  /** Sharing boards & pub bites */
-  sharingBoard: img(
-    'photo-1565299624946-b28f40a0ae38',
-    'Sharing board of pub bites and appetizers for a group'
-  ),
-  /** Classic fish and chips */
   fishAndChips: img(
-    'photo-1553621042-f6e147245754',
-    'Classic Irish pub fish and chips with tartar sauce'
+    'fish-and-chips.jpg',
+    'Classic Irish pub fish and chips with lemon and tartar sauce'
   ),
-  /** Grilled pub fare */
-  grilledPubFare: img(
-    'photo-1544025162-d76694265947',
-    'Grilled meats and sides served pub-style on a wooden table'
+  bangersMash: img(
+    'bangers-mash.jpg',
+    'Bangers and mash with gravy served pub-style on a plate'
   ),
-  /** Brunch at the pub */
-  pubBrunch: img(
-    'photo-1565299507177-b0ac66763828',
-    'Weekend brunch spread at an Irish pub table'
+  shepherdPie: img(
+    'shepherds-pie.jpg',
+    'Classic Irish shepherd\'s pie with golden mashed potato crust in a cast-iron skillet'
   ),
-  /** Stout being enjoyed */
-  stoutMoment: img(
-    'photo-1509042239860-f550ce710b93',
-    'Dark stout beer enjoyed at a wooden pub table'
+  potatoGravy: img(
+    'potato-gravy.jpg',
+    'Creamy mashed potatoes with gravy — classic pub side dish'
   ),
 } as const;
 
@@ -165,55 +136,49 @@ export const LANDING_IMAGES = {
   about: CATALOG.vintageWhiskeyBar,
 } as const;
 
-/** Drinks & atmosphere — gallery strip */
 export const GALLERY_STRIP_IMAGES: LandingImage[] = [
   CATALOG.guinnessDublin,
-  CATALOG.whiskeyRocks,
+  CATALOG.whiskeyNeat,
   CATALOG.guinnessCandlelit,
   CATALOG.irishWhiskeyStore,
 ];
 
-/** The Emerald Pour experience — drinks, bar craft, atmosphere */
 export const EXPERIENCE_IMAGES: LandingImage[] = [
-  CATALOG.pubDiningRoom,
-  CATALOG.stoutMoment,
-  CATALOG.barBottleWall,
-  CATALOG.beerTaps,
+  CATALOG.irishPubExterior,
+  CATALOG.stoutOnBar,
+  CATALOG.irishWhiskeyTray,
+  CATALOG.guinnessPour,
   CATALOG.whiskeyCocktail,
-  CATALOG.barCraft,
+  CATALOG.pubBarEvening,
 ];
 
-/** Irish pub food photography */
 export const FOOD_IMAGES: LandingImage[] = [
+  CATALOG.shepherdPie,
   CATALOG.fishAndChips,
   CATALOG.irishBreakfast,
-  CATALOG.pubBurger,
-  CATALOG.sharingBoard,
+  CATALOG.bangersMash,
 ];
 
-/** Menu category hero shots */
 export const MENU_CATEGORY_IMAGES = {
   beer: CATALOG.guinnessTable,
   whiskey: CATALOG.whiskeyNeat,
-  cocktails: CATALOG.whiskeyFlight,
-  food: CATALOG.pubPlatter,
+  cocktails: CATALOG.whiskeyCocktail,
+  food: CATALOG.shepherdPie,
 } as const;
 
 export const SERVICE_IMAGES = {
-  weddings: CATALOG.barToast.src,
-  corporate: CATALOG.barEvening.src,
-  private: CATALOG.barCorner.src,
-  stpatricks: CATALOG.vintageWhiskeyBar.src,
+  weddings: CATALOG.beerCheers.src,
+  corporate: CATALOG.pubBarEvening.src,
+  private: CATALOG.irishWhiskeyStore.src,
+  stpatricks: CATALOG.stoutOnBar.src,
 } as const;
 
-/** Testimonials — atmosphere shots (may overlap gallery on small cards) */
 export const TESTIMONIAL_IMAGES = {
-  t1: CATALOG.grilledPubFare.src,
-  t2: CATALOG.pubBrunch.src,
+  t1: CATALOG.fishAndChips.src,
+  t2: CATALOG.irishBreakfast.src,
   t3: CATALOG.whiskeyNeat.src,
 } as const;
 
-/** Full public gallery */
 export const STOCK_GALLERY_IMAGES: LandingImage[] = dedupeById([
   ...GALLERY_STRIP_IMAGES,
   ...EXPERIENCE_IMAGES,
@@ -221,17 +186,15 @@ export const STOCK_GALLERY_IMAGES: LandingImage[] = dedupeById([
   CATALOG.pubInteriorHero,
   CATALOG.guinnessMacro,
   CATALOG.guinnessWood,
+  CATALOG.guinnessGarden,
+  CATALOG.guinnessSign,
   CATALOG.vintageWhiskeyBar,
-  CATALOG.guinnessTable,
-  CATALOG.whiskeyCocktail,
-  CATALOG.whiskeyNeat,
-  CATALOG.barCraft,
-  CATALOG.pubPlatter,
+  CATALOG.whiskeyWall,
+  CATALOG.jamesonPour,
   CATALOG.pubBurger,
-  CATALOG.irishBreakfast,
-  CATALOG.grilledPubFare,
-  CATALOG.pubBrunch,
-  CATALOG.stoutMoment,
+  CATALOG.pubSausages,
+  CATALOG.potatoGravy,
+  CATALOG.beerCheers,
 ]);
 
 function dedupeById(images: LandingImage[]): LandingImage[] {
@@ -244,10 +207,9 @@ function dedupeById(images: LandingImage[]): LandingImage[] {
 }
 
 export function getLandingPageImageIds(): string[] {
-  const fromSrc = (src: string) =>
-    src.match(/photo-[a-z0-9-]+/)?.[0] ?? src;
+  const fromSrc = (src: string) => src.split('/').pop()?.replace('.jpg', '') ?? src;
 
-  return [
+  return [...new Set([
     LANDING_IMAGES.hero.id,
     LANDING_IMAGES.heroAccent.id,
     LANDING_IMAGES.guinness.id,
@@ -256,7 +218,7 @@ export function getLandingPageImageIds(): string[] {
     ...FOOD_IMAGES.map((i) => i.id),
     ...Object.values(MENU_CATEGORY_IMAGES).map((i) => i.id),
     ...Object.values(SERVICE_IMAGES).map(fromSrc),
-  ];
+  ])];
 }
 
 export const STOCK_GALLERY_COUNT = STOCK_GALLERY_IMAGES.length;

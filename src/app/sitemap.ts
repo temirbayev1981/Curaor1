@@ -6,7 +6,21 @@ import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { SeoArticle } from '@/types/database';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ['', '/book', '/gallery', '/locations', '/faq', '/articles', '/terms', '/privacy'];
+  const staticPaths = [
+    '',
+    '/about',
+    '/services',
+    '/menu',
+    '/contact',
+    '/book',
+    '/gallery',
+    '/locations',
+    '/faq',
+    '/articles',
+    '/portal',
+    '/terms',
+    '/privacy',
+  ];
   const eventTypes = ['wedding', 'corporate', 'private', 'stpatricks'] as const;
   const locales = ['en', 'ru'] as const;
 

@@ -1,12 +1,13 @@
 import { createAdminClient } from '@/lib/supabase/admin';
+import {
+  buildDefaultMonthDays,
+  isDatabaseUnavailableError,
+  type DayAvailability,
+  type DayAvailabilityStatus,
+} from './availability-utils';
 
-export type DayAvailabilityStatus = 'open' | 'limited' | 'full';
-
-export interface DayAvailability {
-  date: string;
-  status: DayAvailabilityStatus;
-  bookingCount: number;
-}
+export type { DayAvailability, DayAvailabilityStatus } from './availability-utils';
+export { buildDefaultMonthDays } from './availability-utils';
 
 const MAX_BOOKINGS_PER_DAY = 2;
 
@@ -30,20 +31,37 @@ export async function getMonthAvailability(
   const lastDay = daysInMonth(year, monthNum);
   const end = `${month}-${String(lastDay).padStart(2, '0')}T23:59:59.999Z`;
 
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from('bookings')
-    .select('booking_start')
-    .eq('tenant_id', tenantId)
-    .neq('status', 'cancelled')
-    .gte('booking_start', start)
-    .lte('booking_start', end);
+  let data: Array<{ booking_start: string }> | null = null;
 
-  if (error) throw new Error(error.message);
+  try {
+    const supabase = createAdminClient();
+    const result = await supabase
+      .from('bookings')
+      .select('booking_start')
+      .eq('tenant_id', tenantId)
+      .neq('status', 'cancelled')
+      .gte('booking_start', start)
+      .lte('booking_start', end);
+
+    if (result.error) {
+      if (isDatabaseUnavailableError(result.error.message)) {
+        return buildDefaultMonthDays(month);
+      }
+      throw new Error(result.error.message);
+    }
+
+    data = result.data;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Availability check failed';
+    if (isDatabaseUnavailableError(message)) {
+      return buildDefaultMonthDays(month);
+    }
+    throw err;
+  }
 
   const counts = new Map<string, number>();
   for (const row of data ?? []) {
-    const date = (row.booking_start as string).slice(0, 10);
+    const date = row.booking_start.slice(0, 10);
     counts.set(date, (counts.get(date) ?? 0) + 1);
   }
 

@@ -66,4 +66,20 @@ describe('getMonthAvailability', () => {
     expect(days).toHaveLength(31);
     expect(days[0]?.status).toBe('open');
   });
+
+  it('falls back to open days when bookings table is missing', async () => {
+    mockSelect.mockReturnValue({
+      eq: vi.fn().mockReturnThis(),
+      neq: vi.fn().mockReturnThis(),
+      gte: vi.fn().mockReturnThis(),
+      lte: vi.fn().mockResolvedValue({
+        data: null,
+        error: { message: "Could not find the table 'public.bookings' in the schema cache" },
+      }),
+    });
+
+    const days = await getMonthAvailability('tenant-1', '2026-07');
+    expect(days).toHaveLength(31);
+    expect(days.every((day) => day.status === 'open')).toBe(true);
+  });
 });

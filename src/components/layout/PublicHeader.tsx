@@ -11,10 +11,12 @@ import type { Locale } from '@/lib/i18n/config';
 
 const links = [
   { href: '/', key: 'home' },
-  { href: '#about', key: 'about' },
-  { href: '#services', key: 'services' },
+  { href: '/about', key: 'about' },
+  { href: '/services', key: 'services' },
+  { href: '/menu', key: 'menu' },
   { href: '/gallery', key: 'gallery' },
   { href: '/locations', key: 'locations' },
+  { href: '/contact', key: 'contact' },
 ] as const;
 
 function linkHref(locale: Locale, href: string) {

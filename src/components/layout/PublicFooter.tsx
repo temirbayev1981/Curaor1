@@ -10,11 +10,15 @@ export function PublicFooter({ locale }: { locale: Locale }) {
   const year = new Date().getFullYear();
 
   const quickLinks = [
+    { href: '/about', key: 'about' },
+    { href: '/services', key: 'services' },
+    { href: '/menu', key: 'menu' },
+    { href: '/gallery', key: 'gallery' },
+    { href: '/locations', key: 'locations' },
     { href: '/book', key: 'book' },
     { href: '/faq', key: 'faq' },
     { href: '/articles', key: 'articles' },
-    { href: '/locations', key: 'locations' },
-    { href: '/gallery', key: 'gallery' },
+    { href: '/contact', key: 'contact' },
     { href: '/portal', key: 'portal' },
   ] as const;
 
