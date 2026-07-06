@@ -1,116 +1,241 @@
-/** Curated Irish pub / mobile bar photography — unique Pexels IDs only. */
+/**
+ * Premium Irish pub photography — Unsplash (Guinness, whiskey, interiors, food).
+ * Each image ID is used once across the entire site.
+ */
 
-const pexels = (id: number, w = 1200) =>
-  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+const unsplash = (slug: string, w = 1400) =>
+  `https://images.unsplash.com/${slug}?w=${w}&q=85&auto=format&fit=crop`;
 
 export interface LandingImage {
-  id: number;
+  id: string;
   src: string;
   alt: string;
 }
 
-function img(id: number, alt: string, w = 1200): LandingImage {
-  return { id, src: pexels(id, w), alt };
+function img(slug: string, alt: string, w = 1400): LandingImage {
+  return { id: slug, src: unsplash(slug, w), alt };
 }
 
-/** Master catalog — each ID used once across the entire site. */
+/** Master catalog — authentic Irish pub, Guinness, whiskey & hearty food. */
 const CATALOG = {
-  hero: img(1157570, 'Mobile Irish pub at an evening event with warm string lights', 1920),
-  guinnessPint: img(5946962, 'Perfect pint of stout on a rustic wooden bar'),
-  pubInterior: img(2574489, 'Warm Irish pub interior with bottles and ambient lighting'),
-  outdoorBarDay: img(3184418, 'Guests enjoying drinks at an outdoor mobile bar'),
-  beerTaps: img(3612571, 'Craft beer taps at a professional mobile bar'),
-  nightCelebration: img(2747449, 'Evening celebration with golden string lights'),
-  weddingToast: img(265722, 'Wedding reception toast with champagne and celebration'),
-  whiskeyGlasses: img(602750, 'Premium Irish whiskey glasses on a wooden bar'),
-  festivalCrowd: img(1763075, 'Festival crowd celebrating with drinks at sunset'),
-  corporateMixer: img(1181395, 'Corporate networking event with bar service'),
-  pouringPint: img(1552630, 'Bartender pouring a fresh pint of stout'),
-  craftCocktails: img(1304540, 'Handcrafted cocktails at a private celebration'),
-  outdoorConcert: img(2774556, 'Outdoor concert and bar at golden hour'),
-  backyardParty: img(3171837, 'Friends celebrating at a backyard private party'),
-  stPatricks: img(1190297, "St. Patrick's Day celebration with green decor"),
-  weddingCouple: img(1444442, 'Happy couple at their wedding reception'),
-  officeCelebration: img(4056723, 'Corporate team celebration with drinks'),
-  cheersFriends: img(759174, 'Friends raising glasses for a toast'),
-  irishPubNight: img(1267325, 'Cozy pub atmosphere with warm lighting at night'),
-  whiskeyPour: img(3408744, 'Whiskey being poured into a crystal glass'),
-  barrelAging: img(5531545, 'Oak barrels in a traditional distillery'),
-  gardenParty: img(1670752, 'Elegant garden party with bar setup'),
-  toastGroup: img(2206746, 'Group of guests toasting at an event'),
-  cocktailBar: img(1126728, 'Colorful cocktails lined up on a bar'),
-  eveningReception: img(4058705, 'Evening wedding reception with ambient lighting'),
-  pubCrowd: img(1283218, 'Lively pub crowd enjoying drinks together'),
-  beerCheers: img(1571020, 'Friends clinking beer glasses at a celebration'),
-  rusticBar: img(2740966, 'Rustic wooden bar setup for an outdoor event'),
-  festivalLights: img(1040880, 'Festival at night with glowing lights and crowd'),
-  mobileSetup: img(5245329, 'Professional mobile bar setup at an outdoor venue'),
+  /** Cozy traditional pub interior with wood & warm light */
+  pubInteriorHero: img(
+    'photo-1757695099881-c890996d9e39',
+    'Cozy Irish pub interior with wooden benches and warm ambient lighting',
+    1920
+  ),
+  /** Macro Guinness pint with creamy head */
+  guinnessMacro: img(
+    'photo-1720110919165-49df0e4f5d49',
+    'Close-up of a perfect pint of Guinness stout with creamy white head'
+  ),
+  /** Guinness on rustic wooden table */
+  guinnessWood: img(
+    'photo-1642191572834-256807f846b7',
+    'Pint of Guinness on a rustic wooden pub table'
+  ),
+  /** Guinness in traditional pub by candlelight */
+  guinnessCandlelit: img(
+    'photo-1563396983631-2f8cf576bb36',
+    'Guinness draught in a glass beside candlelight in an English-style pub'
+  ),
+  /** Guinness in Dublin, Ireland */
+  guinnessDublin: img(
+    'photo-1743634424925-bd6a37c38bcc',
+    'Glass of Guinness beside a can in Dublin, Ireland'
+  ),
+  /** Guinness on dark table */
+  guinnessTable: img(
+    'photo-1632293416349-4a3ff46e3572',
+    'Glass of Guinness sitting on a dark wooden table'
+  ),
+  /** Vintage bar with whiskey bottles */
+  vintageWhiskeyBar: img(
+    'photo-1759373247456-49cc5f02b408',
+    'Antique wooden bar counter lined with whiskey and liquor bottles'
+  ),
+  /** Irish whiskey shopfront */
+  irishWhiskeyStore: img(
+    'photo-1706483524268-597b1ea01ed1',
+    'Traditional Irish storefront with whiskey bottles in the window'
+  ),
+  /** Whiskey on the rocks */
+  whiskeyRocks: img(
+    'photo-1436076863939-06870fe779c2',
+    'Premium Irish whiskey served on the rocks in a crystal tumbler'
+  ),
+  /** Whiskey cocktail at the bar */
+  whiskeyCocktail: img(
+    'photo-1470337458703-46ad1756a187',
+    'Handcrafted whiskey cocktail on a polished wooden bar'
+  ),
+  /** Neat whiskey pour */
+  whiskeyNeat: img(
+    'photo-1601925260368-ae2f83cf8b7f',
+    'Amber Irish whiskey poured into a glass at the bar'
+  ),
+  /** Whiskey tasting lineup */
+  whiskeyFlight: img(
+    'photo-1629203851122-3726ecdf080e',
+    'Flight of Irish whiskeys lined up for tasting'
+  ),
+  /** Back bar bottle display */
+  barBottleWall: img(
+    'photo-1535958636474-b021ee887b13',
+    'Backlit wall of whiskey and spirits behind a pub bar'
+  ),
+  /** Classic pub atmosphere */
+  pubDiningRoom: img(
+    'photo-1555396273-367ea4eb4db5',
+    'Warm-lit pub dining room with wooden tables and bottles'
+  ),
+  /** Evening bar scene */
+  barEvening: img(
+    'photo-1514933651103-005eec06c04b',
+    'Evening atmosphere inside a traditional pub bar'
+  ),
+  /** Craft beer taps */
+  beerTaps: img(
+    'photo-1551218808-94e220e084d2',
+    'Row of brass beer taps ready to pour draft stout and ale'
+  ),
+  /** Friends toasting at the bar */
+  barToast: img(
+    'photo-1513475382585-d06e58bcb0e0',
+    'Friends raising glasses in a toast at a cozy pub bar'
+  ),
+  /** Intimate bar corner */
+  barCorner: img(
+    'photo-1578662996442-48f60103fc96',
+    'Intimate corner of an Irish pub with drinks on the counter'
+  ),
+  /** Bartender detail */
+  barCraft: img(
+    'photo-1559339352-11d035aa65de',
+    'Bartender craft and bottles behind a wooden pub bar'
+  ),
+  /** Hearty pub plating */
+  pubPlatter: img(
+    'photo-1414235077428-338989a2e8c0',
+    'Hearty plated pub fare served at a candlelit table'
+  ),
+  /** Classic pub burger & fries */
+  pubBurger: img(
+    'photo-1551782450-17144efb9c50',
+    'Gourmet pub burger with fries on a wooden board'
+  ),
+  /** Full Irish breakfast */
+  irishBreakfast: img(
+    'photo-1567620905732-2d1ec7ab7445',
+    'Traditional full Irish breakfast with eggs, sausage and soda bread'
+  ),
+  /** Sharing boards & pub bites */
+  sharingBoard: img(
+    'photo-1565299624946-b28f40a0ae38',
+    'Sharing board of pub bites and appetizers for a group'
+  ),
+  /** Classic fish and chips */
+  fishAndChips: img(
+    'photo-1553621042-f6e147245754',
+    'Classic Irish pub fish and chips with tartar sauce'
+  ),
+  /** Grilled pub fare */
+  grilledPubFare: img(
+    'photo-1544025162-d76694265947',
+    'Grilled meats and sides served pub-style on a wooden table'
+  ),
+  /** Brunch at the pub */
+  pubBrunch: img(
+    'photo-1565299507177-b0ac66763828',
+    'Weekend brunch spread at an Irish pub table'
+  ),
+  /** Stout being enjoyed */
+  stoutMoment: img(
+    'photo-1509042239860-f550ce710b93',
+    'Dark stout beer enjoyed at a wooden pub table'
+  ),
 } as const;
 
 export { CATALOG };
 
 export const LANDING_IMAGES = {
-  hero: CATALOG.hero,
-  /** Hero side card — distinct from the about pint photo. */
-  heroAccent: CATALOG.whiskeyGlasses,
-  guinness: CATALOG.guinnessPint,
-  about: CATALOG.pubInterior,
+  hero: CATALOG.pubInteriorHero,
+  heroAccent: CATALOG.guinnessMacro,
+  guinness: CATALOG.guinnessWood,
+  about: CATALOG.vintageWhiskeyBar,
 } as const;
 
-/** Mockup: horizontal gallery strip (4–6 event photos). */
+/** Drinks & atmosphere — gallery strip */
 export const GALLERY_STRIP_IMAGES: LandingImage[] = [
-  CATALOG.outdoorBarDay,
-  CATALOG.whiskeyPour,
-  CATALOG.irishPubNight,
-  CATALOG.toastGroup,
+  CATALOG.guinnessDublin,
+  CATALOG.whiskeyRocks,
+  CATALOG.guinnessCandlelit,
+  CATALOG.irishWhiskeyStore,
 ];
 
-/** Experience mosaic — 6 unique scenes. */
+/** The Emerald Pour experience — drinks, bar craft, atmosphere */
 export const EXPERIENCE_IMAGES: LandingImage[] = [
-  CATALOG.corporateMixer,
-  CATALOG.pouringPint,
-  CATALOG.craftCocktails,
-  CATALOG.festivalLights,
-  CATALOG.gardenParty,
-  CATALOG.beerCheers,
+  CATALOG.pubDiningRoom,
+  CATALOG.stoutMoment,
+  CATALOG.barBottleWall,
+  CATALOG.beerTaps,
+  CATALOG.whiskeyCocktail,
+  CATALOG.barCraft,
 ];
+
+/** Irish pub food photography */
+export const FOOD_IMAGES: LandingImage[] = [
+  CATALOG.fishAndChips,
+  CATALOG.irishBreakfast,
+  CATALOG.pubBurger,
+  CATALOG.sharingBoard,
+];
+
+/** Menu category hero shots */
+export const MENU_CATEGORY_IMAGES = {
+  beer: CATALOG.guinnessTable,
+  whiskey: CATALOG.whiskeyNeat,
+  cocktails: CATALOG.whiskeyFlight,
+  food: CATALOG.pubPlatter,
+} as const;
 
 export const SERVICE_IMAGES = {
-  weddings: CATALOG.weddingCouple.src,
-  corporate: CATALOG.officeCelebration.src,
-  private: CATALOG.backyardParty.src,
-  stpatricks: CATALOG.stPatricks.src,
+  weddings: CATALOG.barToast.src,
+  corporate: CATALOG.barEvening.src,
+  private: CATALOG.barCorner.src,
+  stpatricks: CATALOG.vintageWhiskeyBar.src,
 } as const;
 
+/** Testimonials — atmosphere shots (may overlap gallery on small cards) */
 export const TESTIMONIAL_IMAGES = {
-  t1: CATALOG.weddingToast.src,
-  t2: CATALOG.eveningReception.src,
-  t3: CATALOG.cheersFriends.src,
+  t1: CATALOG.grilledPubFare.src,
+  t2: CATALOG.pubBrunch.src,
+  t3: CATALOG.whiskeyNeat.src,
 } as const;
 
-/** Full public gallery — deduplicated by Pexels ID. */
+/** Full public gallery */
 export const STOCK_GALLERY_IMAGES: LandingImage[] = dedupeById([
   ...GALLERY_STRIP_IMAGES,
   ...EXPERIENCE_IMAGES,
-  CATALOG.hero,
-  CATALOG.guinnessPint,
-  CATALOG.pubInterior,
-  CATALOG.beerTaps,
-  CATALOG.nightCelebration,
-  CATALOG.whiskeyGlasses,
-  CATALOG.festivalCrowd,
-  CATALOG.outdoorConcert,
-  CATALOG.cheersFriends,
-  CATALOG.cocktailBar,
-  CATALOG.eveningReception,
-  CATALOG.pubCrowd,
-  CATALOG.barrelAging,
-  CATALOG.rusticBar,
-  CATALOG.mobileSetup,
+  ...FOOD_IMAGES,
+  CATALOG.pubInteriorHero,
+  CATALOG.guinnessMacro,
+  CATALOG.guinnessWood,
+  CATALOG.vintageWhiskeyBar,
+  CATALOG.guinnessTable,
+  CATALOG.whiskeyCocktail,
+  CATALOG.whiskeyNeat,
+  CATALOG.barCraft,
+  CATALOG.pubPlatter,
+  CATALOG.pubBurger,
+  CATALOG.irishBreakfast,
+  CATALOG.grilledPubFare,
+  CATALOG.pubBrunch,
+  CATALOG.stoutMoment,
 ]);
 
 function dedupeById(images: LandingImage[]): LandingImage[] {
-  const seen = new Set<number>();
+  const seen = new Set<string>();
   return images.filter((image) => {
     if (seen.has(image.id)) return false;
     seen.add(image.id);
@@ -118,9 +243,9 @@ function dedupeById(images: LandingImage[]): LandingImage[] {
   });
 }
 
-/** IDs visible on the landing page (each must appear once). */
-export function getLandingPageImageIds(): number[] {
-  const fromUrl = (src: string) => extractPexelsId(src)!;
+export function getLandingPageImageIds(): string[] {
+  const fromSrc = (src: string) =>
+    src.match(/photo-[a-z0-9-]+/)?.[0] ?? src;
 
   return [
     LANDING_IMAGES.hero.id,
@@ -128,14 +253,10 @@ export function getLandingPageImageIds(): number[] {
     LANDING_IMAGES.guinness.id,
     ...GALLERY_STRIP_IMAGES.map((i) => i.id),
     ...EXPERIENCE_IMAGES.map((i) => i.id),
-    ...Object.values(SERVICE_IMAGES).map(fromUrl),
-    ...Object.values(TESTIMONIAL_IMAGES).map(fromUrl),
+    ...FOOD_IMAGES.map((i) => i.id),
+    ...Object.values(MENU_CATEGORY_IMAGES).map((i) => i.id),
+    ...Object.values(SERVICE_IMAGES).map(fromSrc),
   ];
-}
-
-function extractPexelsId(url: string): number | null {
-  const match = url.match(/photos\/(\d+)\//);
-  return match ? Number(match[1]) : null;
 }
 
 export const STOCK_GALLERY_COUNT = STOCK_GALLERY_IMAGES.length;

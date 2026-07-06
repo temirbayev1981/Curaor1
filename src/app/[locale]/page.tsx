@@ -8,6 +8,7 @@ import { GalleryStripSection } from '@/components/landing/GalleryStripSection';
 import { ExperienceGridSection } from '@/components/landing/ExperienceGridSection';
 import { FeaturesBarSection } from '@/components/landing/FeaturesBarSection';
 import { HeroSection } from '@/components/landing/HeroSection';
+import { FoodShowcaseSection } from '@/components/landing/FoodShowcaseSection';
 import { MenuPreviewSection } from '@/components/landing/MenuPreviewSection';
 import { OccasionsSection } from '@/components/landing/OccasionsSection';
 import { PricingPackagesSection } from '@/components/landing/PricingPackagesSection';
@@ -46,7 +47,14 @@ export async function generateMetadata({
       locale: locale === 'ru' ? 'ru_RU' : 'en_US',
       type: 'website',
       url: absoluteUrl(`/${locale}`),
-      images: [{ url: absoluteUrl('/og-image.jpg'), width: 1200, height: 630 }],
+      images: [
+        {
+          url: 'https://images.unsplash.com/photo-1720110919165-49df0e4f5d49?w=1200&q=85',
+          width: 1200,
+          height: 630,
+          alt: 'Pint of Guinness stout',
+        },
+      ],
     },
   };
 }
@@ -119,6 +127,7 @@ export default async function HomePage({
         <OccasionsSection />
         <PricingPackagesSection locale={locale as Locale} />
         <MenuPreviewSection />
+        <FoodShowcaseSection />
         <ServicesSection />
         <GalleryStripSection locale={locale as Locale} />
         <ExperienceGridSection />

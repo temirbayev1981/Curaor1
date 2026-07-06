@@ -19,12 +19,12 @@
   },
   "hero": {
     "title": "The Emerald Pour",
-    "badge": "Ireland on Wheels",
+    "badge": "Guinness · Whiskey · Craic",
     "subtitle": "North Carolina's Premier Mobile Irish Pub Experience",
-    "headline": "Good Times. Great Drinks.",
-    "headlineAccent": "Anywhere.",
-    "sideTagline": "The real Irish pub experience — we bring it to you.",
-    "description": "The Emerald Pour is a full-service mobile Irish pub bringing the spirit of Ireland to your next event.",
+    "headline": "Ireland's Finest Pints.",
+    "headlineAccent": "Poured at Your Door.",
+    "sideTagline": "Guinness on tap, premium Irish whiskey, and the warmth of a Dublin pub — wherever you celebrate.",
+    "description": "The Emerald Pour brings authentic Guinness draught, curated Irish whiskey, and classic pub fare to weddings, corporate events, and celebrations across the Carolinas.",
     "cta": "Book Your Event",
     "secondary": "View Gallery"
   },
@@ -119,13 +119,19 @@
       }
     },
     "menu": {
-      "title": "The Drinks Menu",
-      "subtitle": "Authentic Irish favorites and craft cocktails — all included in your package",
+      "eyebrow": "On Tap & In Glass",
+      "title": "Guinness, Whiskey & Pub Classics",
+      "subtitle": "From a perfectly settled pint to a neat pour of Jameson — every drink is part of the experience",
       "categories": {
         "beer": { "title": "Beer & Cider", "items": { "i1": "Guinness Draught", "i2": "Smithwick's Ale", "i3": "Harp Lager", "i4": "Irish Hard Cider" } },
         "whiskey": { "title": "Irish Whiskey", "items": { "i1": "Jameson", "i2": "Bushmills", "i3": "Tullamore D.E.W.", "i4": "Redbreast 12yr" } },
-        "cocktails": { "title": "Cocktails", "items": { "i1": "Irish Coffee", "i2": "Whiskey Sour", "i3": "Emerald Mule", "i4": "Shamrock Martini" } }
+        "food": { "title": "Pub Fare", "items": { "i1": "Fish & Chips", "i2": "Shepherd's Pie", "i3": "Bangers & Mash", "i4": "Full Irish Breakfast" } }
       }
+    },
+    "food": {
+      "eyebrow": "From the Kitchen",
+      "title": "Hearty Irish Pub Fare",
+      "subtitle": "Classic comfort food to pair with your pint — served fresh at your event"
     },
     "contact": {
       "title": "Get in Touch",
