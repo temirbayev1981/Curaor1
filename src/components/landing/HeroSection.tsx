@@ -4,93 +4,87 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Clover } from 'lucide-react';
 import { LANDING_IMAGES } from '@/lib/media/landing-images';
 import type { Locale } from '@/lib/i18n/config';
 
 export function HeroSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
-  const fadeUp = { opacity: 1, y: 0 };
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden pt-16">
+    <section className="relative flex min-h-[92vh] items-center overflow-hidden pt-16">
       <Image
         src={LANDING_IMAGES.hero.src}
         alt={LANDING_IMAGES.hero.alt}
         fill
         priority
         unoptimized
-        className="object-cover"
+        className="object-cover object-center"
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/90 via-black/75 to-emerald-900/80" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-500/20 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-950/80 to-emerald-950/30" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-      <motion.div
-        className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl"
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-gold/10 blur-3xl"
-        animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 10, repeat: Infinity }}
-      />
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2">
+        <motion.div
+          initial={false}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="max-w-xl"
+        >
+          <p className="mb-4 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.2em] text-gold">
+            <Clover className="h-4 w-4" />
+            {t('hero.badge')}
+          </p>
 
-      <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-        <motion.div initial={false} animate={fadeUp} transition={{ duration: 0.8 }}>
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-black/40 px-4 py-1.5 text-sm text-emerald-300 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4" />
-            <span>{t('hero.badge')}</span>
+          <h1 className="mb-2 font-serif text-5xl font-bold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+            {t('hero.headline')}
+          </h1>
+          <p className="mb-6 font-serif text-3xl italic text-gold sm:text-4xl">
+            {t('hero.headlineAccent')}
+          </p>
+
+          <p className="mb-8 max-w-lg text-lg leading-relaxed text-zinc-200">
+            {t('hero.description')}
+          </p>
+
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Link
+              href={`/${locale}/book`}
+              className="group inline-flex items-center justify-center gap-2 rounded-lg border-2 border-gold bg-emerald-900/80 px-8 py-4 text-base font-semibold text-gold shadow-lg transition hover:bg-emerald-800"
+            >
+              <Clover className="h-4 w-4" />
+              {t('hero.cta')}
+              <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href={`/${locale}/gallery`}
+              className="inline-flex items-center justify-center rounded-lg border border-white/30 px-8 py-4 text-base font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
+            >
+              {t('hero.secondary')}
+            </Link>
           </div>
         </motion.div>
 
-        <motion.h1
-          className="mb-4 text-5xl font-bold tracking-tight text-white drop-shadow-lg sm:text-7xl"
-          initial={false}
-          animate={fadeUp}
-          transition={{ duration: 0.8, delay: 0.1 }}
-        >
-          {t('hero.title')}
-        </motion.h1>
-
-        <motion.p
-          className="mb-2 text-xl text-emerald-300 sm:text-2xl"
-          initial={false}
-          animate={fadeUp}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {t('hero.subtitle')}
-        </motion.p>
-
-        <motion.p
-          className="mx-auto mb-10 max-w-2xl text-lg text-zinc-200"
-          initial={false}
-          animate={fadeUp}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          {t('hero.description')}
-        </motion.p>
-
         <motion.div
-          className="flex flex-col items-center justify-center gap-4 sm:flex-row"
           initial={false}
-          animate={fadeUp}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="relative hidden aspect-[4/5] overflow-hidden rounded-2xl border border-gold/20 shadow-2xl lg:block"
         >
-          <Link
-            href={`/${locale}/book`}
-            className="group flex items-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400"
-          >
-            {t('hero.cta')}
-            <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
-          </Link>
-          <Link
-            href={`/${locale}/gallery`}
-            className="rounded-xl border border-white/30 bg-black/30 px-8 py-4 text-lg font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
-          >
-            {t('hero.secondary')}
-          </Link>
+          <Image
+            src={LANDING_IMAGES.heroAccent.src}
+            alt={LANDING_IMAGES.heroAccent.alt}
+            fill
+            unoptimized
+            className="object-cover"
+            sizes="50vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent" />
+          <div className="absolute bottom-6 left-6 right-6 rounded-xl border border-gold/30 bg-black/50 p-4 backdrop-blur-sm">
+            <p className="font-serif text-2xl text-gold">Sláinte!</p>
+            <p className="mt-1 text-sm text-zinc-300">{t('hero.sideTagline')}</p>
+          </div>
         </motion.div>
       </div>
     </section>

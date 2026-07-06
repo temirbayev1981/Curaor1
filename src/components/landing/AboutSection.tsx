@@ -12,7 +12,7 @@ export function AboutSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
 
   return (
-    <section className="relative overflow-hidden border-y border-white/5 bg-emerald-950/30 py-24">
+    <section id="about" className="relative overflow-hidden border-y border-white/5 bg-emerald-950/30 py-24">
       <div className="absolute right-0 top-1/2 h-96 w-96 -translate-y-1/2 translate-x-1/3 text-emerald-500/5">
         <Clover className="h-full w-full" strokeWidth={0.5} />
       </div>
@@ -44,7 +44,7 @@ export function AboutSection({ locale }: { locale: Locale }) {
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-gold">
             {t('landing.about.eyebrow')}
           </p>
-          <h2 className="mb-6 text-4xl font-bold leading-tight text-white sm:text-5xl">
+          <h2 className="mb-6 font-serif text-4xl font-bold leading-tight text-white sm:text-5xl">
             {t('landing.about.title')}{' '}
             <span className="text-gradient">{t('landing.about.titleAccent')}</span>
           </h2>

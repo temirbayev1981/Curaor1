@@ -3,9 +3,10 @@ import { PublicFooter } from '@/components/layout/PublicFooter';
 import { AboutSection } from '@/components/landing/AboutSection';
 import { GalleryStripSection } from '@/components/landing/GalleryStripSection';
 import { ExperienceGridSection } from '@/components/landing/ExperienceGridSection';
+import { FeaturesBarSection } from '@/components/landing/FeaturesBarSection';
 import { HeroSection } from '@/components/landing/HeroSection';
+import { OccasionsSection } from '@/components/landing/OccasionsSection';
 import { ServicesSection } from '@/components/landing/ServicesSection';
-import { StatsSection } from '@/components/landing/StatsSection';
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
 import { CTASection } from '@/components/landing/CTASection';
 import type { Locale } from '@/lib/i18n/config';
@@ -76,8 +77,9 @@ export default async function HomePage({
       <PublicHeader locale={locale as Locale} />
       <main>
         <HeroSection locale={locale as Locale} />
-        <StatsSection />
+        <FeaturesBarSection />
         <AboutSection locale={locale as Locale} />
+        <OccasionsSection />
         <ServicesSection />
         <GalleryStripSection locale={locale as Locale} />
         <ExperienceGridSection />

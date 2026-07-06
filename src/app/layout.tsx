@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
 import './globals.css';
 
 const geistSans = Geist({
@@ -10,6 +10,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+
+const playfair = Playfair_Display({
+  variable: '--font-playfair',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +34,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${geistSans.variable} ${geistMono.variable} h-full`}>
+    <html
+      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full`}
+    >
       <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
   );

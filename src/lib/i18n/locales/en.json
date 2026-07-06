@@ -1,6 +1,7 @@
 {
   "nav": {
     "home": "Home",
+    "about": "About",
     "services": "Services",
     "locations": "Locations",
     "book": "Book Now",
@@ -16,9 +17,12 @@
   },
   "hero": {
     "title": "The Emerald Pour",
-    "badge": "Premium Mobile Irish Pub",
+    "badge": "Ireland on Wheels",
     "subtitle": "North Carolina's Premier Mobile Irish Pub Experience",
-    "description": "Bring the authentic Irish pub atmosphere to your event. Premium mobile bar service for weddings, corporate events, and celebrations across the Carolinas.",
+    "headline": "Good Times. Great Drinks.",
+    "headlineAccent": "Anywhere.",
+    "sideTagline": "The real Irish pub experience — we bring it to you.",
+    "description": "The Emerald Pour is a full-service mobile Irish pub bringing the spirit of Ireland to your next event.",
     "cta": "Book Your Event",
     "secondary": "View Gallery"
   },
@@ -39,6 +43,33 @@
     "experience": {
       "title": "The Emerald Pour Experience",
       "subtitle": "Premium mobile bar service with authentic Irish hospitality — see it in action at events across the Carolinas."
+    },
+    "features": {
+      "fullBar": {
+        "title": "Full Bar",
+        "desc": "Beer, whiskey, cocktails & more"
+      },
+      "mobile": {
+        "title": "Mobile & Flexible",
+        "desc": "We bring the pub to you"
+      },
+      "events": {
+        "title": "Perfect for Any Event",
+        "desc": "Weddings, corporate events, parties & more"
+      },
+      "authentic": {
+        "title": "Authentic Irish",
+        "desc": "The real Irish pub experience"
+      }
+    },
+    "occasions": {
+      "title": "Perfect for Any Occasion",
+      "weddings": "Weddings",
+      "corporate": "Corporate Events",
+      "private": "Private Parties",
+      "festivals": "Festivals & Fairs",
+      "birthdays": "Birthdays",
+      "more": "And More!"
     }
   },
   "services": {
@@ -78,9 +109,10 @@
     }
   },
   "cta": {
-    "title": "Ready to Bring the Pub to Your Event?",
-    "subtitle": "Book your date today — limited availability for peak season weekends.",
-    "button": "Get Started",
+    "title": "Let's Make Your Event",
+    "titleAccent": "Unforgettable.",
+    "subtitle": "Date availability fills up fast. Book now and let's get the party started!",
+    "button": "Book Now",
     "call": "Or call us at (704) 555-0199"
   },
   "booking": {
