@@ -5,7 +5,7 @@ import { EVENT_TYPES } from '@/domain/events/event.types';
 import { bookingService } from '@/domain/booking/booking.service';
 import type { Payment, PaymentType } from '@/types/database';
 
-import { getStripeSecretKey } from '@/lib/config/env';
+import { getStripeSecretKey, isStripeConfigured } from '@/lib/config/env';
 
 function getStripe(): Stripe {
   return new Stripe(getStripeSecretKey(), {
@@ -92,6 +92,44 @@ export class PaymentService {
     return { sessionId: session.id, url: session.url! };
   }
 
+  async createGuestCheckoutSession(
+    tenantId: string,
+    bookingId: string,
+    email: string,
+    successUrl: string,
+    cancelUrl: string
+  ): Promise<{ sessionId: string; url: string }> {
+    if (!isStripeConfigured()) {
+      throw new Error('Payments are not configured');
+    }
+
+    const supabase = createAdminClient();
+    const { data: booking, error } = await supabase
+      .from('bookings')
+      .select('*, customers(email)')
+      .eq('id', bookingId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    if (error || !booking) throw new Error('Booking not found');
+
+    const customerEmail = (booking.customers as { email: string } | null)?.email;
+    if (!customerEmail || customerEmail.toLowerCase() !== email.toLowerCase()) {
+      throw new Error('Email does not match booking');
+    }
+
+    const paymentType =
+      Number(booking.deposit_percent) === 100 ? ('full' as const) : ('deposit' as const);
+
+    return this.createCheckoutSession(
+      tenantId,
+      bookingId,
+      paymentType,
+      successUrl,
+      cancelUrl
+    );
+  }
+
   async handleWebhook(event: Stripe.Event): Promise<void> {
     if (event.type !== 'checkout.session.completed') return;
 
@@ -101,6 +139,16 @@ export class PaymentService {
     if (!tenantId || !bookingId || !paymentId) return;
 
     const supabase = createAdminClient();
+
+    const { data: existingPayment } = await supabase
+      .from('payments')
+      .select('status')
+      .eq('id', paymentId)
+      .single();
+
+    if (existingPayment?.status === 'succeeded') {
+      return;
+    }
 
     await supabase
       .from('payments')
@@ -183,10 +231,10 @@ export class PaymentService {
 
     await eventBus.publish({
       tenantId,
-      eventType: EVENT_TYPES.PAYMENT_FAILED,
+      eventType: EVENT_TYPES.PAYMENT_REFUNDED,
       aggregateId: paymentId,
       aggregateType: 'payment',
-      payload: { bookingId: payment.booking_id, paymentType: payment.payment_type, refunded: true },
+      payload: { bookingId: payment.booking_id, paymentType: payment.payment_type },
       idempotencyKey: `payment.refunded:${paymentId}`,
     });
 

@@ -115,6 +115,10 @@ export function getMapboxToken(): string {
   return token;
 }
 
+export function getBusinessPhone(): string {
+  return process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+1-704-555-0199';
+}
+
 export function getGooglePlaceId(): string | undefined {
   return process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID;
 }

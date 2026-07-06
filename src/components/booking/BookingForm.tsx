@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { CheckCircle, User, Calendar, MapPin } from 'lucide-react';
+import { CheckCircle, User, Calendar, MapPin, Star } from 'lucide-react';
 import { PublicHeader } from '@/components/layout/PublicHeader';
 import { PublicFooter } from '@/components/layout/PublicFooter';
 import { PublicSiteExtras } from '@/components/layout/PublicSiteExtras';
@@ -34,11 +34,13 @@ export function BookingForm({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [slotAvailable, setSlotAvailable] = useState(true);
   const [form, setForm] = useState({
     fullName: '',
     email: '',
     phone: '',
-    eventType: 'wedding',
+    eventType: searchParams.get('event') ?? 'wedding',
     guestCount: 50,
     date: '',
     startTime: '18:00',
@@ -50,9 +52,14 @@ export function BookingForm({ locale }: { locale: Locale }) {
     packageTier: initialPackage(searchParams),
   });
 
+  const paid = searchParams.get('paid') === '1';
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!slotAvailable) return;
+
     setStatus('loading');
+    setErrorMessage('');
 
     const bookingStart = new Date(`${form.date}T${form.startTime}`).toISOString();
     const bookingEnd = new Date(`${form.date}T${form.endTime}`).toISOString();
@@ -63,6 +70,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tenantId: DEFAULT_TENANT_ID,
+          locale,
           fullName: form.fullName,
           email: form.email,
           phone: form.phone,
@@ -78,15 +86,47 @@ export function BookingForm({ locale }: { locale: Locale }) {
         }),
       });
 
-      const json = (await res.json()) as { error: { message: string } | null };
+      const json = (await res.json()) as {
+        data: { booking: { id: string }; checkoutUrl: string | null } | null;
+        error: { message: string } | null;
+      };
+
       if (!res.ok || json.error) {
+        setErrorMessage(json.error?.message ?? t('booking.error'));
         setStatus('error');
         return;
       }
+
+      if (json.data?.checkoutUrl) {
+        window.location.href = json.data.checkoutUrl;
+        return;
+      }
+
       setStatus('success');
     } catch {
+      setErrorMessage(t('booking.error'));
       setStatus('error');
     }
+  }
+
+  if (paid) {
+    return (
+      <>
+        <PublicHeader locale={locale} />
+        <main className="relative min-h-screen pt-24 pb-16">
+          <div className="relative mx-auto max-w-lg px-4 text-center">
+            <Card className="py-12">
+              <CheckCircle className="mx-auto mb-4 h-16 w-16 text-emerald-400" />
+              <p className="mb-6 text-lg text-emerald-300">{t('booking.paymentSuccess')}</p>
+              <Link href={`/${locale}/portal`}>
+                <Button>{t('nav.portal')}</Button>
+              </Link>
+            </Card>
+          </div>
+        </main>
+        <PublicFooter locale={locale} />
+      </>
+    );
   }
 
   return (
@@ -95,19 +135,17 @@ export function BookingForm({ locale }: { locale: Locale }) {
       <main className="relative min-h-screen pt-24 pb-16">
         <div className="bg-grid fixed inset-0 opacity-20" />
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="mb-2 text-3xl font-bold text-white">{t('booking.title')}</h1>
-            <p className="mb-8 text-zinc-400">{t('hero.description')}</p>
+            <p className="mb-4 text-zinc-400">{t('hero.description')}</p>
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-4 py-1.5 text-sm text-gold">
+              <Star className="h-4 w-4 fill-gold" />
+              {t('booking.socialProof')}
+            </div>
           </motion.div>
 
           {status === 'success' ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
               <Card className="flex flex-col items-center py-12 text-center">
                 <CheckCircle className="mb-4 h-16 w-16 text-emerald-400" />
                 <p className="mb-6 text-lg text-emerald-300">{t('booking.success')}</p>
@@ -192,20 +230,13 @@ export function BookingForm({ locale }: { locale: Locale }) {
                         />
                       </Field>
                     </div>
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <Field label={t('booking.date')}>
+                    <Field label={t('booking.date')}>
                       <AvailabilityCalendar
                         selectedDate={form.date}
                         onSelectDate={(date) => setForm({ ...form, date })}
                       />
-                      <Input
-                        required
-                        type="date"
-                        className="mt-2"
-                        value={form.date}
-                        onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      />
                     </Field>
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <Field label={t('booking.startTime')}>
                         <Input
                           required
@@ -285,12 +316,18 @@ export function BookingForm({ locale }: { locale: Locale }) {
 
                 {status === 'error' && (
                   <p className="rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400">
-                    {t('booking.error')}
+                    {errorMessage || t('booking.error')}
                   </p>
                 )}
 
-                <Button type="submit" loading={status === 'loading'} size="lg" className="w-full">
-                  {t('booking.submit')}
+                <Button
+                  type="submit"
+                  loading={status === 'loading'}
+                  size="lg"
+                  className="w-full"
+                  disabled={!slotAvailable || !form.date}
+                >
+                  {t('booking.submitPay')}
                 </Button>
               </form>
 
@@ -304,6 +341,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
                 venueAddress={form.venueAddress}
                 venueCity={form.venueCity}
                 venueState={form.venueState}
+                onAvailabilityChange={setSlotAvailable}
               />
             </div>
           )}

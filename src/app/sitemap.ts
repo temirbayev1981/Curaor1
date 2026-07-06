@@ -6,7 +6,8 @@ import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
 import type { SeoArticle } from '@/types/database';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ['', '/book', '/gallery', '/locations', '/faq', '/articles'];
+  const staticPaths = ['', '/book', '/gallery', '/locations', '/faq', '/articles', '/terms', '/privacy'];
+  const eventTypes = ['wedding', 'corporate', 'private', 'stpatricks'] as const;
   const locales = ['en', 'ru'] as const;
 
   const entries: MetadataRoute.Sitemap = [];
@@ -27,6 +28,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.7,
+      });
+    }
+
+    for (const eventType of eventTypes) {
+      entries.push({
+        url: absoluteUrl(`/${locale}/events/${eventType}`),
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.75,
       });
     }
   }

@@ -9,12 +9,16 @@ import { createBookingSchema } from '@/domain/booking/booking.schema';
 import { calculateDistance } from '@/domain/maps/distance.service';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
+import { getSiteUrl, isStripeConfigured } from '@/lib/config/env';
+import { paymentService } from '@/domain/payment/payment.service';
+import { assertPublicTenantId } from '@/lib/tenant/validate-tenant';
 import { linkCustomerToUser } from '@/lib/auth/rbac';
 
 const publicBookingSchema = createBookingSchema.extend({
   fullName: z.string().min(1).max(200),
   email: z.string().email(),
   phone: z.string().optional(),
+  locale: z.enum(['en', 'ru']).optional(),
 }).omit({ customerId: true }).extend({
   customerId: z.string().uuid().optional(),
 });
@@ -43,6 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     const input = parsed.data;
+    assertPublicTenantId(input.tenantId);
     const supabase = createAdminClient();
     const authSupabase = await createClient();
     const { data: { user } } = await authSupabase.auth.getUser();
@@ -106,7 +111,25 @@ export async function POST(request: NextRequest) {
       deliveryDistanceMiles,
     });
 
-    return Response.json(apiSuccess(booking, requestId), { status: 201 });
+    let checkoutUrl: string | null = null;
+    if (isStripeConfigured()) {
+      try {
+        const siteUrl = getSiteUrl();
+        const locale = input.locale ?? 'en';
+        const session = await paymentService.createGuestCheckoutSession(
+          input.tenantId,
+          booking.id,
+          input.email,
+          `${siteUrl}/${locale}/book?paid=1`,
+          `${siteUrl}/${locale}/book?cancelled=1`
+        );
+        checkoutUrl = session.url;
+      } catch {
+        checkoutUrl = null;
+      }
+    }
+
+    return Response.json(apiSuccess({ booking, checkoutUrl }, requestId), { status: 201 });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';
     return Response.json(apiError('BOOKING_ERROR', message, requestId), { status: 500 });

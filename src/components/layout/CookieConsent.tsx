@@ -22,6 +22,7 @@ export function CookieConsent({ locale }: { locale: Locale }) {
   function accept() {
     localStorage.setItem(STORAGE_KEY, 'accepted');
     setVisible(false);
+    window.dispatchEvent(new Event('cookie-consent-accepted'));
   }
 
   if (!visible) return null;

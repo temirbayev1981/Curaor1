@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { linkCustomerToUser } from '@/lib/auth/rbac';
+import { checkAuthRateLimit } from '@/lib/api/rate-limit';
+import { assertPublicTenantId } from '@/lib/tenant/validate-tenant';
 import { auditService } from '@/domain/audit/audit.service';
 
 const registerSchema = z.object({
@@ -16,7 +18,15 @@ const registerSchema = z.object({
 
 export async function POST(request: NextRequest) {
   const requestId = randomUUID();
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+
+  const allowed = await checkAuthRateLimit(ip);
+  if (!allowed) {
+    return Response.json(
+      apiError('RATE_LIMITED', 'Too many registration attempts', requestId),
+      { status: 429 }
+    );
+  }
 
   try {
     const body: unknown = await request.json();
@@ -30,6 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { tenantId, email, password, fullName, phone } = parsed.data;
+    assertPublicTenantId(tenantId);
     const admin = createAdminClient();
 
     const { data: authData, error: authError } = await admin.auth.admin.createUser({

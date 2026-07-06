@@ -21,7 +21,7 @@ function createEdgeConsumer(
     async handle(event) {
       if (!isSupabaseConfigured()) return;
 
-      await fetch(edgeFunctionUrl(functionName), {
+      const response = await fetch(edgeFunctionUrl(functionName), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,6 +34,11 @@ function createEdgeConsumer(
           payload: event.payload,
         }),
       });
+
+      if (!response.ok) {
+        const text = await response.text().catch(() => 'Unknown error');
+        throw new Error(`${functionName} failed (${response.status}): ${text}`);
+      }
     },
   };
 }
@@ -56,6 +61,7 @@ export function registerEventConsumers(): void {
       EVENT_TYPES.BOOKING_CREATED,
       EVENT_TYPES.PAYMENT_SUCCEEDED,
       EVENT_TYPES.BOOKING_STATUS_CHANGED,
+      EVENT_TYPES.CONTRACT_SIGNED,
     ])
   );
 

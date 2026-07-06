@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
-import type { Contract } from '@/types/database';
+import { generateContractPdf } from './contract-pdf.service';
+import type { Booking, Contract, Customer } from '@/types/database';
 
 export class ContractService {
   async getByBooking(tenantId: string, bookingId: string): Promise<Contract | null> {
@@ -24,6 +25,22 @@ export class ContractService {
     if (existing) return existing;
 
     const storagePath = `${tenantId}/${bookingId}/contract.pdf`;
+
+    const { data: bookingRow } = await supabase
+      .from('bookings')
+      .select('*, customers(*)')
+      .eq('id', bookingId)
+      .eq('tenant_id', tenantId)
+      .single();
+
+    if (bookingRow) {
+      const booking = bookingRow as Booking & { customers: Customer };
+      const pdfBytes = await generateContractPdf(booking, booking.customers);
+      await supabase.storage.from('contracts').upload(storagePath, pdfBytes, {
+        contentType: 'application/pdf',
+        upsert: true,
+      });
+    }
 
     const { data, error } = await supabase
       .from('contracts')

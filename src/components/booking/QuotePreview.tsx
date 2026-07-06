@@ -27,6 +27,7 @@ interface QuotePreviewProps {
   venueAddress: string;
   venueCity: string;
   venueState: string;
+  onAvailabilityChange?: (available: boolean) => void;
 }
 
 export function QuotePreview(props: QuotePreviewProps) {
@@ -64,6 +65,9 @@ export function QuotePreview(props: QuotePreviewProps) {
         .then((res) => res.json())
         .then((json: { data: QuoteData | null }) => {
           setQuote(json.data);
+          if (json.data && props.onAvailabilityChange) {
+            props.onAvailabilityChange(json.data.availability.available);
+          }
           setLoading(false);
         })
         .catch(() => setLoading(false));

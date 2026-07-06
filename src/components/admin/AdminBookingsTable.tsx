@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import type { Booking } from '@/types/database';
+import type { Booking, BookingStatus } from '@/types/database';
+import { Input, Select } from '@/components/ui/Input';
 import { BookingActions } from '@/components/admin/BookingActions';
 import { Badge, statusToBadge } from '@/components/ui/Badge';
 import { BOOKING_STATUS_KEYS } from '@/lib/i18n/booking-status';
@@ -21,6 +22,8 @@ export function AdminBookingsTable({ locale }: { locale: Locale }) {
   const { t, i18n } = useTranslation();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<BookingStatus | 'all'>('all');
+  const [citySearch, setCitySearch] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -52,6 +55,37 @@ export function AdminBookingsTable({ locale }: { locale: Locale }) {
   const formatCurrency = (n: number) =>
     new Intl.NumberFormat(dateLocale, { style: 'currency', currency: 'USD' }).format(n);
 
+  const filtered = bookings.filter((b) => {
+    if (statusFilter !== 'all' && b.status !== statusFilter) return false;
+    if (citySearch && !b.venue_city.toLowerCase().includes(citySearch.toLowerCase())) {
+      return false;
+    }
+    return true;
+  });
+
+  function exportCsv() {
+    const rows = [
+      ['event', 'date', 'city', 'guests', 'total', 'status'].join(','),
+      ...filtered.map((b) =>
+        [
+          b.event_type,
+          b.booking_start,
+          b.venue_city,
+          b.guest_count,
+          b.subtotal,
+          b.status,
+        ].join(',')
+      ),
+    ];
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'bookings.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   if (loading) {
     return <div className="skeleton h-48 rounded-xl" />;
   }
@@ -65,6 +99,34 @@ export function AdminBookingsTable({ locale }: { locale: Locale }) {
   }
 
   return (
+    <div>
+      <div className="mb-4 flex flex-wrap gap-3">
+        <Select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as BookingStatus | 'all')}
+          className="w-40"
+        >
+          <option value="all">{t('admin.bookingsTable.allStatuses')}</option>
+          <option value="pending">{t('status.pending')}</option>
+          <option value="deposit_paid">{t('status.deposit_paid')}</option>
+          <option value="confirmed">{t('status.confirmed')}</option>
+          <option value="completed">{t('status.completed')}</option>
+          <option value="cancelled">{t('status.cancelled')}</option>
+        </Select>
+        <Input
+          placeholder={t('admin.bookingsTable.searchCity')}
+          value={citySearch}
+          onChange={(e) => setCitySearch(e.target.value)}
+          className="max-w-xs"
+        />
+        <button
+          type="button"
+          onClick={exportCsv}
+          className="rounded-lg border border-admin-border px-4 py-2 text-sm text-zinc-300 hover:bg-white/5"
+        >
+          {t('admin.bookingsTable.export')}
+        </button>
+      </div>
     <div className="overflow-hidden rounded-2xl border border-admin-border bg-admin-surface">
       <table className="w-full text-left text-sm">
         <thead className="border-b border-admin-border bg-admin-bg">
@@ -93,14 +155,14 @@ export function AdminBookingsTable({ locale }: { locale: Locale }) {
           </tr>
         </thead>
         <tbody>
-          {bookings.length === 0 ? (
+          {filtered.length === 0 ? (
             <tr>
               <td colSpan={7} className="px-4 py-12 text-center text-zinc-500">
                 {t('admin.bookingsTable.empty')}
               </td>
             </tr>
           ) : (
-            bookings.map((booking) => (
+            filtered.map((booking) => (
               <tr
                 key={booking.id}
                 className="border-b border-admin-border transition hover:bg-white/[0.02]"
@@ -138,6 +200,7 @@ export function AdminBookingsTable({ locale }: { locale: Locale }) {
           )}
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

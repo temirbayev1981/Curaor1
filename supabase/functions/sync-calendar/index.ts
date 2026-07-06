@@ -1,20 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-interface DirectPayload {
-  tenantId: string;
-  bookingId: string;
-}
-
-interface EventBusPayload {
-  eventId?: string;
-  tenantId: string;
-  eventType?: string;
-  payload?: Record<string, unknown>;
-}
-
-type RequestBody = DirectPayload & EventBusPayload;
-
 serve(async (req: Request) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
@@ -30,19 +16,19 @@ serve(async (req: Request) => {
     });
   }
 
-  const body = (await req.json()) as RequestBody;
-  const bookingId = body.bookingId ?? (body.payload?.bookingId as string | undefined);
+  const body = (await req.json()) as {
+    tenantId: string;
+    bookingId?: string;
+    payload?: { bookingId?: string; to?: string; from?: string };
+  };
+
+  const bookingId = body.bookingId ?? body.payload?.bookingId;
   const tenantId = body.tenantId;
+  const newStatus = body.payload?.to;
 
   if (!bookingId || !tenantId) {
     return new Response(JSON.stringify({ error: 'bookingId and tenantId required' }), {
       status: 400,
-    });
-  }
-
-  if (body.payload?.to === 'cancelled') {
-    return new Response(JSON.stringify({ skipped: true, reason: 'cancelled' }), {
-      status: 200,
     });
   }
 
@@ -63,6 +49,30 @@ serve(async (req: Request) => {
   }
 
   const accessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+  const eventId = booking.google_calendar_event_id as string | null;
+
+  if (newStatus === 'cancelled' && eventId) {
+    const delResponse = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`,
+      {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+
+    if (delResponse.ok || delResponse.status === 404 || delResponse.status === 410) {
+      await supabase
+        .from('bookings')
+        .update({ google_calendar_event_id: null })
+        .eq('id', bookingId);
+    }
+
+    return new Response(JSON.stringify({ deleted: true }), { status: 200 });
+  }
+
+  if (newStatus === 'cancelled') {
+    return new Response(JSON.stringify({ skipped: true }), { status: 200 });
+  }
 
   const event = {
     summary: `Emerald Pour — ${booking.event_type}`,
@@ -71,6 +81,24 @@ serve(async (req: Request) => {
     start: { dateTime: booking.booking_start, timeZone: 'America/New_York' },
     end: { dateTime: booking.booking_end, timeZone: 'America/New_York' },
   };
+
+  if (eventId) {
+    const patchResponse = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event),
+      }
+    );
+
+    if (patchResponse.ok) {
+      return new Response(JSON.stringify({ eventId, updated: true }), { status: 200 });
+    }
+  }
 
   const calResponse = await fetch(
     'https://www.googleapis.com/calendar/v3/calendars/primary/events',

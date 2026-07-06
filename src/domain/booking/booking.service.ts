@@ -13,6 +13,8 @@ import {
 import { eventBus } from '@/domain/events/event-bus';
 import { EVENT_TYPES } from '@/domain/events/event.types';
 import { inventoryService } from '@/domain/inventory/inventory.service';
+import { contractService } from '@/domain/contract/contract.service';
+import { buildBookingQuote } from '@/lib/booking/quote.service';
 import { assertTransition } from './booking.state-machine';
 import type { CreateBookingInput, UpdateBookingDatesInput } from './booking.schema';
 import type { Booking, BookingStatus, Tenant } from '@/types/database';
@@ -58,6 +60,18 @@ export class BookingService {
       depositPercent
     );
 
+    const quote = await buildBookingQuote({
+      tenantId: input.tenantId,
+      guestCount: input.guestCount,
+      bookingStart: input.bookingStart,
+      bookingEnd: input.bookingEnd,
+      date: input.bookingStart.slice(0, 10),
+    });
+
+    if (!quote.availability.available) {
+      throw new Error('Selected date or time is not available');
+    }
+
     const { data: booking, error } = await supabase
       .from('bookings')
       .insert({
@@ -98,6 +112,12 @@ export class BookingService {
       payload: { bookingId: booking.id, customerId: input.customerId },
       idempotencyKey: `booking.created:${booking.id}`,
     });
+
+    try {
+      await contractService.createForBooking(input.tenantId, booking.id);
+    } catch {
+      // Contract generation optional if storage unavailable
+    }
 
     return booking as Booking;
   }

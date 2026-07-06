@@ -3,6 +3,8 @@ import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { buildBookingQuote } from '@/lib/booking/quote.service';
+import { checkQuoteRateLimit } from '@/lib/api/rate-limit';
+import { assertPublicTenantId } from '@/lib/tenant/validate-tenant';
 
 const quoteSchema = z.object({
   tenantId: z.string().uuid(),
@@ -20,6 +22,16 @@ const quoteSchema = z.object({
 
 export async function GET(request: NextRequest) {
   const requestId = randomUUID();
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+
+  const allowed = await checkQuoteRateLimit(ip);
+  if (!allowed) {
+    return Response.json(
+      apiError('RATE_LIMITED', 'Too many quote requests', requestId),
+      { status: 429 }
+    );
+  }
+
   const params = Object.fromEntries(request.nextUrl.searchParams.entries());
   const parsed = quoteSchema.safeParse(params);
 
@@ -31,6 +43,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    assertPublicTenantId(parsed.data.tenantId);
     const quote = await buildBookingQuote(parsed.data);
     return Response.json(apiSuccess(quote, requestId));
   } catch (err) {

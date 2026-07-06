@@ -220,6 +220,9 @@
     "state": "State",
     "deposit": "Deposit Option",
     "submit": "Request Booking",
+    "submitPay": "Book & Pay Deposit",
+    "paymentSuccess": "Payment received! Your event is confirmed.",
+    "socialProof": "4.9★ rated · 500+ events across the Carolinas",
     "success": "Booking request submitted! We'll confirm within 24 hours.",
     "error": "Unable to submit booking. Please try again.",
     "contactSection": "Contact Information",
@@ -418,6 +421,7 @@
   "admin": {
     "dashboard": "Dashboard",
     "bookings": "Bookings",
+    "customers": "Customers",
     "calendar": "Calendar",
     "inventory": "Inventory",
     "media": "Media Library",
@@ -439,6 +443,7 @@
     "lastUpdated": "Last updated",
     "dashboardDesc": "Business overview and recent activity",
     "bookingsDesc": "Manage and update booking statuses",
+    "customersDesc": "Customer directory with booking history and spend",
     "settingsDesc": "Configure pricing, notifications, and integrations",
     "mediaDesc": "Upload and organize event photos",
     "inventoryDesc": "Track stock and unit costs",
@@ -453,7 +458,18 @@
       "status": "Status",
       "actions": "Actions",
       "empty": "No bookings yet",
-      "fetchError": "Failed to load bookings"
+      "fetchError": "Failed to load bookings",
+      "allStatuses": "All statuses",
+      "searchCity": "Search city...",
+      "export": "Export CSV"
+    },
+    "customersTable": {
+      "name": "Name",
+      "email": "Email",
+      "bookings": "Bookings",
+      "spent": "Total spent",
+      "empty": "No customers yet",
+      "viewBookings": "View all bookings →"
     },
     "settingsForm": {
       "pricing": "Pricing",
@@ -507,6 +523,7 @@
       "qty": "Qty",
       "unitCost": "Unit Cost",
       "unitPrice": "Unit Price",
+      "actions": "Adjust",
       "empty": "No inventory items",
       "totalCogs": "Total COGS"
     },

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
+  Users,
   LayoutDashboard,
   Calendar,
   CalendarDays,
@@ -22,6 +23,7 @@ const navItems = [
   { href: '/admin', icon: LayoutDashboard, key: 'dashboard' },
   { href: '/admin/calendar', icon: CalendarDays, key: 'calendar' },
   { href: '/admin/bookings', icon: Calendar, key: 'bookings' },
+  { href: '/admin/customers', icon: Users, key: 'customers' },
   { href: '/admin/inventory', icon: Package, key: 'inventory' },
   { href: '/admin/media', icon: Image, key: 'media' },
   { href: '/admin/ai', icon: Sparkles, key: 'ai' },

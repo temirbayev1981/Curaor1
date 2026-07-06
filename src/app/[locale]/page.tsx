@@ -19,7 +19,7 @@ import { GoogleReviewsSection } from '@/components/landing/GoogleReviewsSection'
 import { TrustBadgesSection } from '@/components/landing/TrustBadgesSection';
 import { CTASection } from '@/components/landing/CTASection';
 import type { Locale } from '@/lib/i18n/config';
-import { absoluteUrl } from '@/lib/config/env';
+import { absoluteUrl, getBusinessPhone } from '@/lib/config/env';
 import { getTranslations } from '@/lib/i18n/server';
 
 const FAQ_KEYS = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const;
@@ -74,7 +74,7 @@ export default async function HomePage({
     name: 'The Emerald Pour',
     description: 'Mobile Irish Pub catering across North and South Carolina',
     url: absoluteUrl(`/${locale}`),
-    telephone: '+1-704-555-0199',
+    telephone: getBusinessPhone(),
     address: {
       '@type': 'PostalAddress',
       addressRegion: 'NC',
