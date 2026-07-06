@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "locations": "Locations",
+    "book": "Book Now",
+    "portal": "Customer Portal",
+    "admin": "Admin"
+  },
+  "hero": {
+    "title": "The Emerald Pour",
+    "subtitle": "North Carolina's Premier Mobile Irish Pub Experience",
+    "description": "Bring the authentic Irish pub atmosphere to your event. Premium mobile bar service for weddings, corporate events, and celebrations across the Carolinas.",
+    "cta": "Book Your Event",
+    "secondary": "View Gallery"
+  },
+  "services": {
+    "title": "Our Services",
+    "weddings": "Wedding Receptions",
+    "weddingsDesc": "Create unforgettable memories with our mobile Irish pub at your wedding venue.",
+    "corporate": "Corporate Events",
+    "corporateDesc": "Impress clients and colleagues with premium craft beverages and authentic atmosphere.",
+    "private": "Private Parties",
+    "privateDesc": "Birthdays, anniversaries, and celebrations — we bring the pub to you.",
+    "stpatricks": "St. Patrick's Day",
+    "stpatricksDesc": "The ultimate St. Paddy's celebration with traditional Irish fare and drinks."
+  },
+  "booking": {
+    "title": "Book Your Event",
+    "eventType": "Event Type",
+    "guestCount": "Number of Guests",
+    "date": "Event Date",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "venue": "Venue Address",
+    "city": "City",
+    "deposit": "Deposit Option",
+    "submit": "Request Booking",
+    "success": "Booking request submitted! We'll confirm within 24 hours.",
+    "error": "Unable to submit booking. Please try again."
+  },
+  "locations": {
+    "title": "Serving the Carolinas",
+    "subtitle": "Mobile Irish pub catering across North and South Carolina",
+    "viewCity": "Learn More"
+  },
+  "portal": {
+    "title": "Customer Portal",
+    "myBookings": "My Bookings",
+    "payBalance": "Pay Balance",
+    "downloadInvoice": "Download Invoice",
+    "signContract": "Sign Contract",
+    "changeDates": "Change Dates",
+    "noBookings": "You have no bookings yet."
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "bookings": "Bookings",
+    "inventory": "Inventory",
+    "media": "Media Library",
+    "ai": "AI Assistant",
+    "settings": "Settings",
+    "netProfit": "Net Profit",
+    "roi": "ROI",
+    "cogs": "COGS",
+    "ltv": "Customer LTV",
+    "conversion": "Conversion Rate"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "language": {
+    "switch": "Language",
+    "en": "English",
+    "ru": "Русский"
+  }
+}
