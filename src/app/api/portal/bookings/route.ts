@@ -2,38 +2,33 @@ import { NextRequest } from 'next/server';
 import { randomUUID } from 'crypto';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { bookingService } from '@/domain/booking/booking.service';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthContext, AuthError } from '@/lib/auth/rbac';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const requestId = randomUUID();
-  const tenantId = request.nextUrl.searchParams.get('tenantId');
 
-  if (!tenantId) {
-    return Response.json(apiError('VALIDATION_ERROR', 'tenantId required', requestId), {
-      status: 400,
-    });
+  try {
+    const ctx = await getAuthContext();
+    if (!ctx) {
+      return Response.json(apiError('UNAUTHORIZED', 'Authentication required', requestId), {
+        status: 401,
+      });
+    }
+
+    const { getCustomerIdForUser } = await import('@/lib/auth/ownership');
+    const customerId = await getCustomerIdForUser(ctx.tenantId, ctx.userId);
+
+    if (!customerId) {
+      return Response.json(apiSuccess([], requestId));
+    }
+
+    const bookings = await bookingService.getByCustomer(ctx.tenantId, customerId);
+    return Response.json(apiSuccess(bookings, requestId));
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return Response.json(apiError(err.code, err.message, requestId), { status: 401 });
+    }
+    const message = err instanceof Error ? err.message : 'Fetch failed';
+    return Response.json(apiError('FETCH_ERROR', message, requestId), { status: 500 });
   }
-
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return Response.json(apiError('UNAUTHORIZED', 'Authentication required', requestId), {
-      status: 401,
-    });
-  }
-
-  const { data: customer } = await supabase
-    .from('customers')
-    .select('id')
-    .eq('tenant_id', tenantId)
-    .eq('user_id', user.id)
-    .single();
-
-  if (!customer) {
-    return Response.json(apiSuccess([], requestId));
-  }
-
-  const bookings = await bookingService.getByCustomer(tenantId, customer.id);
-  return Response.json(apiSuccess(bookings, requestId));
 }

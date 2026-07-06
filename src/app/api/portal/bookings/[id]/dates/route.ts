@@ -4,7 +4,9 @@ import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { bookingService } from '@/domain/booking/booking.service';
 import { updateBookingDatesSchema } from '@/domain/booking/booking.schema';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthContext, AuthError } from '@/lib/auth/rbac';
+import { verifyBookingOwnership } from '@/lib/auth/ownership';
+import { auditService } from '@/domain/audit/audit.service';
 
 export async function PATCH(
   request: NextRequest,
@@ -12,21 +14,18 @@ export async function PATCH(
 ) {
   const requestId = randomUUID();
   const { id: bookingId } = await params;
-
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return Response.json(apiError('UNAUTHORIZED', 'Authentication required', requestId), {
-      status: 401,
-    });
-  }
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
 
   try {
+    const ctx = await getAuthContext();
+    if (!ctx) {
+      return Response.json(apiError('UNAUTHORIZED', 'Authentication required', requestId), {
+        status: 401,
+      });
+    }
+
     const body: unknown = await request.json();
-    const parsed = updateBookingDatesSchema.extend({
-      tenantId: z.string().uuid(),
-    }).safeParse(body);
+    const parsed = updateBookingDatesSchema.safeParse(body);
 
     if (!parsed.success) {
       return Response.json(
@@ -35,30 +34,10 @@ export async function PATCH(
       );
     }
 
-    const { data: customer } = await supabase
-      .from('customers')
-      .select('id')
-      .eq('tenant_id', parsed.data.tenantId)
-      .eq('user_id', user.id)
-      .single();
-
-    if (!customer) {
-      return Response.json(apiError('FORBIDDEN', 'Access denied', requestId), { status: 403 });
-    }
-
-    const { data: booking } = await supabase
-      .from('bookings')
-      .select('customer_id, status')
-      .eq('id', bookingId)
-      .eq('tenant_id', parsed.data.tenantId)
-      .single();
-
-    if (!booking || (booking as { customer_id: string }).customer_id !== (customer as { id: string }).id) {
-      return Response.json(apiError('FORBIDDEN', 'Booking not found', requestId), { status: 403 });
-    }
+    await verifyBookingOwnership(ctx.tenantId, ctx.userId, bookingId);
 
     const updated = await bookingService.updateDates(
-      parsed.data.tenantId,
+      ctx.tenantId,
       bookingId,
       {
         bookingStart: parsed.data.bookingStart,
@@ -66,8 +45,25 @@ export async function PATCH(
       }
     );
 
+    await auditService.log({
+      tenantId: ctx.tenantId,
+      actorId: ctx.userId,
+      action: 'booking.dates_updated',
+      resourceType: 'booking',
+      resourceId: bookingId,
+      details: {
+        bookingStart: parsed.data.bookingStart,
+        bookingEnd: parsed.data.bookingEnd,
+      },
+      ipAddress: ip,
+    });
+
     return Response.json(apiSuccess(updated, requestId));
   } catch (err) {
+    if (err instanceof AuthError) {
+      const status = err.code === 'NOT_FOUND' ? 404 : err.code === 'FORBIDDEN' ? 403 : 401;
+      return Response.json(apiError(err.code, err.message, requestId), { status });
+    }
     const message = err instanceof Error ? err.message : 'Update failed';
     return Response.json(apiError('UPDATE_ERROR', message, requestId), { status: 500 });
   }

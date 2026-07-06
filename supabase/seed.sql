@@ -12,7 +12,7 @@ ON CONFLICT (tenant_id, sku) DO NOTHING;
 
 -- Sample customers (no user_id — link after auth signup)
 INSERT INTO customers (id, tenant_id, email, full_name, phone) VALUES
-  ('c1000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', 'sarah.wedding@example.com', 'Sarah Mitchell', '+17045550101'),
+  ('c1000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', 'customer@example.com', 'Sarah Mitchell', '+17045550101'),
   ('c1000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000001', 'corp@techcorp.com', 'Mike Johnson', '+17045550102')
 ON CONFLICT (tenant_id, email) DO NOTHING;
 

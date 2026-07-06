@@ -10,8 +10,6 @@ import type { Booking } from '@/types/database';
 import type { Locale } from '@/lib/i18n/config';
 import { Calendar, CreditCard, FileText, Pen, CalendarClock } from 'lucide-react';
 
-import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
-
 export function CustomerPortal({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -22,7 +20,7 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetch(`/api/portal/bookings?tenantId=${DEFAULT_TENANT_ID}`)
+    fetch(`/api/portal/bookings`)
       .then((res) => res.json())
       .then((json: { data: Booking[] | null }) => {
         setBookings(json.data ?? []);
@@ -36,7 +34,6 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        tenantId: DEFAULT_TENANT_ID,
         bookingId,
         paymentType: type,
         successUrl: `${window.location.origin}/${locale}/portal?paid=true`,
@@ -50,7 +47,7 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
   }
 
   function handleDownloadInvoice(bookingId: string) {
-    const url = `/api/portal/invoices/${bookingId}?tenantId=${DEFAULT_TENANT_ID}`;
+    const url = `/api/portal/invoices/${bookingId}`;
     window.open(url, '_blank');
   }
 
@@ -59,7 +56,6 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        tenantId: DEFAULT_TENANT_ID,
         signatureDataUrl,
         signerName,
       }),
@@ -202,7 +198,6 @@ export function CustomerPortal({ locale }: { locale: Locale }) {
       {datesBooking && (
         <ChangeDatesModal
           booking={datesBooking}
-          tenantId={DEFAULT_TENANT_ID}
           onClose={() => setDatesBooking(null)}
           onSuccess={handleDatesUpdated}
         />

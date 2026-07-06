@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   },
   description:
     'North Carolina premier mobile Irish pub catering for weddings, corporate events, and celebrations.',
+  icons: { icon: '/favicon.svg' },
 };
 
 export default function RootLayout({

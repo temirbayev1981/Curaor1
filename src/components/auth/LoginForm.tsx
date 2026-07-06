@@ -33,6 +33,8 @@ export function LoginForm({ locale }: { locale: Locale }) {
       return;
     }
 
+    await fetch('/api/auth/link-customer', { method: 'POST' });
+
     const redirect = searchParams.get('redirect') ?? `/${locale}/portal`;
     router.push(redirect);
   }

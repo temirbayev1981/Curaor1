@@ -53,6 +53,8 @@ Production-ready commercial SaaS platform for **The Emerald Pour**, a mobile Iri
 
 ## Getting Started
 
+**Full setup guide:** [docs/SETUP.md](docs/SETUP.md)
+
 ```bash
 # Install dependencies
 npm install
@@ -67,8 +69,12 @@ npx supabase db push
 # Or reset with seed data
 npx supabase db reset
 
+# Create dev users (owner + customer)
+npm run bootstrap
+
 # Start development server
 npm run dev
+# → http://localhost:3000
 
 # Run tests
 npm test

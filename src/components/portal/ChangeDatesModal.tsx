@@ -6,14 +6,12 @@ import type { Booking } from '@/types/database';
 
 interface ChangeDatesModalProps {
   booking: Booking;
-  tenantId: string;
   onClose: () => void;
   onSuccess: (updated: Booking) => void;
 }
 
 export function ChangeDatesModal({
   booking,
-  tenantId,
   onClose,
   onSuccess,
 }: ChangeDatesModalProps) {
@@ -39,7 +37,7 @@ export function ChangeDatesModal({
     const res = await fetch(`/api/portal/bookings/${booking.id}/dates`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tenantId, bookingStart, bookingEnd }),
+      body: JSON.stringify({ bookingStart, bookingEnd }),
     });
 
     const json = (await res.json()) as {

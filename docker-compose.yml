@@ -1,0 +1,16 @@
+# Optional: run Supabase locally for development
+# Usage: docker compose up -d
+# Then: npx supabase db reset --local
+
+services:
+  db:
+    image: supabase/postgres:15.8.1.060
+    ports:
+      - '54322:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - supabase-db:/var/lib/postgresql/data
+
+volumes:
+  supabase-db:
