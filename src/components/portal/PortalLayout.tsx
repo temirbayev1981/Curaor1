@@ -40,7 +40,7 @@ export function PortalLayout({
   return (
     <div className="min-h-screen bg-[#070b09]">
       <div className="bg-grid fixed inset-0 opacity-30" />
-      <div className="fixed inset-0 bg-gradient-to-b from-emerald-950/20 via-transparent to-transparent" />
+      <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-emerald-950/20 via-transparent to-transparent" />
 
       <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-black/40 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">

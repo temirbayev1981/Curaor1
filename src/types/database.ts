@@ -22,6 +22,55 @@ export interface TenantSettings {
   telegram_chat_id: string | null;
 }
 
+export type PurchaseOrderStatus = 'draft' | 'ordered' | 'received';
+
+export interface StaffMember {
+  id: string;
+  tenant_id: string;
+  full_name: string;
+  role: string;
+  hourly_rate: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StaffShift {
+  id: string;
+  tenant_id: string;
+  staff_member_id: string;
+  booking_id: string | null;
+  shift_start: string;
+  shift_end: string;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  tenant_id: string;
+  booking_id: string | null;
+  title: string;
+  status: PurchaseOrderStatus;
+  notes: string | null;
+  total_cost: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PurchaseOrderItem {
+  id: string;
+  purchase_order_id: string;
+  inventory_item_id: string | null;
+  item_name: string;
+  sku: string | null;
+  quantity: number;
+  unit_cost: number;
+  line_total: number;
+  created_at: string;
+}
+
 export interface Tenant {
   id: string;
   slug: string;
@@ -226,6 +275,10 @@ export interface Database {
         TenantUser,
         Pick<TenantUser, 'tenant_id' | 'user_id' | 'role'>
       >;
+      staff_members: TableDef<StaffMember>;
+      staff_shifts: TableDef<StaffShift>;
+      purchase_orders: TableDef<PurchaseOrder>;
+      purchase_order_items: TableDef<PurchaseOrderItem>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

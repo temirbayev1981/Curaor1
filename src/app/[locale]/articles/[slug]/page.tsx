@@ -65,7 +65,7 @@ export default async function ArticlePage({
     <>
       <PublicHeader locale={loc} />
       <main className="relative min-h-screen pt-24 pb-16">
-        <div className="bg-grid fixed inset-0 opacity-20" />
+        <div className="bg-grid pointer-events-none fixed inset-0 opacity-20" />
         <article className="relative mx-auto max-w-3xl px-4 sm:px-6">
           <Link
             href={`/${locale}/locations/${article.city_slug}`}

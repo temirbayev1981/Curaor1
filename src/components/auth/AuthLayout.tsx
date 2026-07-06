@@ -23,7 +23,7 @@ export function AuthLayout({
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[#070b09] px-4 py-12">
       <div className="bg-grid fixed inset-0 opacity-30" />
-      <div className="fixed inset-0 bg-gradient-to-br from-emerald-950/40 via-black to-emerald-900/30" />
+      <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-emerald-950/40 via-black to-emerald-900/30" />
 
       <div className="fixed top-4 right-4 z-50">
         <LanguageSwitcher />

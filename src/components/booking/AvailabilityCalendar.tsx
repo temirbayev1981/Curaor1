@@ -29,33 +29,50 @@ function statusClass(status: DayAvailabilityStatus): string {
   }
 }
 
+interface DayEntry {
+  date: string;
+  status: DayAvailabilityStatus;
+  bookingCount: number;
+}
+
 export function AvailabilityCalendar({ selectedDate, onSelectDate }: AvailabilityCalendarProps) {
   const { t } = useTranslation();
   const [viewMonth, setViewMonth] = useState(() => {
     const base = selectedDate ? new Date(`${selectedDate}T12:00:00`) : new Date();
     return new Date(base.getFullYear(), base.getMonth(), 1);
   });
-  const [days, setDays] = useState<
-    Array<{ date: string; status: DayAvailabilityStatus; bookingCount: number }>
-  >([]);
-  const [loading, setLoading] = useState(true);
+  const [monthData, setMonthData] = useState<
+    Record<string, { days: DayEntry[]; loaded: boolean }>
+  >({});
 
   const monthKey = formatMonthKey(viewMonth);
+  const currentMonth = monthData[monthKey];
+  const days = currentMonth?.days ?? [];
+  const loading = !currentMonth?.loaded;
 
   useEffect(() => {
-    setLoading(true);
+    let cancelled = false;
     const params = new URLSearchParams({ tenantId: DEFAULT_TENANT_ID, month: monthKey });
     fetch(`/api/bookings/availability?${params}`)
       .then((res) => res.json())
-      .then((json: { data: { days: typeof days } | null; error?: { message: string } | null }) => {
+      .then((json: { data: { days: DayEntry[] } | null; error?: { message: string } | null }) => {
+        if (cancelled) return;
         const next = json.data?.days?.length ? json.data.days : buildDefaultMonthDays(monthKey);
-        setDays(next);
-        setLoading(false);
+        setMonthData((prev) => ({
+          ...prev,
+          [monthKey]: { days: next, loaded: true },
+        }));
       })
       .catch(() => {
-        setDays(buildDefaultMonthDays(monthKey));
-        setLoading(false);
+        if (cancelled) return;
+        setMonthData((prev) => ({
+          ...prev,
+          [monthKey]: { days: buildDefaultMonthDays(monthKey), loaded: true },
+        }));
       });
+    return () => {
+      cancelled = true;
+    };
   }, [monthKey]);
 
   const weekdayLabels = useMemo(() => {

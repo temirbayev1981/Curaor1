@@ -134,7 +134,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
     <>
       <PublicHeader locale={locale} />
       <main className="relative min-h-screen pt-24 pb-16">
-        <div className="bg-grid fixed inset-0 opacity-20" />
+        <div className="bg-grid pointer-events-none fixed inset-0 opacity-20" />
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="mb-2 text-3xl font-bold text-white">{t('booking.title')}</h1>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { X } from 'lucide-react';
@@ -10,14 +10,10 @@ const STORAGE_KEY = 'emerald-pour-cookie-consent';
 
 export function CookieConsent({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      setVisible(true);
-    }
-  }, []);
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !localStorage.getItem(STORAGE_KEY);
+  });
 
   function accept() {
     localStorage.setItem(STORAGE_KEY, 'accepted');

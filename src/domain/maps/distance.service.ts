@@ -1,18 +1,69 @@
 import { getMapboxOrigin, getMapboxToken } from '@/lib/config/env';
+import { geocodeAddress } from '@/domain/maps/geocode.service';
 
 export interface DistanceResult {
   distanceMiles: number;
   durationMinutes: number;
 }
 
+export interface RouteDistanceResult extends DistanceResult {
+  originAddress: string;
+  destinationAddress: string;
+}
+
 export async function calculateDistance(
   destinationAddress: string
 ): Promise<DistanceResult> {
-  const token = getMapboxToken();
   const { lat, lng } = getMapboxOrigin();
+  return calculateDistanceFromCoords(lng, lat, destinationAddress);
+}
 
-  const encoded = encodeURIComponent(destinationAddress);
-  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${lng},${lat};${encoded}?access_token=${token}`;
+export async function calculateDistanceBetween(
+  originAddress: string,
+  destinationAddress: string
+): Promise<RouteDistanceResult> {
+  const [origin, destination] = await Promise.all([
+    geocodeAddress(originAddress),
+    geocodeAddress(destinationAddress),
+  ]);
+
+  if (!origin) throw new Error('Could not geocode origin address');
+  if (!destination) throw new Error('Could not geocode destination address');
+
+  const result = await fetchDirections(
+    origin.lng,
+    origin.lat,
+    destination.lng,
+    destination.lat
+  );
+
+  return {
+    ...result,
+    originAddress,
+    destinationAddress,
+  };
+}
+
+async function calculateDistanceFromCoords(
+  originLng: number,
+  originLat: number,
+  destinationAddress: string
+): Promise<DistanceResult> {
+  const destination = await geocodeAddress(destinationAddress);
+  if (!destination) throw new Error('Could not geocode destination address');
+  return fetchDirections(originLng, originLat, destination.lng, destination.lat);
+}
+
+async function fetchDirections(
+  originLng: number,
+  originLat: number,
+  destLng: number,
+  destLat: number
+): Promise<DistanceResult> {
+  const token = getMapboxToken();
+  const url =
+    `https://api.mapbox.com/directions/v5/mapbox/driving/` +
+    `${originLng},${originLat};${destLng},${destLat}?access_token=${token}`;
 
   const response = await fetch(url);
   if (!response.ok) {
