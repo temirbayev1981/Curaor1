@@ -25,8 +25,9 @@ export default async function GalleryPage({
   return (
     <>
       <PublicHeader locale={locale as Locale} />
-      <main className="min-h-screen pt-24 pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <main className="relative min-h-screen pt-24 pb-16">
+        <div className="bg-grid fixed inset-0 opacity-20" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <h1 className="mb-4 text-4xl font-bold text-white">{t.nav.gallery}</h1>
           <p className="mb-12 text-lg text-zinc-400">{t.gallery.subtitle}</p>
           <PublicGallery />

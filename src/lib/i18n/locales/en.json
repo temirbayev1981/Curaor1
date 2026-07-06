@@ -113,6 +113,36 @@
     "subtitle": "Mobile Irish pub catering across North and South Carolina",
     "viewCity": "Learn More"
   },
+  "cityPage": {
+    "metaTitle": "Mobile Irish Pub Catering in {{city}}, {{state}} — The Emerald Pour",
+    "metaDescription": "Rent a mobile Irish pub in {{city}}, {{stateFull}}. Weddings, corporate events, and private parties with premium craft beverages.",
+    "h1": "Mobile Irish Pub Catering in {{city}}",
+    "intro": "The Emerald Pour brings the authentic atmosphere of an Irish pub directly to your venue in {{city}}, {{stateFull}}. Whether you're planning a wedding reception, corporate event, or St. Patrick's Day celebration, our mobile bar creates an unforgettable experience.",
+    "servicesTitle": "Our Services in {{city}}",
+    "whyTitle": "Why Choose The Emerald Pour",
+    "relatedCities": "We Also Serve",
+    "ctaTitle": "Book Your Event in {{city}}",
+    "ctaDesc": "Limited weekend availability — reserve your date today.",
+    "ctaButton": "Book in {{city}}",
+    "why": {
+      "authentic": {
+        "title": "Authentic Irish Experience",
+        "desc": "Guinness taps, premium whiskey selection, and traditional pub atmosphere."
+      },
+      "premium": {
+        "title": "Premium Service",
+        "desc": "Professional bartenders, elegant setup, and flawless execution."
+      },
+      "flexible": {
+        "title": "We Come to You",
+        "desc": "Full mobile setup at your venue — weddings, corporate, or backyard parties."
+      },
+      "insured": {
+        "title": "Licensed & Insured",
+        "desc": "Fully licensed catering with liability coverage for peace of mind."
+      }
+    }
+  },
   "portal": {
     "title": "Customer Portal",
     "subtitle": "Your event dashboard",
@@ -245,6 +275,23 @@
       "resource": "Resource",
       "details": "Details",
       "empty": "No audit logs yet"
+    },
+    "aiAssistant": {
+      "description": "Generate 1500-word localized SEO articles. All outputs are sanitized and require manual approval before publishing.",
+      "city": "City",
+      "language": "Language",
+      "generate": "Generate SEO Article",
+      "generating": "Generating...",
+      "generateFailed": "Failed to generate article",
+      "articleCreated": "Article \"{{title}}\" created with status: {{status}}. Awaiting manual approval."
+    },
+    "seo": {
+      "pendingApproval": "Pending Approval",
+      "noPending": "No articles awaiting approval.",
+      "aiGenerated": "AI Generated",
+      "preview": "Preview",
+      "approve": "Approve",
+      "reject": "Reject"
     }
   },
   "footer": {
