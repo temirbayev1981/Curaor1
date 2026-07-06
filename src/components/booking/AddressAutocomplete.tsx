@@ -33,7 +33,6 @@ export function AddressAutocomplete({
 
   useEffect(() => {
     if (value.trim().length < 3) {
-      setSuggestions([]);
       return;
     }
 
@@ -50,6 +49,8 @@ export function AddressAutocomplete({
     return () => clearTimeout(timer);
   }, [value]);
 
+  const visibleSuggestions = value.trim().length >= 3 ? suggestions : [];
+
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -65,14 +66,21 @@ export function AddressAutocomplete({
       <Input
         required={required}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => suggestions.length > 0 && setOpen(true)}
+        onChange={(e) => {
+          const next = e.target.value;
+          onChange(next);
+          if (next.trim().length < 3) {
+            setSuggestions([]);
+            setOpen(false);
+          }
+        }}
+        onFocus={() => visibleSuggestions.length > 0 && setOpen(true)}
         placeholder={t('booking.addressPlaceholder')}
         autoComplete="off"
       />
-      {open && suggestions.length > 0 && (
+      {open && visibleSuggestions.length > 0 && (
         <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-white/10 bg-emerald-950 shadow-xl">
-          {suggestions.map((s) => (
+          {visibleSuggestions.map((s) => (
             <li key={s.id}>
               <button
                 type="button"

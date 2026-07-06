@@ -184,6 +184,61 @@ export class BookingService {
     return data as Booking;
   }
 
+  async updateDelivery(
+    tenantId: string,
+    bookingId: string,
+    deliveryDistanceMiles: number,
+    deliveryCost: number
+  ): Promise<Booking> {
+    const supabase = createAdminClient();
+    const booking = await this.getById(tenantId, bookingId);
+
+    const { data: tenant } = await supabase
+      .from('tenants')
+      .select('*')
+      .eq('id', tenantId)
+      .single();
+
+    const typedTenant = tenant as Tenant;
+    const config = resolveConfig({
+      tenantSettings: typedTenant.settings,
+      adminOverrides: typedTenant.admin_overrides as Record<string, unknown>,
+    });
+
+    const packageMatch = booking.notes?.match(/package:(\w+)/);
+    const matchedTier = packageMatch?.[1];
+    const packageTier =
+      matchedTier && isPackageTierId(matchedTier) ? matchedTier : 'shamrock';
+    const packageBasePrice = calculatePackageBasePrice(
+      config.base_event_price,
+      packageTier,
+      booking.guest_count
+    );
+
+    const { subtotal, depositAmount, balanceDue } = calculateBookingTotals(
+      packageBasePrice,
+      deliveryCost,
+      booking.deposit_percent
+    );
+
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({
+        delivery_distance_miles: deliveryDistanceMiles,
+        delivery_cost: deliveryCost,
+        subtotal,
+        deposit_amount: depositAmount,
+        balance_due: balanceDue,
+      })
+      .eq('id', bookingId)
+      .eq('tenant_id', tenantId)
+      .select()
+      .single();
+
+    if (error || !data) throw new Error(error?.message ?? 'Failed to update delivery');
+    return data as Booking;
+  }
+
   async updateNotes(
     tenantId: string,
     bookingId: string,

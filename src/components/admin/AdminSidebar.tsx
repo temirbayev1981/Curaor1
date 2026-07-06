@@ -14,6 +14,9 @@ import {
   Settings,
   Beer,
   ScrollText,
+  UserCog,
+  ShoppingCart,
+  Route,
 } from 'lucide-react';
 import { AdminLogoutButton } from '@/components/admin/AdminLogoutButton';
 import { cn } from '@/lib/utils';
@@ -24,6 +27,9 @@ const navItems = [
   { href: '/admin/calendar', icon: CalendarDays, key: 'calendar' },
   { href: '/admin/bookings', icon: Calendar, key: 'bookings' },
   { href: '/admin/customers', icon: Users, key: 'customers' },
+  { href: '/admin/staff', icon: UserCog, key: 'staff' },
+  { href: '/admin/procurement', icon: ShoppingCart, key: 'procurement' },
+  { href: '/admin/tools/distance', icon: Route, key: 'distance' },
   { href: '/admin/inventory', icon: Package, key: 'inventory' },
   { href: '/admin/media', icon: Image, key: 'media' },
   { href: '/admin/ai', icon: Sparkles, key: 'ai' },

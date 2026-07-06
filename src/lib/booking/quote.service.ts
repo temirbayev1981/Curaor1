@@ -130,7 +130,7 @@ async function checkAvailability(
   }
 
   const supabase = createAdminClient();
-  let query = supabase
+  const query = supabase
     .from('bookings')
     .select('id, booking_start, booking_end, status')
     .eq('tenant_id', tenantId)

@@ -36,7 +36,7 @@ export default async function LocationsPage({
     <>
       <PublicHeader locale={locale as Locale} />
       <main className="relative min-h-screen pt-24 pb-16">
-        <div className="bg-grid fixed inset-0 opacity-20" />
+        <div className="bg-grid pointer-events-none fixed inset-0 opacity-20" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <h1 className="mb-4 text-4xl font-bold text-white">{t.locations.title}</h1>
           <p className="mb-12 text-lg text-zinc-400">{t.locations.subtitle}</p>
