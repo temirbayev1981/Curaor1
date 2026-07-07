@@ -74,7 +74,7 @@ export function PublicGallery() {
             viewport={{ once: true }}
             transition={{ delay: Math.min(i * 0.03, 0.3) }}
             onClick={() => setLightbox(item)}
-            className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+            className="group relative aspect-square overflow-hidden rounded-xl focus:outline-none focus:ring-2 focus:ring-irish/50"
           >
             {isRemote(item.src) ? (
               <Image

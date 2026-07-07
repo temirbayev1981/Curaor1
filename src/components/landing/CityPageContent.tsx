@@ -78,14 +78,14 @@ export function CityPageContent({
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm text-emerald-300">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-irish/30 bg-irish/10 px-4 py-1.5 text-sm text-irish">
             <MapPin className="h-4 w-4" />
             {cityName}, {state}
           </div>
           <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl">
             {interpolate(t('cityPage.h1'), vars)}
           </h1>
-          <p className="max-w-3xl text-lg leading-relaxed text-zinc-400">
+          <p className="max-w-3xl text-lg leading-relaxed text-muted-secondary">
             {interpolate(t('cityPage.intro'), vars)}
           </p>
         </motion.div>
@@ -106,12 +106,12 @@ export function CityPageContent({
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.08 }}
                     >
-                      <Card className="h-full transition hover:border-emerald-500/20">
-                        <Icon className="mb-3 h-6 w-6 text-emerald-400" />
+                      <Card className="h-full transition hover:border-irish/20">
+                        <Icon className="mb-3 h-6 w-6 text-irish" />
                         <h3 className="mb-2 font-semibold text-white">
                           {t(`services.${key}`)}
                         </h3>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-secondary">
                           {t(`services.${key}Desc`)}
                         </p>
                       </Card>
@@ -136,11 +136,11 @@ export function CityPageContent({
                       transition={{ delay: 0.3 + i * 0.08 }}
                       className="glass-card rounded-xl p-5"
                     >
-                      <Icon className="mb-2 h-5 w-5 text-emerald-400" />
+                      <Icon className="mb-2 h-5 w-5 text-irish" />
                       <h3 className="mb-1 font-medium text-white">
                         {t(`cityPage.why.${key}.title`)}
                       </h3>
-                      <p className="text-sm text-zinc-400">
+                      <p className="text-sm text-muted-secondary">
                         {t(`cityPage.why.${key}.desc`)}
                       </p>
                     </motion.div>
@@ -159,10 +159,10 @@ export function CityPageContent({
                     <Link
                       key={article.slug}
                       href={`/${locale}/articles/${article.slug}`}
-                      className="glass-card flex items-center justify-between rounded-xl p-4 transition hover:border-emerald-500/20"
+                      className="glass-card flex items-center justify-between rounded-xl p-4 transition hover:border-irish/20"
                     >
                       <span className="font-medium text-white">{article.title}</span>
-                      <ArrowRight className="h-4 w-4 text-emerald-400" />
+                      <ArrowRight className="h-4 w-4 text-irish" />
                     </Link>
                   ))}
                 </div>
@@ -179,7 +179,7 @@ export function CityPageContent({
                     <Link
                       key={city.slug}
                       href={`/${locale}/locations/${city.slug}`}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300 transition hover:border-emerald-500/30 hover:text-emerald-300"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-muted transition hover:border-irish/30 hover:text-irish"
                     >
                       <MapPin className="h-3.5 w-3.5" />
                       {city.name}
@@ -192,11 +192,11 @@ export function CityPageContent({
 
           <aside className="lg:col-span-1">
             <div className="sticky top-24">
-              <Card className="!border-emerald-500/20 !bg-gradient-to-br from-emerald-500/10 to-transparent">
+              <Card className="!border-irish/20 !bg-gradient-to-br from-irish/10 to-transparent">
                 <h3 className="mb-2 text-xl font-semibold text-white">
                   {interpolate(t('cityPage.ctaTitle'), vars)}
                 </h3>
-                <p className="mb-6 text-sm text-zinc-400">
+                <p className="mb-6 text-sm text-muted-secondary">
                   {t('cityPage.ctaDesc')}
                 </p>
                 <Link href={`/${locale}/book?city=${citySlug}`}>
@@ -205,7 +205,7 @@ export function CityPageContent({
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <p className="mt-4 text-center text-xs text-zinc-500">
+                <p className="mt-4 text-center text-xs text-muted-secondary">
                   {t('cta.call')}
                 </p>
               </Card>

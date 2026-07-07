@@ -12,8 +12,8 @@ export function AboutSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
 
   return (
-    <section id="about" className="relative overflow-hidden border-y border-white/5 bg-black py-24">
-      <div className="absolute right-0 top-1/2 h-96 w-96 -translate-y-1/2 translate-x-1/3 text-emerald-500/5">
+    <section id="about" className="relative overflow-hidden border-y border-border bg-background py-24">
+      <div className="absolute right-0 top-1/2 h-96 w-96 -translate-y-1/2 translate-x-1/3 text-irish/5">
         <Clover className="h-full w-full" strokeWidth={0.5} />
       </div>
 
@@ -36,7 +36,7 @@ export function AboutSection({ locale }: { locale: Locale }) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <p className="absolute bottom-4 left-4 font-serif text-2xl text-gold">Guinness</p>
           </div>
-          <div className="relative aspect-square overflow-hidden rounded-2xl border border-white/10">
+          <div className="relative aspect-square overflow-hidden rounded-2xl border border-border">
             <Image
               src={LANDING_IMAGES.about.src}
               alt={LANDING_IMAGES.about.alt}
@@ -46,7 +46,7 @@ export function AboutSection({ locale }: { locale: Locale }) {
               sizes="25vw"
             />
           </div>
-          <div className="relative aspect-square overflow-hidden rounded-2xl border border-white/10">
+          <div className="relative aspect-square overflow-hidden rounded-2xl border border-border">
             <Image
               src={LANDING_IMAGES.aboutAccent.src}
               alt={LANDING_IMAGES.aboutAccent.alt}
@@ -70,15 +70,15 @@ export function AboutSection({ locale }: { locale: Locale }) {
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-gold">
             {t('landing.about.eyebrow')}
           </p>
-          <h2 className="mb-6 font-serif text-4xl font-bold leading-tight text-white sm:text-5xl">
+          <h2 className="mb-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl">
             {t('landing.about.title')}{' '}
-            <span className="text-gradient">{t('landing.about.titleAccent')}</span>
+            <span className="text-accent-script">{t('landing.about.titleAccent')}</span>
           </h2>
-          <p className="mb-4 text-lg leading-relaxed text-zinc-300">{t('landing.about.body')}</p>
-          <p className="mb-8 text-zinc-400">{t('landing.about.body2')}</p>
+          <p className="mb-4 text-lg leading-relaxed text-muted">{t('landing.about.body')}</p>
+          <p className="mb-8 text-muted-secondary">{t('landing.about.body2')}</p>
           <Link
             href={`/${locale}/contact`}
-            className="inline-flex rounded-xl border border-gold/40 bg-gold/10 px-6 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20"
+            className="btn-primary inline-flex px-6 py-3 text-sm font-semibold"
           >
             {t('landing.about.cta')}
           </Link>

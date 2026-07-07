@@ -29,20 +29,20 @@ export function LocationsGrid({
         >
           <Link
             href={`/${locale}/locations/${city.slug}`}
-            className="glass-card group flex items-center justify-between gap-4 rounded-2xl p-6 transition hover:border-emerald-500/30"
+            className="glass-card group flex items-center justify-between gap-4 rounded-2xl p-6 transition hover:border-irish/30"
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10">
-                <MapPin className="h-6 w-6 text-emerald-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-irish/10">
+                <MapPin className="h-6 w-6 text-irish" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-white group-hover:text-emerald-300">
+                <h2 className="text-lg font-semibold text-white group-hover:text-accent-neon">
                   {city.name}
                 </h2>
-                <p className="text-sm text-zinc-500">{city.state}</p>
+                <p className="text-sm text-muted-secondary">{city.state}</p>
               </div>
             </div>
-            <ArrowRight className="h-5 w-5 text-zinc-600 transition group-hover:text-emerald-400" />
+            <ArrowRight className="h-5 w-5 text-muted-secondary transition group-hover:text-irish" />
           </Link>
         </motion.div>
       ))}

@@ -86,7 +86,7 @@ export function AdminLoginForm({ locale }: { locale: Locale }) {
         </Button>
       </form>
       <p className="mt-6 text-center text-sm text-zinc-400">
-        <Link href={`/${locale}`} className="text-emerald-400 hover:underline">
+        <Link href={`/${locale}`} className="text-irish hover:underline">
           {t('errors.backHome')}
         </Link>
       </p>

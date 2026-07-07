@@ -13,10 +13,10 @@ export function NotFoundContent({ locale }: { locale: Locale }) {
     <div className="relative flex min-h-screen items-center justify-center bg-[#070b09] px-4">
       <div className="bg-grid pointer-events-none fixed inset-0 opacity-30" />
       <div className="relative z-10 text-center">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10">
-          <Beer className="h-8 w-8 text-emerald-400" />
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-irish/10">
+          <Beer className="h-8 w-8 text-irish" />
         </div>
-        <p className="mb-2 text-6xl font-bold text-emerald-400">404</p>
+        <p className="mb-2 text-6xl font-bold text-irish">404</p>
         <h1 className="mb-3 text-2xl font-bold text-white">{t('errors.notFoundTitle')}</h1>
         <p className="mb-8 max-w-md text-zinc-400">{t('errors.notFoundDesc')}</p>
         <Link href={`/${locale}`}>

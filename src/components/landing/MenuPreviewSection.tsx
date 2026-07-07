@@ -17,8 +17,8 @@ export function MenuPreviewSection() {
   const { t } = useTranslation();
 
   return (
-    <section id="menu" className="relative overflow-hidden border-y border-gold/10 py-24">
-      <div className="absolute inset-0 bg-gradient-to-b from-emerald-950/80 via-black to-emerald-950/60" />
+    <section id="menu" className="relative overflow-hidden border-y border-border py-24">
+      <div className="absolute inset-0 bg-gradient-to-b from-emerald-dark/80 via-background to-emerald-dark/60" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
@@ -33,7 +33,7 @@ export function MenuPreviewSection() {
           <h2 className="font-serif text-3xl font-bold text-white sm:text-5xl">
             {t('landing.menu.title')}
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-zinc-400">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-secondary">
             {t('landing.menu.subtitle')}
           </p>
         </motion.div>
@@ -46,7 +46,7 @@ export function MenuPreviewSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="group overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-2xl shadow-black/50"
+              className="group overflow-hidden rounded-2xl border border-border bg-card shadow-2xl shadow-black/50"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
@@ -69,7 +69,7 @@ export function MenuPreviewSection() {
                 {[1, 2, 3, 4].map((n) => (
                   <li
                     key={n}
-                    className="border-b border-white/5 pb-2 text-sm text-zinc-300 last:border-0"
+                    className="border-b border-border pb-2 text-sm text-muted last:border-0"
                   >
                     {t(`landing.menu.categories.${key}.items.i${n}`)}
                   </li>

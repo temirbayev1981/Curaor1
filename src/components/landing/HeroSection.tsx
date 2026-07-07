@@ -22,8 +22,9 @@ export function HeroSection({ locale }: { locale: Locale }) {
         className="object-cover object-center"
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#052f17]/95 via-[#052f17]/80 to-[#052f17]/45" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#052f17]/90 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/95 via-[#111111]/80 to-[#111111]/45" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/90 via-transparent to-black/30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#c57a20]/15 via-transparent to-[#f5c26b]/10" />
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2">
         <motion.div
@@ -33,25 +34,25 @@ export function HeroSection({ locale }: { locale: Locale }) {
           className="max-w-xl"
         >
           <p className="mb-4 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.2em] text-gold">
-            <Clover className="h-4 w-4" />
+            <Clover className="h-4 w-4 text-irish" />
             {t('hero.badge')}
           </p>
 
-          <h1 className="mb-2 font-serif text-5xl font-bold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+          <h1 className="mb-2 text-5xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
             {t('hero.headline')}
           </h1>
-          <p className="mb-6 font-serif text-3xl italic text-gold sm:text-4xl">
+          <p className="mb-6 text-3xl text-accent-script sm:text-4xl">
             {t('hero.headlineAccent')}
           </p>
 
-          <p className="mb-8 max-w-lg text-lg leading-relaxed text-zinc-200">
+          <p className="mb-8 max-w-lg text-lg leading-relaxed text-muted">
             {t('hero.description')}
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row">
             <Link
               href={`/${locale}/book`}
-              className="group inline-flex items-center justify-center gap-2 rounded-lg border-2 border-gold bg-[#052f17]/90 px-8 py-4 text-base font-semibold text-gold shadow-lg transition hover:bg-[#0a3d22]"
+              className="btn-primary group inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold shadow-lg"
             >
               <Clover className="h-4 w-4" />
               {t('hero.cta')}
@@ -59,7 +60,7 @@ export function HeroSection({ locale }: { locale: Locale }) {
             </Link>
             <Link
               href={`/${locale}/gallery`}
-              className="inline-flex items-center justify-center rounded-lg border border-white/30 px-8 py-4 text-base font-medium text-white backdrop-blur-sm transition hover:bg-white/10"
+              className="inline-flex items-center justify-center rounded-lg border border-white px-8 py-4 text-base font-medium text-white transition hover:border-irish hover:text-irish"
             >
               {t('hero.secondary')}
             </Link>
@@ -80,10 +81,11 @@ export function HeroSection({ locale }: { locale: Locale }) {
             className="object-cover"
             sizes="50vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-emerald-dark/80 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#ffcc66]/10 via-transparent to-[#ffd27a]/5" />
           <div className="absolute bottom-6 left-6 right-6 rounded-xl border border-gold/30 bg-black/50 p-4 backdrop-blur-sm">
             <p className="font-serif text-2xl text-gold">Sláinte!</p>
-            <p className="mt-1 text-sm text-zinc-300">{t('hero.sideTagline')}</p>
+            <p className="mt-1 text-sm text-muted">{t('hero.sideTagline')}</p>
           </div>
         </motion.div>
       </div>

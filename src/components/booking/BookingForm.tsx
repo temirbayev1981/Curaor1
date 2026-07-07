@@ -119,8 +119,8 @@ export function BookingForm({ locale }: { locale: Locale }) {
         <main className="relative min-h-screen pt-24 pb-16">
           <div className="relative mx-auto max-w-lg px-4 text-center">
             <Card className="py-12">
-              <CheckCircle className="mx-auto mb-4 h-16 w-16 text-emerald-400" />
-              <p className="mb-6 text-lg text-emerald-300">{t('booking.paymentSuccess')}</p>
+              <CheckCircle className="mx-auto mb-4 h-16 w-16 text-irish" />
+              <p className="mb-6 text-lg text-irish">{t('booking.paymentSuccess')}</p>
               <Link href={`/${locale}/portal`}>
                 <Button>{t('nav.portal')}</Button>
               </Link>
@@ -150,8 +150,8 @@ export function BookingForm({ locale }: { locale: Locale }) {
           {status === 'success' ? (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
               <Card className="flex flex-col items-center py-12 text-center">
-                <CheckCircle className="mb-4 h-16 w-16 text-emerald-400" />
-                <p className="mb-6 text-lg text-emerald-300">{t('booking.success')}</p>
+                <CheckCircle className="mb-4 h-16 w-16 text-irish" />
+                <p className="mb-6 text-lg text-irish">{t('booking.success')}</p>
                 <Link href={`/${locale}/portal`}>
                   <Button>{t('nav.portal')}</Button>
                 </Link>
@@ -161,7 +161,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
             <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <Card>
-                  <div className="mb-4 flex items-center gap-2 text-emerald-400">
+                  <div className="mb-4 flex items-center gap-2 text-irish">
                     <User className="h-5 w-5" />
                     <h2 className="font-semibold text-white">{t('booking.contactSection')}</h2>
                   </div>
@@ -185,7 +185,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
                 </Card>
 
                 <Card>
-                  <div className="mb-4 flex items-center gap-2 text-emerald-400">
+                  <div className="mb-4 flex items-center gap-2 text-irish">
                     <Calendar className="h-5 w-5" />
                     <h2 className="font-semibold text-white">{t('booking.eventSection')}</h2>
                   </div>
@@ -261,7 +261,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
                 </Card>
 
                 <Card>
-                  <div className="mb-4 flex items-center gap-2 text-emerald-400">
+                  <div className="mb-4 flex items-center gap-2 text-irish">
                     <MapPin className="h-5 w-5" />
                     <h2 className="font-semibold text-white">{t('booking.venueSection')}</h2>
                   </div>

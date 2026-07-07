@@ -34,7 +34,7 @@ export function GoogleReviewsSection() {
           viewport={{ once: true }}
           className="mb-10 text-center"
         >
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-zinc-300">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm text-muted">
             <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden>
               <path
                 fill="#4285F4"
@@ -56,7 +56,7 @@ export function GoogleReviewsSection() {
             Google Reviews
           </div>
           <h2 className="text-3xl font-bold text-white">{t('landing.googleReviews.title')}</h2>
-          <p className="mt-2 text-zinc-400">{t('landing.googleReviews.subtitle')}</p>
+          <p className="mt-2 text-muted-secondary">{t('landing.googleReviews.subtitle')}</p>
           <div className="mt-4 flex items-center justify-center gap-2">
             <div className="flex">
               {Array.from({ length: 5 }).map((_, i) => (
@@ -64,7 +64,7 @@ export function GoogleReviewsSection() {
               ))}
             </div>
             <span className="text-lg font-semibold text-white">4.9</span>
-            <span className="text-zinc-500">({t('landing.googleReviews.count')})</span>
+            <span className="text-muted-secondary">({t('landing.googleReviews.count')})</span>
           </div>
         </motion.div>
 
@@ -83,7 +83,7 @@ export function GoogleReviewsSection() {
                   <Star key={j} className="h-4 w-4 fill-gold text-gold" />
                 ))}
               </div>
-              <p className="mb-4 text-sm leading-relaxed text-zinc-300">
+              <p className="mb-4 text-sm leading-relaxed text-muted">
                 &ldquo;{t(`landing.googleReviews.${key}.text`)}&rdquo;
               </p>
               <p className="text-sm font-medium text-white">
@@ -98,7 +98,7 @@ export function GoogleReviewsSection() {
             href={reviewsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-white transition hover:border-emerald-500/30 hover:bg-emerald-500/10"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-white transition hover:border-irish hover:bg-irish/10"
           >
             {t('landing.googleReviews.cta')}
           </Link>

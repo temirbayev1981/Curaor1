@@ -77,7 +77,7 @@ export function QuotePreview(props: QuotePreviewProps) {
   const availabilityKey = availability?.message ?? 'select_date';
 
   return (
-    <Card className="sticky top-24 border-gold/20 bg-emerald-950/50">
+    <Card className="sticky top-24 border-gold/20 bg-surface">
       <h3 className="mb-4 font-semibold text-gold">{t('booking.availability.title')}</h3>
       {loading && !availability ? (
         <div className="skeleton h-20 rounded-lg" />
@@ -86,13 +86,13 @@ export function QuotePreview(props: QuotePreviewProps) {
           <p
             className={`rounded-lg px-3 py-2 text-xs ${
               availability.available
-                ? 'bg-emerald-500/10 text-emerald-300'
+                ? 'bg-irish/10 text-irish'
                 : 'bg-amber-500/10 text-amber-300'
             }`}
           >
             {t(`booking.quote.availability.${availabilityKey}`)}
           </p>
-          <p className="text-xs text-zinc-500">{t('booking.availability.note')}</p>
+          <p className="text-xs text-muted-secondary">{t('booking.availability.note')}</p>
         </div>
       ) : null}
     </Card>

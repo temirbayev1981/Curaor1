@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { Beer } from 'lucide-react';
+import { Clover } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/config';
 
 export function PublicFooter({ locale }: { locale: Locale }) {
@@ -23,21 +23,21 @@ export function PublicFooter({ locale }: { locale: Locale }) {
   ] as const;
 
   return (
-    <footer className="relative z-10 border-t border-white/5 bg-black/60 pb-20 md:pb-0">
+    <footer className="relative z-10 border-t border-border bg-surface-elevated pb-20 md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-12 md:grid-cols-3">
           <div>
             <div className="mb-4 flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10">
-                <Beer className="h-5 w-5 text-emerald-400" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-irish/10">
+                <Clover className="h-5 w-5 text-irish" />
               </div>
               <span className="font-semibold text-white">The Emerald Pour</span>
             </div>
-            <p className="text-sm leading-relaxed text-zinc-500">{t('footer.tagline')}</p>
+            <p className="text-sm leading-relaxed text-muted-secondary">{t('footer.tagline')}</p>
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-400">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-caption">
               {t('footer.quickLinks')}
             </h3>
             <div className="flex flex-col gap-2">
@@ -45,7 +45,7 @@ export function PublicFooter({ locale }: { locale: Locale }) {
                 <Link
                   key={key}
                   href={`/${locale}${href}`}
-                  className="text-sm text-zinc-500 transition hover:text-emerald-400"
+                  className="text-sm text-muted-secondary transition hover:text-irish"
                 >
                   {t(`nav.${key}`)}
                 </Link>
@@ -54,19 +54,19 @@ export function PublicFooter({ locale }: { locale: Locale }) {
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-400">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-caption">
               {t('footer.legal')}
             </h3>
             <div className="flex flex-col gap-2">
               <Link
                 href={`/${locale}/privacy`}
-                className="text-sm text-zinc-500 transition hover:text-white"
+                className="text-sm text-muted-secondary transition hover:text-white"
               >
                 {t('footer.privacy')}
               </Link>
               <Link
                 href={`/${locale}/terms`}
-                className="text-sm text-zinc-500 transition hover:text-white"
+                className="text-sm text-muted-secondary transition hover:text-white"
               >
                 {t('footer.terms')}
               </Link>
@@ -74,7 +74,7 @@ export function PublicFooter({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/5 pt-8 text-center text-sm text-zinc-600">
+        <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-secondary">
           © {year} The Emerald Pour. {t('footer.rights')}
         </div>
       </div>

@@ -34,7 +34,7 @@ export function GalleryStripSection({ locale }: { locale: Locale }) {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="relative h-64 w-80 shrink-0 overflow-hidden rounded-2xl border border-white/10 sm:h-72 sm:w-96"
+              className="relative h-64 w-80 shrink-0 overflow-hidden rounded-2xl sm:h-72 sm:w-96"
             >
               <Image
                 src={image.src}
@@ -53,7 +53,7 @@ export function GalleryStripSection({ locale }: { locale: Locale }) {
       <div className="mt-8 text-center">
         <Link
           href={`/${locale}/gallery`}
-          className="text-sm font-medium text-emerald-400 transition hover:text-emerald-300"
+          className="text-sm font-medium text-irish transition hover:text-accent-neon"
         >
           {t('landing.galleryStrip.viewAll')} →
         </Link>

@@ -13,7 +13,7 @@ export function FAQSection() {
   const [open, setOpen] = useState<string | null>(FAQ_KEYS[0]);
 
   return (
-    <section id="faq" className="border-y border-white/5 bg-emerald-950/20 py-24">
+    <section id="faq" className="border-y border-border bg-surface py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <motion.div
           initial={false}
@@ -24,7 +24,7 @@ export function FAQSection() {
           <h2 className="font-serif text-3xl font-bold text-white sm:text-4xl">
             {t('landing.faq.title')}
           </h2>
-          <p className="mt-3 text-zinc-400">{t('landing.faq.subtitle')}</p>
+          <p className="mt-3 text-muted-secondary">{t('landing.faq.subtitle')}</p>
         </motion.div>
 
         <div className="space-y-3">
@@ -33,7 +33,7 @@ export function FAQSection() {
             return (
               <div
                 key={key}
-                className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]"
+                className="overflow-hidden rounded-xl border border-border bg-card"
               >
                 <button
                   type="button"
@@ -58,7 +58,7 @@ export function FAQSection() {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <p className="border-t border-white/5 px-5 py-4 text-sm leading-relaxed text-zinc-400">
+                      <p className="border-t border-border px-5 py-4 text-sm leading-relaxed text-muted-secondary">
                         {t(`landing.faq.items.${key}.a`)}
                       </p>
                     </motion.div>

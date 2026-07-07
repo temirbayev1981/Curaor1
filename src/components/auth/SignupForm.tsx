@@ -100,7 +100,7 @@ export function SignupForm({ locale }: { locale: Locale }) {
       </form>
       <p className="mt-6 text-center text-sm text-zinc-400">
         {t('auth.hasAccount')}{' '}
-        <Link href={`/${locale}/login`} className="text-emerald-400 hover:underline">
+        <Link href={`/${locale}/login`} className="text-irish hover:underline">
           {t('auth.signInLink')}
         </Link>
       </p>
