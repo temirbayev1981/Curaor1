@@ -21,28 +21,28 @@ export function ContactSection({ locale }: { locale: Locale }) {
             <h2 className="mb-4 font-serif text-3xl font-bold text-white sm:text-4xl">
               {t('landing.contact.title')}
             </h2>
-            <p className="mb-8 text-lg text-zinc-400">{t('landing.contact.subtitle')}</p>
+            <p className="mb-8 text-lg text-muted-secondary">{t('landing.contact.subtitle')}</p>
             <div className="space-y-4">
               <a
                 href="tel:+17045550199"
-                className="flex items-center gap-3 text-zinc-300 transition hover:text-gold"
+                className="flex items-center gap-3 text-muted transition hover:text-irish"
               >
-                <Phone className="h-5 w-5 text-emerald-400" />
+                <Phone className="h-5 w-5 text-irish" />
                 (704) 555-0199
               </a>
               <a
                 href="mailto:bookings@emeraldpour.com"
-                className="flex items-center gap-3 text-zinc-300 transition hover:text-gold"
+                className="flex items-center gap-3 text-muted transition hover:text-irish"
               >
-                <Mail className="h-5 w-5 text-emerald-400" />
+                <Mail className="h-5 w-5 text-irish" />
                 bookings@emeraldpour.com
               </a>
-              <p className="flex items-center gap-3 text-zinc-300">
-                <MapPin className="h-5 w-5 text-emerald-400" />
+              <p className="flex items-center gap-3 text-muted">
+                <MapPin className="h-5 w-5 text-irish" />
                 {t('landing.contact.area')}
               </p>
-              <p className="flex items-center gap-3 text-zinc-300">
-                <Clock className="h-5 w-5 text-emerald-400" />
+              <p className="flex items-center gap-3 text-muted">
+                <Clock className="h-5 w-5 text-irish" />
                 {t('landing.contact.hours')}
               </p>
             </div>
@@ -57,16 +57,16 @@ export function ContactSection({ locale }: { locale: Locale }) {
             <h3 className="mb-4 text-xl font-semibold text-white">
               {t('landing.contact.ctaTitle')}
             </h3>
-            <p className="mb-6 text-sm text-zinc-400">{t('landing.contact.ctaDesc')}</p>
+            <p className="mb-6 text-sm text-muted-secondary">{t('landing.contact.ctaDesc')}</p>
             <Link
               href={`/${locale}/book`}
-              className="mb-4 inline-flex w-full items-center justify-center rounded-lg bg-gold px-6 py-3 font-semibold text-emerald-950 transition hover:bg-gold/90"
+              className="btn-primary mb-4 inline-flex w-full items-center justify-center px-6 py-3 font-semibold"
             >
               {t('landing.contact.ctaButton')}
             </Link>
             <Link
               href={`/${locale}/faq`}
-              className="inline-flex w-full items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-sm text-zinc-300 transition hover:bg-white/5"
+              className="inline-flex w-full items-center justify-center rounded-lg border border-border px-6 py-3 text-sm text-muted transition hover:border-irish hover:text-irish"
             >
               {t('landing.contact.faqLink')}
             </Link>

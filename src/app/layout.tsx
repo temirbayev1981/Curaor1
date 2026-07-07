@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
+import { Geist, Geist_Mono, Pacifico, Playfair_Display } from 'next/font/google';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import './globals.css';
 
@@ -19,6 +19,12 @@ const playfair = Playfair_Display({
   style: ['normal', 'italic'],
 });
 
+const pacifico = Pacifico({
+  variable: '--font-pacifico',
+  subsets: ['latin'],
+  weight: '400',
+});
+
 export const metadata: Metadata = {
   title: {
     default: 'The Emerald Pour — Mobile Irish Pub',
@@ -36,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${pacifico.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">
         <GoogleAnalytics />

@@ -9,13 +9,13 @@ export function ExperienceGridSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="border-y border-white/5 bg-white/[0.02] py-24">
+    <section className="border-y border-border bg-features py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mb-12 text-center">
           <h2 className="mb-3 text-3xl font-bold text-white sm:text-4xl">
             {t('landing.experience.title')}
           </h2>
-          <p className="mx-auto max-w-2xl text-zinc-400">{t('landing.experience.subtitle')}</p>
+          <p className="mx-auto max-w-2xl text-muted-secondary">{t('landing.experience.subtitle')}</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -26,7 +26,7 @@ export function ExperienceGridSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
-              className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10"
+              className="relative aspect-[4/3] overflow-hidden rounded-2xl"
             >
               <Image
                 src={image.src}

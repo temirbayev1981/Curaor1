@@ -27,7 +27,7 @@ export function PricingPackagesSection({ locale }: { locale: Locale }) {
           <h2 className="font-serif text-3xl font-bold text-white sm:text-4xl">
             {t('landing.pricing.title')}
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-zinc-400">{t('landing.pricing.subtitle')}</p>
+          <p className="mx-auto mt-3 max-w-2xl text-muted-secondary">{t('landing.pricing.subtitle')}</p>
         </motion.div>
 
         <div className="grid gap-6 lg:grid-cols-3">
@@ -40,12 +40,12 @@ export function PricingPackagesSection({ locale }: { locale: Locale }) {
               transition={{ delay: i * 0.1 }}
               className={`relative flex flex-col rounded-2xl border p-8 ${
                 tier === 'emerald'
-                  ? 'border-gold/40 bg-gradient-to-b from-gold/10 to-transparent shadow-lg shadow-gold/5'
-                  : 'border-white/10 bg-white/[0.03]'
+                  ? 'border-irish/40 bg-gradient-to-b from-irish/10 to-transparent shadow-lg shadow-irish/5'
+                  : 'border-border bg-card'
               }`}
             >
               {tier === 'emerald' && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-950">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
                   {t('landing.pricing.popular')}
                 </span>
               )}
@@ -55,13 +55,13 @@ export function PricingPackagesSection({ locale }: { locale: Locale }) {
                   {t(`landing.pricing.tiers.${tier}.name`)}
                 </h3>
               </div>
-              <p className="mb-6 text-sm text-zinc-400">
+              <p className="mb-6 text-sm text-muted-secondary">
                 {t(`landing.pricing.tiers.${tier}.guests`)}
               </p>
               <ul className="mb-8 flex-1 space-y-3">
                 {Array.from({ length: FEATURE_COUNTS[tier] }).map((_, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-zinc-300">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                  <li key={idx} className="flex items-start gap-2 text-sm text-muted">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-irish" />
                     {t(`landing.pricing.tiers.${tier}.features.f${idx + 1}`)}
                   </li>
                 ))}
@@ -70,8 +70,8 @@ export function PricingPackagesSection({ locale }: { locale: Locale }) {
                 href={`/${locale}/book?package=${tier}`}
                 className={`rounded-lg px-6 py-3 text-center text-sm font-semibold transition ${
                   tier === 'emerald'
-                    ? 'bg-gold text-emerald-950 hover:bg-gold/90'
-                    : 'border border-white/20 text-white hover:bg-white/5'
+                    ? 'btn-primary'
+                    : 'border border-border text-white hover:border-irish hover:text-irish'
                 }`}
               >
                 {t('landing.pricing.cta')}

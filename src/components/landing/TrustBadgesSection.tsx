@@ -26,12 +26,12 @@ export function TrustBadgesSection() {
             transition={{ delay: i * 0.08 }}
             className="glass-card flex items-start gap-4 rounded-2xl p-5"
           >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gold/10">
-              <Icon className="h-5 w-5 text-gold" />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-irish/10">
+              <Icon className="h-5 w-5 text-irish" />
             </div>
             <div>
               <h3 className="font-semibold text-white">{t(`landing.trust.${key}.title`)}</h3>
-              <p className="mt-1 text-sm text-zinc-400">{t(`landing.trust.${key}.desc`)}</p>
+              <p className="mt-1 text-sm text-muted-secondary">{t(`landing.trust.${key}.desc`)}</p>
             </div>
           </motion.div>
         ))}

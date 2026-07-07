@@ -3,16 +3,53 @@
 @source "../../src/**/*.{ts,tsx}";
 
 :root {
-  --background: #052f17;
-  --foreground: #f5f0e6;
-  --emerald: #166534;
-  --emerald-dark: #052f17;
-  --emerald-glow: rgba(181, 142, 61, 0.12);
-  --gold: #b58e3d;
+  /* Core palette */
+  --background: #090a0b;
+  --foreground: #ffffff;
+  --surface: #121212;
+  --surface-elevated: #111315;
+  --nav: #0a0b0d;
+  --border: #2a2a2a;
+  --card: #121212;
+  --features-bg: #0c0c0c;
+
+  /* Text */
+  --muted: #d8d8d8;
+  --muted-secondary: #9a9a9a;
+  --muted-caption: #afafaf;
+  --nav-link: #e8e8e8;
+  --nav-subtitle: #bdbdbd;
+
+  /* Greens */
+  --primary: #18a64c;
+  --primary-hover: #21c55d;
+  --primary-cta-hover: #2ad163;
+  --primary-nav: #1aae4a;
+  --primary-nav-hover: #00c853;
+  --irish: #00a63a;
+  --accent-neon: #33ff66;
+  --emerald-dark: #0d4b2d;
+  --emerald-cta: #123f28;
+  --emerald-secondary: #006d3c;
+  --emerald-glow: rgba(51, 255, 102, 0.12);
+
+  /* Warm accents */
+  --gold: #d4af37;
+  --warm-light: #ffd27a;
+  --warm-amber: #d88924;
+  --warm-glow: #c57a20;
+  --warm-highlight: #f5c26b;
+
+  /* Hero overlays */
+  --hero-dark: #080808;
+  --hero-dark-alt: #111111;
+
+  /* Admin (unchanged) */
   --admin-bg: #09090b;
   --admin-surface: #111113;
   --admin-surface-elevated: #18181b;
   --admin-border: #27272a;
+
   --glass: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
 }
@@ -20,9 +57,28 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-emerald: var(--emerald);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-nav: var(--nav);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-features: var(--features-bg);
+  --color-muted: var(--muted);
+  --color-muted-secondary: var(--muted-secondary);
+  --color-muted-caption: var(--muted-caption);
+  --color-nav-link: var(--nav-link);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-cta-hover: var(--primary-cta-hover);
+  --color-primary-nav: var(--primary-nav);
+  --color-primary-nav-hover: var(--primary-nav-hover);
+  --color-irish: var(--irish);
+  --color-accent-neon: var(--accent-neon);
   --color-emerald-dark: var(--emerald-dark);
+  --color-emerald-cta: var(--emerald-cta);
   --color-gold: var(--gold);
+  --color-warm-light: var(--warm-light);
+  --color-warm-amber: var(--warm-amber);
   --color-admin-bg: var(--admin-bg);
   --color-admin-surface: var(--admin-surface);
   --color-admin-surface-elevated: var(--admin-surface-elevated);
@@ -30,11 +86,12 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair), Georgia, 'Times New Roman', serif;
+  --font-script: var(--font-pacifico), 'Brush Script MT', cursive;
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--muted);
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -52,14 +109,46 @@ body {
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 .glow-emerald {
   box-shadow: 0 0 40px var(--emerald-glow);
+}
+
+/* Typography */
+.font-script {
+  font-family: var(--font-script);
+}
+
+.text-accent-script {
+  color: var(--accent-neon);
+  font-family: var(--font-script);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-nav {
+  background: var(--primary-nav);
+  color: #ffffff;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.btn-nav:hover {
+  background: var(--primary-nav-hover);
 }
 
 /* Skeleton */
@@ -96,7 +185,7 @@ body {
 
 /* Gradient text */
 .text-gradient {
-  background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #d4af37 100%);
+  background: linear-gradient(135deg, var(--irish) 0%, var(--accent-neon) 50%, var(--gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

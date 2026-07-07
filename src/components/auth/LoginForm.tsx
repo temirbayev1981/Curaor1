@@ -63,7 +63,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
   return (
     <AuthLayout locale={locale} title={t('auth.signIn')}>
       {resetSent ? (
-        <p className="text-center text-emerald-300">
+        <p className="text-center text-irish">
           {t('auth.resetSent', { email })}
         </p>
       ) : (
@@ -95,7 +95,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
           <button
             type="button"
             onClick={handleForgotPassword}
-            className="w-full text-sm text-zinc-400 transition hover:text-emerald-400"
+            className="w-full text-sm text-zinc-400 transition hover:text-irish"
           >
             {t('auth.forgotPassword')}
           </button>
@@ -103,7 +103,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
       )}
       <p className="mt-6 text-center text-sm text-zinc-400">
         {t('auth.noAccount')}{' '}
-        <Link href={`/${locale}/signup`} className="text-emerald-400 hover:underline">
+        <Link href={`/${locale}/signup`} className="text-irish hover:underline">
           {t('auth.createOne')}
         </Link>
       </p>

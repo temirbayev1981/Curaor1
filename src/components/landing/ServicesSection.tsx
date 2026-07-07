@@ -10,7 +10,7 @@ const services = [
   { key: 'weddings', icon: Heart, color: 'text-rose-400' },
   { key: 'corporate', icon: Building2, color: 'text-blue-400' },
   { key: 'private', icon: PartyPopper, color: 'text-purple-400' },
-  { key: 'stpatricks', icon: Clover, color: 'text-emerald-400' },
+  { key: 'stpatricks', icon: Clover, color: 'text-irish' },
 ] as const;
 
 export function ServicesSection() {
@@ -31,12 +31,12 @@ export function ServicesSection() {
           {services.map(({ key, icon: Icon, color }, i) => (
             <motion.div
               key={key}
-              className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm"
+              className="overflow-hidden rounded-2xl border border-border bg-card"
               initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -4, borderColor: 'rgba(16, 185, 129, 0.3)' }}
+              whileHover={{ y: -4, borderColor: 'rgba(0, 166, 58, 0.3)' }}
             >
               <div className="relative aspect-[16/10] w-full">
                 <Image
@@ -54,7 +54,7 @@ export function ServicesSection() {
                 <h3 className="mb-2 text-lg font-semibold text-white">
                   {t(`services.${key}`)}
                 </h3>
-                <p className="text-sm text-zinc-400">
+                <p className="text-sm text-muted-secondary">
                   {t(`services.${key}Desc`)}
                 </p>
               </div>

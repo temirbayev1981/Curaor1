@@ -24,11 +24,11 @@ export function CookieConsent({ locale }: { locale: Locale }) {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-black/90 p-4 backdrop-blur-md md:bottom-0 md:left-auto md:right-4 md:mb-4 md:max-w-md md:rounded-xl md:border">
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-nav/95 p-4 backdrop-blur-md md:bottom-0 md:left-auto md:right-4 md:mb-4 md:max-w-md md:rounded-xl md:border">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-muted-secondary">
           {t('cookies.message')}{' '}
-          <Link href={`/${locale}/privacy`} className="text-emerald-400 hover:underline">
+          <Link href={`/${locale}/privacy`} className="text-irish hover:underline">
             {t('footer.privacy')}
           </Link>
         </p>
@@ -36,7 +36,7 @@ export function CookieConsent({ locale }: { locale: Locale }) {
           <button
             type="button"
             onClick={accept}
-            className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-400"
+            className="btn-primary px-4 py-2 text-sm font-medium"
           >
             {t('cookies.accept')}
           </button>

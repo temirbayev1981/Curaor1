@@ -21,7 +21,7 @@ function formatMonthKey(date: Date): string {
 function statusClass(status: DayAvailabilityStatus): string {
   switch (status) {
     case 'open':
-      return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30';
+      return 'bg-irish/20 text-irish border-irish/30 hover:bg-irish/30';
     case 'limited':
       return 'bg-amber-500/20 text-amber-300 border-amber-500/30 hover:bg-amber-500/30';
     case 'full':
@@ -93,7 +93,7 @@ export function AvailabilityCalendar({ selectedDate, onSelectDate }: Availabilit
   }
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+    <div className="rounded-xl border border-border bg-card p-4">
       <div className="mb-4 flex items-center justify-between">
         <button
           type="button"
@@ -141,7 +141,7 @@ export function AvailabilityCalendar({ selectedDate, onSelectDate }: Availabilit
                 onClick={() => onSelectDate(day.date)}
                 title={t(`booking.calendar.status.${day.status}`)}
                 className={`flex h-9 items-center justify-center rounded-lg border text-sm transition ${statusClass(day.status)} ${
-                  isSelected ? 'ring-2 ring-gold ring-offset-1 ring-offset-emerald-950' : ''
+                  isSelected ? 'ring-2 ring-gold ring-offset-1 ring-offset-background' : ''
                 } ${isPast ? 'opacity-40' : ''}`}
               >
                 {dayNum}
@@ -153,7 +153,7 @@ export function AvailabilityCalendar({ selectedDate, onSelectDate }: Availabilit
 
       <div className="mt-4 flex flex-wrap gap-3 text-xs text-zinc-500">
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded bg-emerald-500/40" />
+          <span className="h-3 w-3 rounded bg-irish/40" />
           {t('booking.calendar.legend.open')}
         </span>
         <span className="flex items-center gap-1.5">

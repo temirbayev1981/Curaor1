@@ -21,7 +21,7 @@ export function LegalDocument({ namespace }: { namespace: 'privacy' | 'terms' })
         <div className="space-y-6">
           {sections.map((key) => (
             <Card key={key}>
-              <h2 className="mb-3 text-xl font-semibold text-emerald-400">
+              <h2 className="mb-3 text-xl font-semibold text-irish">
                 {t(`${namespace}.${key}Title`)}
               </h2>
               <p className="leading-relaxed text-zinc-300">{t(`${namespace}.${key}Body`)}</p>

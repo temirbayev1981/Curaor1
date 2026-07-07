@@ -10,8 +10,8 @@ export function CTASection({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
 
   return (
-    <section className="relative overflow-hidden border-t border-gold/10 bg-emerald-950 py-24">
-      <div className="absolute -left-16 top-1/2 h-72 w-72 -translate-y-1/2 text-emerald-800/30">
+    <section className="relative overflow-hidden border-t border-border bg-emerald-cta py-24">
+      <div className="absolute -left-16 top-1/2 h-72 w-72 -translate-y-1/2 text-irish/10">
         <Clover className="h-full w-full" strokeWidth={0.5} />
       </div>
 
@@ -21,19 +21,19 @@ export function CTASection({ locale }: { locale: Locale }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="mb-2 font-serif text-3xl font-bold uppercase tracking-wide text-white sm:text-4xl">
+          <h2 className="mb-2 text-3xl font-extrabold uppercase tracking-wide text-white sm:text-4xl">
             {t('cta.title')}{' '}
-            <span className="italic text-gold">{t('cta.titleAccent')}</span>
+            <span className="text-accent-script">{t('cta.titleAccent')}</span>
           </h2>
-          <p className="mb-8 text-lg text-emerald-100/70">{t('cta.subtitle')}</p>
+          <p className="mb-8 text-lg text-muted">{t('cta.subtitle')}</p>
           <Link
             href={`/${locale}/book`}
-            className="inline-flex items-center gap-2 rounded-lg bg-gold px-10 py-4 text-base font-bold uppercase tracking-wider text-emerald-950 shadow-lg transition hover:bg-gold/90"
+            className="btn-primary inline-flex items-center gap-2 px-10 py-4 text-base font-bold uppercase tracking-wider shadow-lg hover:bg-primary-cta-hover"
           >
             <Clover className="h-5 w-5" />
             {t('cta.button')}
           </Link>
-          <p className="mt-6 text-sm text-emerald-100/50">{t('cta.call')}</p>
+          <p className="mt-6 text-sm text-muted-secondary">{t('cta.call')}</p>
         </motion.div>
       </div>
     </section>

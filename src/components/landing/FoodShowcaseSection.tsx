@@ -23,7 +23,7 @@ export function FoodShowcaseSection() {
           <h2 className="font-serif text-3xl font-bold text-white sm:text-4xl">
             {t('landing.food.title')}
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-zinc-400">{t('landing.food.subtitle')}</p>
+          <p className="mx-auto mt-3 max-w-2xl text-muted-secondary">{t('landing.food.subtitle')}</p>
         </motion.div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -34,7 +34,7 @@ export function FoodShowcaseSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.07 }}
-              className={`relative overflow-hidden rounded-2xl border border-white/10 ${
+              className={`relative overflow-hidden rounded-2xl ${
                 i === 0 ? 'md:col-span-2 md:row-span-2 md:aspect-auto min-h-[320px]' : 'aspect-square'
               }`}
             >

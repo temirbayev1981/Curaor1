@@ -23,7 +23,7 @@ export function TestimonialsSection() {
           <h2 className="mb-3 text-3xl font-bold text-white sm:text-4xl">
             {t('testimonials.title')}
           </h2>
-          <p className="mx-auto max-w-2xl text-zinc-400">
+          <p className="mx-auto max-w-2xl text-muted-secondary">
             {t('testimonials.subtitle')}
           </p>
         </motion.div>
@@ -49,15 +49,15 @@ export function TestimonialsSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent" />
               </div>
               <div className="flex flex-col p-6">
-              <Quote className="mb-4 h-8 w-8 text-emerald-500/40" />
-              <p className="mb-6 flex-1 text-sm leading-relaxed text-zinc-300">
+              <Quote className="mb-4 h-8 w-8 text-irish/40" />
+              <p className="mb-6 flex-1 text-sm leading-relaxed text-muted">
                 &ldquo;{t(`testimonials.${key}.quote`)}&rdquo;
               </p>
-              <div className="border-t border-white/5 pt-4">
+              <div className="border-t border-border pt-4">
                 <p className="font-medium text-white">
                   {t(`testimonials.${key}.name`)}
                 </p>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-muted-secondary">
                   {t(`testimonials.${key}.event`)}
                 </p>
               </div>

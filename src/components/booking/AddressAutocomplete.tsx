@@ -79,7 +79,7 @@ export function AddressAutocomplete({
         autoComplete="off"
       />
       {open && visibleSuggestions.length > 0 && (
-        <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-white/10 bg-emerald-950 shadow-xl">
+        <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-border bg-surface shadow-xl">
           {visibleSuggestions.map((s) => (
             <li key={s.id}>
               <button
