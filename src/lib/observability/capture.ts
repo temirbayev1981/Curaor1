@@ -1,26 +1,26 @@
-/**
- * Lightweight error reporting — structured JSON logs for production monitoring.
- * Set SENTRY_DSN to enable external forwarding via your log drain.
- */
+import * as Sentry from '@sentry/nextjs';
 
-interface ErrorContext {
-  digest?: string;
-  tags?: Record<string, string>;
-}
+const dsn = process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN;
 
-export function captureError(error: unknown, context?: ErrorContext): void {
+export function captureError(error: unknown, context?: { digest?: string; tags?: Record<string, string> }): void {
   const message = error instanceof Error ? error.message : String(error);
-  const stack = error instanceof Error ? error.stack : undefined;
 
-  const payload = {
-    level: 'error',
-    message,
-    stack,
-    digest: context?.digest,
-    tags: context?.tags,
-    timestamp: new Date().toISOString(),
-    sentryConfigured: Boolean(process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN),
-  };
+  if (dsn) {
+    Sentry.captureException(error instanceof Error ? error : new Error(message), {
+      tags: context?.tags,
+      extra: { digest: context?.digest },
+    });
+    return;
+  }
 
-  console.error(JSON.stringify(payload));
+  console.error(
+    JSON.stringify({
+      level: 'error',
+      message,
+      stack: error instanceof Error ? error.stack : undefined,
+      digest: context?.digest,
+      tags: context?.tags,
+      timestamp: new Date().toISOString(),
+    })
+  );
 }

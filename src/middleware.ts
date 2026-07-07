@@ -12,6 +12,7 @@ import { resolveRedirect } from '@/lib/auth/safe-redirect';
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from '@/lib/config/env';
 import { isApiRoute, isStaticAsset, needsLocaleRedirect } from '@/lib/middleware/paths';
 import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
+import { resolveTenantSlug } from '@/lib/tenant/extract-slug';
 import type { UserRole } from '@/types/database';
 
 const AUTH_PATHS = ['/portal'];
@@ -68,6 +69,17 @@ function finishWithoutSupabase(
       maxAge: 31536000,
     });
   }
+
+  const hostname = request.headers.get('host') ?? '';
+  const tenantSlug = resolveTenantSlug(
+    hostname,
+    request.nextUrl.searchParams.get('tenant'),
+    request.cookies.get('tenant_slug')?.value ?? null
+  );
+  response.cookies.set('tenant_slug', tenantSlug, {
+    path: '/',
+    maxAge: 31536000,
+  });
 
   return response;
 }
@@ -219,6 +231,18 @@ export async function middleware(request: NextRequest) {
   }
 
   supabaseResponse.cookies.set('locale', locale, {
+    path: '/',
+    maxAge: 31536000,
+  });
+
+  const hostname = request.headers.get('host') ?? '';
+  const queryTenant = request.nextUrl.searchParams.get('tenant');
+  const tenantSlug = resolveTenantSlug(
+    hostname,
+    queryTenant,
+    request.cookies.get('tenant_slug')?.value ?? null
+  );
+  supabaseResponse.cookies.set('tenant_slug', tenantSlug, {
     path: '/',
     maxAge: 31536000,
   });

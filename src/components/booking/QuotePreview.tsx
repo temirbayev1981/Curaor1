@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
-import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
+import { useTenantId } from '@/components/providers/TenantProvider';
 import type { PackageTierId } from '@/lib/booking/packages';
 
 interface AvailabilityData {
@@ -26,6 +26,7 @@ interface QuotePreviewProps {
 
 export function QuotePreview(props: QuotePreviewProps) {
   const { t } = useTranslation();
+  const tenantId = useTenantId();
   const [availability, setAvailability] = useState<AvailabilityData | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +41,7 @@ export function QuotePreview(props: QuotePreviewProps) {
       : undefined;
 
     const params = new URLSearchParams({
-      tenantId: DEFAULT_TENANT_ID,
+      tenantId,
       guestCount: String(props.guestCount),
       depositPercent: String(props.depositPercent),
       packageTier: props.packageTier,

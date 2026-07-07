@@ -11,7 +11,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { getSiteUrl, isStripeConfigured } from '@/lib/config/env';
 import { paymentService } from '@/domain/payment/payment.service';
-import { assertPublicTenantId } from '@/lib/tenant/validate-tenant';
+import { validatePublicTenantId } from '@/lib/tenant/validate-tenant';
 import { linkCustomerToUser } from '@/lib/auth/rbac';
 
 const publicBookingSchema = createBookingSchema.extend({
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     const input = parsed.data;
-    assertPublicTenantId(input.tenantId);
+    await validatePublicTenantId(input.tenantId);
     const supabase = createAdminClient();
     const authSupabase = await createClient();
     const { data: { user } } = await authSupabase.auth.getUser();

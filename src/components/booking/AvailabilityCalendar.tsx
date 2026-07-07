@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
+import { useTenantId } from '@/components/providers/TenantProvider';
 import {
   buildDefaultMonthDays,
   type DayAvailabilityStatus,
@@ -37,6 +37,7 @@ interface DayEntry {
 
 export function AvailabilityCalendar({ selectedDate, onSelectDate }: AvailabilityCalendarProps) {
   const { t } = useTranslation();
+  const tenantId = useTenantId();
   const [viewMonth, setViewMonth] = useState(() => {
     const base = selectedDate ? new Date(`${selectedDate}T12:00:00`) : new Date();
     return new Date(base.getFullYear(), base.getMonth(), 1);
@@ -52,7 +53,7 @@ export function AvailabilityCalendar({ selectedDate, onSelectDate }: Availabilit
 
   useEffect(() => {
     let cancelled = false;
-    const params = new URLSearchParams({ tenantId: DEFAULT_TENANT_ID, month: monthKey });
+    const params = new URLSearchParams({ tenantId, month: monthKey });
     fetch(`/api/bookings/availability?${params}`)
       .then((res) => res.json())
       .then((json: { data: { days: DayEntry[] } | null; error?: { message: string } | null }) => {
@@ -73,7 +74,7 @@ export function AvailabilityCalendar({ selectedDate, onSelectDate }: Availabilit
     return () => {
       cancelled = true;
     };
-  }, [monthKey]);
+  }, [monthKey, tenantId]);
 
   const weekdayLabels = useMemo(() => {
     const formatter = new Intl.DateTimeFormat(undefined, { weekday: 'short' });
