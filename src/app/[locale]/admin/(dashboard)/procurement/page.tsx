@@ -14,8 +14,8 @@ export default async function AdminProcurementPage({
   return (
     <div>
       <AdminPageHeader
-        title={t.admin.procurement.title}
-        description={t.admin.procurement.desc}
+        title={t.admin.procurementTools.title}
+        description={t.admin.procurementTools.desc}
       />
       <ProcurementManager />
     </div>

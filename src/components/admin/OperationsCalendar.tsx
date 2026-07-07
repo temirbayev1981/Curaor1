@@ -49,7 +49,7 @@ export function OperationsCalendar({ locale }: { locale: Locale }) {
   return (
     <div className="rounded-xl border border-admin-border bg-admin-surface p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-white">{t('admin.calendar.title')}</h2>
+        <h2 className="text-lg font-semibold text-white">{t('admin.operationsCalendar.title')}</h2>
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -116,7 +116,7 @@ export function OperationsCalendar({ locale }: { locale: Locale }) {
       </div>
 
       <div className="mt-6 space-y-2">
-        <h3 className="text-sm font-medium text-zinc-400">{t('admin.calendar.upcoming')}</h3>
+        <h3 className="text-sm font-medium text-zinc-400">{t('admin.operationsCalendar.upcoming')}</h3>
         {bookings
           .filter((b) => new Date(b.booking_start) >= new Date() && b.status !== 'cancelled')
           .slice(0, 5)

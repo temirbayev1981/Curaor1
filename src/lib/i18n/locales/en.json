@@ -499,12 +499,12 @@
       "title": "Financial Metrics",
       "subtitle": "Calculated from succeeded payments, inventory valuation, and booking completion rates."
     },
-    "calendar": {
+    "operationsCalendar": {
       "title": "Operations Calendar",
       "desc": "View upcoming events and daily booking load",
       "upcoming": "Upcoming Events"
     },
-    "staff": {
+    "staffTools": {
       "title": "Staff Schedule",
       "desc": "Manage shifts, track hours, and auto-calculate payroll",
       "activeMembers": "Active staff",
@@ -521,7 +521,7 @@
       "noShifts": "No shifts scheduled this month",
       "fetchError": "Could not load staff data"
     },
-    "procurement": {
+    "procurementTools": {
       "title": "Shopping Lists",
       "desc": "Generate purchase lists from low stock and estimate costs",
       "generateLowStock": "Generate from low stock",
@@ -536,7 +536,7 @@
         "received": "Received"
       }
     },
-    "distance": {
+    "distanceTools": {
       "title": "Distance Calculator",
       "desc": "Calculate route from point A to B and delivery cost",
       "origin": "Point A (origin)",

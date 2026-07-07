@@ -13,7 +13,7 @@ export default async function AdminDistancePage({
 
   return (
     <div>
-      <AdminPageHeader title={t.admin.distance.title} description={t.admin.distance.desc} />
+      <AdminPageHeader title={t.admin.distanceTools.title} description={t.admin.distanceTools.desc} />
       <DistanceCalculatorTool />
     </div>
   );
