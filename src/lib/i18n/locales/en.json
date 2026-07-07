@@ -570,7 +570,9 @@
       "rate": "Rate",
       "cost": "Delivery cost",
       "savedToBooking": "Saved to booking — subtotal recalculated",
-      "error": "Distance calculation failed"
+      "error": "Distance calculation failed",
+      "notConfiguredTitle": "Mapbox not connected",
+      "notConfigured": "Distance calculation requires a Mapbox access token. Add it in Vercel, redeploy, then try again."
     },
     "profit": {
       "title": "Event P&L",
@@ -631,6 +633,8 @@
       "generate": "Generate SEO Article",
       "generating": "Generating...",
       "generateFailed": "Failed to generate article",
+      "notConfiguredTitle": "OpenAI not connected",
+      "notConfigured": "AI article generation requires an OpenAI API key. Add it in Vercel, redeploy, then try again.",
       "articleCreated": "Article \"{{title}}\" created with status: {{status}}. Awaiting manual approval."
     },
     "seo": {

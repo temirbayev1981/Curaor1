@@ -105,6 +105,10 @@ export function getOpenAiApiKey(): string {
   return key;
 }
 
+export function isOpenAiConfigured(): boolean {
+  return Boolean(process.env.OPENAI_API_KEY?.trim());
+}
+
 export function isMapboxConfigured(): boolean {
   return Boolean(process.env.MAPBOX_ACCESS_TOKEN);
 }

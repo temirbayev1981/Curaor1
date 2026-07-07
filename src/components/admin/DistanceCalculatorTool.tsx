@@ -7,6 +7,13 @@ import type { Booking } from '@/types/database';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
+import { IntegrationNotice } from '@/components/admin/IntegrationNotice';
+
+interface IntegrationStatus {
+  mapbox: boolean;
+  openai: boolean;
+  stripe: boolean;
+}
 
 interface DistanceResult {
   originAddress: string;
@@ -27,12 +34,18 @@ export function DistanceCalculatorTool() {
   const [result, setResult] = useState<DistanceResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [integrations, setIntegrations] = useState<IntegrationStatus | null>(null);
 
   useEffect(() => {
     fetch('/api/admin/bookings')
       .then((res) => res.json())
       .then((json: { data: Booking[] | null }) => setBookings(json.data ?? []))
       .catch(() => setBookings([]));
+
+    fetch('/api/admin/integrations')
+      .then((res) => res.json())
+      .then((json: { data: IntegrationStatus | null }) => setIntegrations(json.data))
+      .catch(() => setIntegrations(null));
   }, []);
 
   async function calculate() {
@@ -50,10 +63,14 @@ export function DistanceCalculatorTool() {
     });
     const json = (await res.json()) as {
       data: DistanceResult | null;
-      error?: { message: string };
+      error?: { code?: string; message: string };
     };
     if (!res.ok || json.error) {
-      setError(json.error?.message ?? t('admin.distanceTools.error'));
+      const message =
+        json.error?.code === 'NOT_CONFIGURED'
+          ? t('admin.distanceTools.notConfigured')
+          : (json.error?.message ?? t('admin.distanceTools.error'));
+      setError(message);
     } else {
       setResult(json.data);
     }
@@ -74,6 +91,13 @@ export function DistanceCalculatorTool() {
 
   return (
     <div className="space-y-6">
+      {integrations && !integrations.mapbox && (
+        <IntegrationNotice
+          title={t('admin.distanceTools.notConfiguredTitle')}
+          description={t('admin.distanceTools.notConfigured')}
+          envVar="MAPBOX_ACCESS_TOKEN"
+        />
+      )}
       <Card>
         <h2 className="mb-4 font-semibold text-white">{t('admin.distanceTools.title')}</h2>
         <div className="space-y-3">
@@ -114,7 +138,12 @@ export function DistanceCalculatorTool() {
               ))}
             </select>
           </div>
-          <Button onClick={calculate} loading={loading} className="w-full sm:w-auto">
+          <Button
+            onClick={calculate}
+            loading={loading}
+            disabled={integrations !== null && !integrations.mapbox}
+            className="w-full sm:w-auto"
+          >
             <Route className="h-4 w-4" />
             {t('admin.distanceTools.calculate')}
           </Button>

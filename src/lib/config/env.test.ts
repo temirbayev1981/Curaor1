@@ -65,4 +65,17 @@ describe('env config', () => {
     process.env.SUPABASE_SERVICE_ROLE_KEY = jwt;
     expect(isSupabaseConfigured()).toBe(true);
   });
+
+  it('detects optional OpenAI and Mapbox config', async () => {
+    const { isOpenAiConfigured, isMapboxConfigured } = await import('./env');
+    delete process.env.OPENAI_API_KEY;
+    delete process.env.MAPBOX_ACCESS_TOKEN;
+    expect(isOpenAiConfigured()).toBe(false);
+    expect(isMapboxConfigured()).toBe(false);
+
+    process.env.OPENAI_API_KEY = 'sk-test';
+    process.env.MAPBOX_ACCESS_TOKEN = 'pk.test';
+    expect(isOpenAiConfigured()).toBe(true);
+    expect(isMapboxConfigured()).toBe(true);
+  });
 });

@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { requireStaff, AuthError } from '@/lib/auth/rbac';
+import { isOpenAiConfigured } from '@/lib/config/env';
 import { aiContentService } from '@/domain/ai/ai-content.service';
 
 const generateSchema = z.object({
@@ -15,6 +16,18 @@ export async function POST(request: NextRequest) {
 
   try {
     const ctx = await requireStaff();
+
+    if (!isOpenAiConfigured()) {
+      return Response.json(
+        apiError(
+          'NOT_CONFIGURED',
+          'OpenAI is not configured. Add OPENAI_API_KEY in Vercel environment variables.',
+          requestId
+        ),
+        { status: 503 }
+      );
+    }
+
     const body: unknown = await request.json();
     const parsed = generateSchema.safeParse(body);
 
