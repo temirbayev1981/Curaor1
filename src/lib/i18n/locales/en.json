@@ -635,6 +635,7 @@
       "generateFailed": "Failed to generate article",
       "notConfiguredTitle": "OpenAI not connected",
       "notConfigured": "AI article generation requires an OpenAI API key. Add it in Vercel, redeploy, then try again.",
+      "quotaExceeded": "OpenAI quota exceeded. Add billing or credits at platform.openai.com, then try again.",
       "articleCreated": "Article \"{{title}}\" created with status: {{status}}. Awaiting manual approval."
     },
     "seo": {

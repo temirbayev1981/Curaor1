@@ -51,11 +51,14 @@ export function AiAssistant({ locale }: { locale: Locale }) {
 
       if (!res.ok || json.error) {
         setStatus('error');
-        setMessage(
+        const msg = json.error?.message ?? '';
+        const display =
           json.error?.code === 'NOT_CONFIGURED'
             ? t('admin.aiAssistant.notConfigured')
-            : (json.error?.message ?? t('admin.aiAssistant.generateFailed'))
-        );
+            : msg.includes('quota') || msg.includes('429')
+              ? t('admin.aiAssistant.quotaExceeded')
+              : (msg || t('admin.aiAssistant.generateFailed'));
+        setMessage(display);
         return;
       }
 
