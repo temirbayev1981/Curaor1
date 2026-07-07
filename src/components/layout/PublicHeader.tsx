@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
-import { TenantSwitcher } from '@/components/ui/TenantSwitcher';
 import { Clover, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Locale } from '@/lib/i18n/config';
@@ -58,7 +57,6 @@ export function PublicHeader({ locale }: { locale: Locale }) {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <TenantSwitcher />
           <LanguageSwitcher />
           <Link
             href={`/${locale}/admin/login`}
