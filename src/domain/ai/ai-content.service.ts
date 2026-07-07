@@ -1,10 +1,10 @@
 import { getOpenAiApiKey } from '@/lib/config/env';
-import DOMPurify from 'isomorphic-dompurify';
 import OpenAI from 'openai';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { checkAiRateLimit } from '@/lib/api/rate-limit';
 import { eventBus } from '@/domain/events/event-bus';
 import { EVENT_TYPES } from '@/domain/events/event.types';
+import { sanitizeArticleHtml } from '@/domain/ai/sanitize-article-html';
 import type { Locale, SeoArticle } from '@/types/database';
 
 const CAROLINA_CITIES: Record<string, { en: string; ru: string; state: string }> = {
@@ -48,17 +48,14 @@ export class AiContentService {
         },
         {
           role: 'user',
-          content: `Write a 1500-word SEO article about mobile Irish pub catering in ${cityName}, ${city.state}. Include local event venues, St. Patrick's Day parties, corporate events, and wedding receptions. Use natural keywords.`,
+          content: `Write an 800-word SEO article about mobile Irish pub catering in ${cityName}, ${city.state}. Include local event venues, St. Patrick's Day parties, corporate events, and wedding receptions. Use natural keywords.`,
         },
       ],
-      max_tokens: 4000,
+      max_tokens: 2500,
     });
 
     const rawContent = completion.choices[0]?.message?.content ?? '';
-    const sanitized = DOMPurify.sanitize(rawContent, {
-      ALLOWED_TAGS: ['h2', 'h3', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'a'],
-      ALLOWED_ATTR: ['href'],
-    });
+    const sanitized = sanitizeArticleHtml(rawContent);
 
     const title =
       locale === 'ru'
@@ -74,17 +71,20 @@ export class AiContentService {
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from('seo_articles')
-      .insert({
-        tenant_id: tenantId,
-        locale,
-        city_slug: citySlug,
-        title,
-        slug,
-        content: sanitized,
-        meta_description: metaDescription,
-        status: 'pending_approval',
-        ai_generated: true,
-      })
+      .upsert(
+        {
+          tenant_id: tenantId,
+          locale,
+          city_slug: citySlug,
+          title,
+          slug,
+          content: sanitized,
+          meta_description: metaDescription,
+          status: 'pending_approval',
+          ai_generated: true,
+        },
+        { onConflict: 'tenant_id,locale,slug' }
+      )
       .select()
       .single();
 

@@ -6,6 +6,9 @@ import { requireStaff, AuthError } from '@/lib/auth/rbac';
 import { isOpenAiConfigured } from '@/lib/config/env';
 import { aiContentService } from '@/domain/ai/ai-content.service';
 
+export const runtime = 'nodejs';
+export const maxDuration = 60;
+
 const generateSchema = z.object({
   citySlug: z.string().min(1),
   locale: z.enum(['en', 'ru']),
