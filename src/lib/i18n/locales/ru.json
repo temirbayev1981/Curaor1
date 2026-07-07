@@ -485,9 +485,19 @@
       "uploading": "Загрузка...",
       "newFolder": "Новая папка",
       "tagSelected": "Тег выбранного",
+      "selectMode": "Выбрать",
+      "cancelSelect": "Отмена",
       "toggleGallery": "В галерею",
       "galleryTag": "gallery",
-      "empty": "Перетащите файлы сюда или нажмите Загрузить"
+      "empty": "Перетащите файлы сюда или нажмите Загрузить",
+      "allFiles": "Все файлы",
+      "uncategorized": "Без папки",
+      "folderNamePrompt": "Название папки",
+      "folderError": "Не удалось создать папку",
+      "tagPrompt": "Имя тега (напр. gallery, wedding)",
+      "tagError": "Не удалось применить тег",
+      "altText": "Alt-текст",
+      "altTextShort": "Alt"
     },
     "bookingsTrend": "{{completed}}/{{total}} бронирований",
     "metricsGuide": {
@@ -633,6 +643,20 @@
       "crmNotes": "CRM-заметки",
       "notesPlaceholder": "Внутренние заметки о бронировании...",
       "saveNotes": "Сохранить заметки"
+    },
+    "contract": {
+      "title": "Контракт",
+      "none": "Контракт для этого бронирования ещё не создан",
+      "fetchError": "Не удалось загрузить контракт",
+      "download": "Скачать PDF",
+      "awaitingSignature": "Ожидает подписи клиента",
+      "signedAt": "Подписан {{date}}",
+      "status": {
+        "draft": "Черновик",
+        "sent": "Отправлен",
+        "signed": "Подписан",
+        "void": "Аннулирован"
+      }
     }
   },
   "eventPages": {

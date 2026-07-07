@@ -10,12 +10,19 @@ import {
 import { mediaService } from '@/domain/media/media.service';
 import { createAdminClient } from '@/lib/supabase/admin';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const requestId = randomUUID();
+  const folderId = request.nextUrl.searchParams.get('folderId');
 
   try {
     const ctx = await requireStaff();
-    const { assets, total } = await mediaService.listAssets(ctx.tenantId);
+    const [folders, { assets, total }] = await Promise.all([
+      mediaService.listFolders(ctx.tenantId),
+      mediaService.listAssets(
+        ctx.tenantId,
+        folderId === 'all' ? undefined : folderId === 'root' || !folderId ? null : folderId
+      ),
+    ]);
     const urls: Record<string, string> = {};
 
     await Promise.all(
@@ -29,7 +36,7 @@ export async function GET() {
       })
     );
 
-    return Response.json(apiSuccess({ assets, urls, total }, requestId));
+    return Response.json(apiSuccess({ assets, urls, total, folders }, requestId));
   } catch (err) {
     if (err instanceof AuthError) {
       return Response.json(apiError(err.code, err.message, requestId), {
@@ -48,6 +55,7 @@ export async function POST(request: NextRequest) {
     const ctx = await requireStaff();
     const formData = await request.formData();
     const files = formData.getAll('files') as File[];
+    const folderId = formData.get('folderId') as string | null;
 
     if (files.length === 0) {
       return Response.json(
@@ -75,7 +83,7 @@ export async function POST(request: NextRequest) {
 
       const asset = await mediaService.registerAsset(ctx.tenantId, {
         tenant_id: ctx.tenantId,
-        folder_id: null,
+        folder_id: folderId && folderId !== 'root' ? folderId : null,
         storage_path: storagePath,
         filename: file.name,
         mime_type: file.type,

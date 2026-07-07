@@ -1,4 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { unauthorizedResponse, verifyEdgeRequest } from '../_shared/auth.ts';
 
 const MAPBOX_TOKEN = Deno.env.get('MAPBOX_ACCESS_TOKEN');
 const ORIGIN_LAT = 35.2271;
@@ -12,6 +13,10 @@ interface DistanceRequest {
 serve(async (req: Request) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
+  }
+
+  if (!verifyEdgeRequest(req)) {
+    return unauthorizedResponse();
   }
 
   if (!MAPBOX_TOKEN) {

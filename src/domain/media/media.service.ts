@@ -132,6 +132,62 @@ export class MediaService {
     );
   }
 
+  async bulkUpdateTags(
+    tenantId: string,
+    assetIds: string[],
+    tag: string,
+    action: 'add' | 'remove'
+  ): Promise<MediaAsset[]> {
+    const supabase = createAdminClient();
+    const updated: MediaAsset[] = [];
+
+    for (const assetId of assetIds) {
+      const { data: asset, error: fetchError } = await supabase
+        .from('media_assets')
+        .select('*')
+        .eq('id', assetId)
+        .eq('tenant_id', tenantId)
+        .single();
+
+      if (fetchError || !asset) continue;
+
+      const current = (asset as MediaAsset).tags;
+      const tags =
+        action === 'add'
+          ? current.includes(tag)
+            ? current
+            : [...current, tag]
+          : current.filter((t) => t !== tag);
+
+      const { data, error } = await supabase
+        .from('media_assets')
+        .update({ tags })
+        .eq('id', assetId)
+        .eq('tenant_id', tenantId)
+        .select()
+        .single();
+
+      if (!error && data) updated.push(data as MediaAsset);
+    }
+
+    return updated;
+  }
+
+  async moveToFolder(
+    tenantId: string,
+    assetIds: string[],
+    folderId: string | null
+  ): Promise<void> {
+    const supabase = createAdminClient();
+    const { error } = await supabase
+      .from('media_assets')
+      .update({ folder_id: folderId })
+      .eq('tenant_id', tenantId)
+      .in('id', assetIds);
+
+    if (error) throw new Error(error.message);
+  }
+
   async listPublicGallery(
     tenantId: string
   ): Promise<{ assets: MediaAsset[]; urls: Record<string, string> }> {

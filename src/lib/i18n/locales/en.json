@@ -497,9 +497,19 @@
       "uploading": "Uploading...",
       "newFolder": "New Folder",
       "tagSelected": "Tag Selected",
+      "selectMode": "Select",
+      "cancelSelect": "Cancel",
       "toggleGallery": "Toggle gallery",
       "galleryTag": "gallery",
-      "empty": "Drag and drop files here or click Upload"
+      "empty": "Drag and drop files here or click Upload",
+      "allFiles": "All files",
+      "uncategorized": "Uncategorized",
+      "folderNamePrompt": "Folder name",
+      "folderError": "Failed to create folder",
+      "tagPrompt": "Tag name (e.g. gallery, wedding)",
+      "tagError": "Failed to apply tag",
+      "altText": "Alt text",
+      "altTextShort": "Alt"
     },
     "bookingsTrend": "{{completed}}/{{total}} bookings",
     "metricsGuide": {
@@ -644,6 +654,20 @@
       "crmNotes": "CRM Notes",
       "notesPlaceholder": "Internal notes about this booking...",
       "saveNotes": "Save Notes"
+    },
+    "contract": {
+      "title": "Contract",
+      "none": "No contract generated for this booking yet",
+      "fetchError": "Failed to load contract",
+      "download": "Download PDF",
+      "awaitingSignature": "Awaiting customer signature",
+      "signedAt": "Signed on {{date}}",
+      "status": {
+        "draft": "Draft",
+        "sent": "Sent",
+        "signed": "Signed",
+        "void": "Void"
+      }
     }
   },
   "eventPages": {
