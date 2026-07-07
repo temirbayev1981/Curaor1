@@ -56,4 +56,32 @@ describe('PaymentService.handleWebhook idempotency', () => {
 
     expect(mockFrom).toHaveBeenCalledWith('payments');
   });
+
+  it('loads payments by booking', async () => {
+    mockEq.mockReturnThis();
+    mockFrom.mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({
+            data: [
+              {
+                id: 'p1',
+                tenant_id: 't1',
+                booking_id: 'b1',
+                amount: 375,
+                payment_type: 'deposit',
+                status: 'succeeded',
+              },
+            ],
+            error: null,
+          }),
+        }),
+      }),
+    });
+
+    const { paymentService } = await import('@/domain/payment/payment.service');
+    const payments = await paymentService.getByBooking('t1', 'b1');
+    expect(payments).toHaveLength(1);
+    expect(payments[0]?.status).toBe('succeeded');
+  });
 });

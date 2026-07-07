@@ -3,6 +3,7 @@ import {
   resolveConfig,
   calculateDeliveryCost,
   calculateBookingTotals,
+  getDepositPercent,
   SYSTEM_DEFAULTS,
 } from '@/lib/config/hierarchy';
 
@@ -27,5 +28,11 @@ describe('ConfigHierarchy', () => {
     expect(totals.subtotal).toBe(1550);
     expect(totals.depositAmount).toBe(387.5);
     expect(totals.balanceDue).toBe(1162.5);
+  });
+
+  it('uses override deposit percent when provided', () => {
+    const config = resolveConfig({});
+    expect(getDepositPercent(config, 100)).toBe(100);
+    expect(getDepositPercent(config)).toBe(25);
   });
 });

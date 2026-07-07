@@ -65,4 +65,36 @@ describe('env config', () => {
     process.env.SUPABASE_SERVICE_ROLE_KEY = jwt;
     expect(isSupabaseConfigured()).toBe(true);
   });
+
+  it('reads optional integrations and defaults', async () => {
+    const {
+      isMapboxConfigured,
+      isStripeConfigured,
+      getBusinessPhone,
+      getGoogleReviewsUrl,
+      getMapboxOrigin,
+    } = await import('./env');
+
+    delete process.env.MAPBOX_ACCESS_TOKEN;
+    delete process.env.STRIPE_SECRET_KEY;
+    delete process.env.NEXT_PUBLIC_BUSINESS_PHONE;
+    delete process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID;
+
+    expect(isMapboxConfigured()).toBe(false);
+    expect(isStripeConfigured()).toBe(false);
+    expect(getBusinessPhone()).toBe('+1-704-555-0199');
+    expect(getGoogleReviewsUrl()).toContain('google.com/maps');
+    expect(getMapboxOrigin()).toEqual({ lat: 35.2271, lng: -80.8431 });
+
+    process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID = 'ChIJ-test';
+    expect(getGoogleReviewsUrl()).toContain('ChIJ-test');
+  });
+
+  it('throws when required secrets are missing', async () => {
+    const { getStripeSecretKey, getMapboxToken } = await import('./env');
+    delete process.env.STRIPE_SECRET_KEY;
+    delete process.env.MAPBOX_ACCESS_TOKEN;
+    expect(() => getStripeSecretKey()).toThrow('STRIPE_SECRET_KEY');
+    expect(() => getMapboxToken()).toThrow('MAPBOX_ACCESS_TOKEN');
+  });
 });

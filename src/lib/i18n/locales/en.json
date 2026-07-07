@@ -769,5 +769,8 @@
     "switch": "Language",
     "en": "English",
     "ru": "Русский"
+  },
+  "tenant": {
+    "switch": "Business"
   }
 }

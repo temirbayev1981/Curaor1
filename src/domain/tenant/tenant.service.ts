@@ -45,6 +45,36 @@ export class TenantService {
     throw new Error('Tenant not found');
   }
 
+  async getByCustomDomain(hostname: string): Promise<Tenant | null> {
+    const host = hostname.split(':')[0]?.toLowerCase() ?? '';
+    if (!host || host === 'localhost' || host.endsWith('.localhost')) {
+      return null;
+    }
+
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('tenants')
+      .select('*')
+      .eq('custom_domain', host)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    return (data as Tenant) ?? null;
+  }
+
+  async listPublic(): Promise<Array<{ slug: string; name: string }>> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('tenants')
+      .select('slug, name')
+      .eq('is_active', true)
+      .order('name');
+
+    if (error) throw new Error(error.message);
+    return (data ?? []) as Array<{ slug: string; name: string }>;
+  }
+
   async getById(tenantId: string): Promise<Tenant> {
     const supabase = createAdminClient();
     const { data, error } = await supabase

@@ -758,5 +758,8 @@
     "switch": "Язык",
     "en": "English",
     "ru": "Русский"
+  },
+  "tenant": {
+    "switch": "Бизнес"
   }
 }

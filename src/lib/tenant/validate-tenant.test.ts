@@ -30,3 +30,50 @@ describe('assertPublicTenantId', () => {
     ).not.toThrow();
   });
 });
+
+describe('validatePublicTenantId', () => {
+  it('validates active tenant from database', async () => {
+    vi.spyOn(env, 'isSupabaseConfigured').mockReturnValue(true);
+    const { tenantService } = await import('@/domain/tenant/tenant.service');
+    vi.spyOn(tenantService, 'getById').mockResolvedValue({
+      id: DEFAULT_TENANT_ID,
+      slug: 'emerald-pour',
+      name: 'The Emerald Pour',
+      settings: {},
+      is_active: true,
+      custom_domain: null,
+      created_at: '',
+      updated_at: '',
+    });
+
+    const { validatePublicTenantId } = await import('./validate-tenant');
+    await expect(validatePublicTenantId(DEFAULT_TENANT_ID)).resolves.toBeUndefined();
+  });
+
+  it('rejects inactive tenant', async () => {
+    vi.spyOn(env, 'isSupabaseConfigured').mockReturnValue(true);
+    const { tenantService } = await import('@/domain/tenant/tenant.service');
+    vi.spyOn(tenantService, 'getById').mockResolvedValue({
+      id: DEFAULT_TENANT_ID,
+      slug: 'emerald-pour',
+      name: 'The Emerald Pour',
+      settings: {},
+      is_active: false,
+      custom_domain: null,
+      created_at: '',
+      updated_at: '',
+    });
+
+    const { validatePublicTenantId } = await import('./validate-tenant');
+    await expect(validatePublicTenantId(DEFAULT_TENANT_ID)).rejects.toThrow('Invalid tenant');
+  });
+
+  it('rejects tenant when lookup fails', async () => {
+    vi.spyOn(env, 'isSupabaseConfigured').mockReturnValue(true);
+    const { tenantService } = await import('@/domain/tenant/tenant.service');
+    vi.spyOn(tenantService, 'getById').mockRejectedValue(new Error('db error'));
+
+    const { validatePublicTenantId } = await import('./validate-tenant');
+    await expect(validatePublicTenantId(DEFAULT_TENANT_ID)).rejects.toThrow('Invalid tenant');
+  });
+});

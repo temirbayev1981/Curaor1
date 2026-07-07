@@ -1,7 +1,8 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { inventoryService } from '@/domain/inventory/inventory.service';
 import { staffService } from '@/domain/staff/staff.service';
-import type { Booking, InventoryItem, Payment } from '@/types/database';
+import { calculateMargin, estimateEventCogs } from '@/domain/profit/profit.utils';
+import type { Booking, Payment } from '@/types/database';
 
 export interface EventProfitability {
   bookingId: string;
@@ -14,37 +15,6 @@ export interface EventProfitability {
   marginPercent: number;
   cogsBreakdown: Array<{ name: string; sku: string; quantity: number; cost: number }>;
   laborBreakdown: Array<{ name: string; hours: number; pay: number }>;
-}
-
-const EVENT_CONSUMPTION_RULES = [
-  { sku: 'BEER-001', perGuests: 40, min: 1 },
-  { sku: 'SPIR-001', perGuests: 60, min: 1 },
-  { sku: 'SUPP-001', perGuests: 50, min: 1 },
-  { sku: 'DECO-001', perGuests: 80, min: 1 },
-] as const;
-
-function estimateEventCogs(
-  guestCount: number,
-  inventory: InventoryItem[]
-): { total: number; breakdown: EventProfitability['cogsBreakdown'] } {
-  const breakdown: EventProfitability['cogsBreakdown'] = [];
-  let total = 0;
-
-  for (const rule of EVENT_CONSUMPTION_RULES) {
-    const item = inventory.find((i) => i.sku === rule.sku);
-    if (!item) continue;
-    const quantity = Math.max(rule.min, Math.ceil(guestCount / rule.perGuests));
-    const cost = Math.round(quantity * Number(item.unit_cost) * 100) / 100;
-    total += cost;
-    breakdown.push({
-      name: item.name,
-      sku: item.sku,
-      quantity,
-      cost,
-    });
-  }
-
-  return { total: Math.round(total * 100) / 100, breakdown };
 }
 
 export class ProfitService {
@@ -87,9 +57,7 @@ export class ProfitService {
       laborBreakdown.reduce((sum, row) => sum + row.pay, 0) * 100
     ) / 100;
     const totalCosts = Math.round((cogs + deliveryCost + laborCost) * 100) / 100;
-    const margin = Math.round((revenue - totalCosts) * 100) / 100;
-    const marginPercent =
-      revenue > 0 ? Math.round((margin / revenue) * 10000) / 100 : 0;
+    const { margin, marginPercent } = calculateMargin(revenue, totalCosts);
 
     return {
       bookingId,
