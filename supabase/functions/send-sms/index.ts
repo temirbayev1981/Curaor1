@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { unauthorizedResponse, verifyEdgeRequest } from '../_shared/auth.ts';
 
 const TWILIO_SID = Deno.env.get('TWILIO_ACCOUNT_SID');
 const TWILIO_TOKEN = Deno.env.get('TWILIO_AUTH_TOKEN');
@@ -14,6 +15,10 @@ interface SmsPayload {
 serve(async (req: Request) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
+  }
+
+  if (!verifyEdgeRequest(req)) {
+    return unauthorizedResponse();
   }
 
   if (!TWILIO_SID || !TWILIO_TOKEN || !TWILIO_PHONE) {

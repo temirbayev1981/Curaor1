@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, MapPin, Users, Calendar, DollarSign } from 'lucide-react';
 import type { Booking, Customer, Payment } from '@/types/database';
 import { BookingProfitabilityCard } from '@/components/admin/BookingProfitabilityCard';
+import { ContractStatusCard } from '@/components/admin/ContractStatusCard';
 import { BookingActions } from '@/components/admin/BookingActions';
 import { Badge, statusToBadge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -251,6 +252,8 @@ export function AdminBookingDetail({
       </Card>
 
       <BookingProfitabilityCard bookingId={bookingId} />
+
+      <ContractStatusCard bookingId={bookingId} />
 
       <Card>
         <h2 className="mb-4 font-semibold text-white">{t('admin.bookingDetail.crmNotes')}</h2>

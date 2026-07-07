@@ -1,16 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/Button';
+import { captureError } from '@/lib/observability/capture';
 
 export default function Error({
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    captureError(error, { digest: error.digest, tags: { surface: 'error-boundary' } });
+  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#070b09] px-4">

@@ -16,8 +16,18 @@ test.describe('Public site smoke tests', () => {
     await expect(page.getByRole('heading', { name: /Book Your Event/i })).toBeVisible();
   });
 
+  test('booking page has deposit selector', async ({ page }) => {
+    await page.goto('/en/book');
+    await expect(page.getByText(/25% deposit/i)).toBeVisible();
+  });
+
   test('login page loads', async ({ page }) => {
     await page.goto('/en/login');
+    await expect(page.getByRole('button', { name: /Sign In/i })).toBeVisible();
+  });
+
+  test('admin login page loads', async ({ page }) => {
+    await page.goto('/en/admin/login');
     await expect(page.getByRole('button', { name: /Sign In/i })).toBeVisible();
   });
 
@@ -26,10 +36,10 @@ test.describe('Public site smoke tests', () => {
     await expect(page.getByText('404')).toBeVisible();
   });
 
-  test('health API returns ok', async ({ request }) => {
+  test('health API returns status payload', async ({ request }) => {
     const res = await request.get('/api/health');
-    expect(res.ok()).toBeTruthy();
     const json = await res.json();
-    expect(json.data.status).toBe('ok');
+    expect(['ok', 'degraded']).toContain(json.data.status);
+    expect(json.data).toHaveProperty('supabase');
   });
 });

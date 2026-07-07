@@ -13,20 +13,28 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Upload, Folder, Tag, ImageIcon } from 'lucide-react';
+import { Upload, Folder, Tag, ImageIcon, CheckSquare, Square } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import type { MediaAsset } from '@/types/database';
+import type { MediaAsset, MediaFolder } from '@/types/database';
 
 function SortableAsset({
   asset,
   url,
+  selected,
+  selectionMode,
+  onToggleSelect,
   onToggleGallery,
   onAltTextChange,
+  t,
 }: {
   asset: MediaAsset;
   url: string;
+  selected: boolean;
+  selectionMode: boolean;
+  onToggleSelect: (asset: MediaAsset) => void;
   onToggleGallery: (asset: MediaAsset) => void;
   onAltTextChange: (asset: MediaAsset, altText: string) => void;
+  t: (key: string) => string;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: asset.id,
@@ -45,7 +53,9 @@ function SortableAsset({
       style={style}
       {...attributes}
       {...listeners}
-      className="group relative aspect-square overflow-hidden rounded-xl border border-admin-border bg-admin-bg transition hover:border-emerald-500/30"
+      className={`group relative aspect-square overflow-hidden rounded-xl border bg-admin-bg transition hover:border-emerald-500/30 ${
+        selected ? 'border-emerald-500' : 'border-admin-border'
+      }`}
     >
       {asset.mime_type.startsWith('image/') ? (
         <img
@@ -59,6 +69,18 @@ function SortableAsset({
           {asset.filename}
         </div>
       )}
+      {selectionMode && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect(asset);
+          }}
+          className="absolute left-2 top-2 rounded-lg bg-black/60 p-1.5 text-white"
+        >
+          {selected ? <CheckSquare className="h-4 w-4" /> : <Square className="h-4 w-4" />}
+        </button>
+      )}
       <button
         type="button"
         onClick={(e) => {
@@ -70,7 +92,7 @@ function SortableAsset({
             ? 'bg-emerald-500 text-white'
             : 'bg-black/50 text-zinc-300 hover:bg-black/70'
         }`}
-        title="Toggle gallery"
+        title={t('admin.mediaLibrary.toggleGallery')}
       >
         <ImageIcon className="h-4 w-4" />
       </button>
@@ -95,7 +117,7 @@ function SortableAsset({
               }
             }}
             className="w-full rounded border border-white/20 bg-black/50 px-2 py-1 text-xs text-white"
-            placeholder="Alt text"
+            placeholder={t('admin.mediaLibrary.altText')}
             autoFocus
           />
         </div>
@@ -108,7 +130,7 @@ function SortableAsset({
           }}
           className="absolute bottom-2 right-2 rounded bg-black/60 px-1.5 py-0.5 text-xs text-zinc-300 opacity-0 transition group-hover:opacity-100"
         >
-          Alt
+          {t('admin.mediaLibrary.altTextShort')}
         </button>
       )}
       {asset.tags.length > 0 && (
@@ -130,42 +152,106 @@ function SortableAsset({
 export function MediaLibrary() {
   const { t } = useTranslation();
   const [assets, setAssets] = useState<MediaAsset[]>([]);
+  const [folders, setFolders] = useState<MediaFolder[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
+  const [folderFilter, setFolderFilter] = useState<'all' | 'root' | string>('all');
+  const [ready, setReady] = useState(false);
+  const [reloadToken, setReloadToken] = useState(0);
+
+  const reload = () => setReloadToken((n) => n + 1);
 
   useEffect(() => {
-    void (async () => {
-      const res = await fetch('/api/media');
-      const json = (await res.json()) as {
-        data: { assets: MediaAsset[]; urls: Record<string, string> } | null;
-      };
-      if (json.data) {
+    let cancelled = false;
+    const query =
+      folderFilter === 'all'
+        ? '?folderId=all'
+        : folderFilter === 'root'
+          ? '?folderId=root'
+          : `?folderId=${folderFilter}`;
+
+    fetch(`/api/media${query}`)
+      .then((res) => res.json())
+      .then((json: { data: { assets: MediaAsset[]; urls: Record<string, string>; folders: MediaFolder[] } | null }) => {
+        if (cancelled || !json.data) return;
         setAssets(json.data.assets);
         setUrls(json.data.urls);
-        setLoading(false);
-      }
-    })();
-  }, []);
+        setFolders(json.data.folders);
+        setReady(true);
+      })
+      .catch(() => {
+        if (!cancelled) setReady(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [folderFilter, reloadToken]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files?.length) return;
     setUploading(true);
+    setError('');
 
     const formData = new FormData();
     Array.from(files).forEach((file) => formData.append('files', file));
+    if (folderFilter !== 'all' && folderFilter !== 'root') {
+      formData.append('folderId', folderFilter);
+    }
 
     await fetch('/api/media', { method: 'POST', body: formData });
-    const res = await fetch('/api/media');
-    const json = (await res.json()) as {
-      data: { assets: MediaAsset[]; urls: Record<string, string> } | null;
-    };
-    if (json.data) {
-      setAssets(json.data.assets);
-      setUrls(json.data.urls);
-    }
+    reload();
     setUploading(false);
+  }
+
+  async function createFolder() {
+    const name = window.prompt(t('admin.mediaLibrary.folderNamePrompt'));
+    if (!name?.trim()) return;
+
+    const res = await fetch('/api/media/folders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.trim() }),
+    });
+
+    if (!res.ok) {
+      setError(t('admin.mediaLibrary.folderError'));
+      return;
+    }
+
+    reload();
+  }
+
+  async function bulkTag() {
+    const tag = window.prompt(t('admin.mediaLibrary.tagPrompt'));
+    if (!tag?.trim() || selectedIds.size === 0) return;
+
+    const res = await fetch('/api/media/bulk-tag', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assetIds: [...selectedIds],
+        tag: tag.trim(),
+        action: 'add',
+      }),
+    });
+
+    const json = (await res.json()) as {
+      data: { assets: MediaAsset[] } | null;
+      error: { message: string } | null;
+    };
+
+    if (!res.ok || !json.data) {
+      setError(json.error?.message ?? t('admin.mediaLibrary.tagError'));
+      return;
+    }
+
+    setAssets((prev) => {
+      const map = new Map(json.data!.assets.map((a) => [a.id, a]));
+      return prev.map((a) => map.get(a.id) ?? a);
+    });
+    setSelectedIds(new Set());
+    setSelectionMode(false);
   }
 
   async function toggleGalleryTag(asset: MediaAsset) {
@@ -201,6 +287,15 @@ export function MediaLibrary() {
     }
   }
 
+  function toggleSelect(asset: MediaAsset) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(asset.id)) next.delete(asset.id);
+      else next.add(asset.id);
+      return next;
+    });
+  }
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -222,7 +317,7 @@ export function MediaLibrary() {
     });
   }
 
-  if (loading) {
+  if (!ready) {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
@@ -234,6 +329,45 @@ export function MediaLibrary() {
 
   return (
     <div>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setFolderFilter('all')}
+          className={`rounded-lg px-3 py-1.5 text-sm transition ${
+            folderFilter === 'all'
+              ? 'bg-emerald-500/20 text-emerald-400'
+              : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+          }`}
+        >
+          {t('admin.mediaLibrary.allFiles')}
+        </button>
+        <button
+          type="button"
+          onClick={() => setFolderFilter('root')}
+          className={`rounded-lg px-3 py-1.5 text-sm transition ${
+            folderFilter === 'root'
+              ? 'bg-emerald-500/20 text-emerald-400'
+              : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+          }`}
+        >
+          {t('admin.mediaLibrary.uncategorized')}
+        </button>
+        {folders.map((folder) => (
+          <button
+            key={folder.id}
+            type="button"
+            onClick={() => setFolderFilter(folder.id)}
+            className={`rounded-lg px-3 py-1.5 text-sm transition ${
+              folderFilter === folder.id
+                ? 'bg-emerald-500/20 text-emerald-400'
+                : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+            }`}
+          >
+            {folder.name}
+          </button>
+        ))}
+      </div>
+
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <label className="inline-flex cursor-pointer">
           <input
@@ -248,15 +382,29 @@ export function MediaLibrary() {
             {uploading ? t('admin.mediaLibrary.uploading') : t('admin.mediaLibrary.upload')}
           </span>
         </label>
-        <Button variant="outline" size="sm" disabled>
+        <Button variant="outline" size="sm" onClick={createFolder}>
           <Folder className="h-4 w-4" />
           {t('admin.mediaLibrary.newFolder')}
         </Button>
-        <Button variant="outline" size="sm" disabled>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setSelectionMode((v) => !v);
+            setSelectedIds(new Set());
+          }}
+        >
           <Tag className="h-4 w-4" />
-          {t('admin.mediaLibrary.tagSelected')}
+          {selectionMode ? t('admin.mediaLibrary.cancelSelect') : t('admin.mediaLibrary.selectMode')}
         </Button>
+        {selectionMode && selectedIds.size > 0 && (
+          <Button size="sm" onClick={bulkTag}>
+            {t('admin.mediaLibrary.tagSelected')} ({selectedIds.size})
+          </Button>
+        )}
       </div>
+
+      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
       {assets.length > 0 ? (
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -267,8 +415,12 @@ export function MediaLibrary() {
                   key={asset.id}
                   asset={asset}
                   url={urls[asset.id] ?? ''}
+                  selected={selectedIds.has(asset.id)}
+                  selectionMode={selectionMode}
+                  onToggleSelect={toggleSelect}
                   onToggleGallery={toggleGalleryTag}
                   onAltTextChange={updateAltText}
+                  t={t}
                 />
               ))}
             </div>
