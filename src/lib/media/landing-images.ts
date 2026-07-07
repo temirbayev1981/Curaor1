@@ -18,7 +18,7 @@ function img(file: string, alt: string): LandingImage {
 const CATALOG = {
   heroMobileBarTruck: img(
     'hero-mobile-bar-truck.jpg',
-    'Guests gathering at a mobile bar food truck under warm Edison string lights at twilight'
+    'The Emerald Pour mobile Irish pub truck glowing with warm string lights and guests at twilight'
   ),
   foodTruckStringLights: img(
     'food-truck-string-lights.jpg',

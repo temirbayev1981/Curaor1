@@ -22,9 +22,9 @@ export function HeroSection({ locale }: { locale: Locale }) {
         className="object-cover object-center"
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/95 via-[#111111]/80 to-[#111111]/45" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/90 via-transparent to-black/30" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#c57a20]/15 via-transparent to-[#f5c26b]/10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/80 via-[#111111]/55 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/75 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#c57a20]/10 via-transparent to-[#f5c26b]/5" />
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2">
         <motion.div
