@@ -108,6 +108,10 @@ const CATALOG = {
     'jameson-bottles.jpg',
     'Jameson Irish whiskey bottles lined up on the bar'
   ),
+  corporateGuinnessToast: img(
+    'corporate-guinness-toast.jpg',
+    'Smiling colleagues toasting with pints of Guinness stout at a warm Irish pub table'
+  ),
   whiskeyTasting: img(
     'whiskey-tasting.jpg',
     'Premium Irish whiskey tasting flight on a dark wooden bar'
@@ -212,7 +216,7 @@ export const MENU_CATEGORY_IMAGES = {
 
 export const SERVICE_IMAGES = {
   weddings: CATALOG.eventToastGlasses.src,
-  corporate: CATALOG.whiskeyTasting.src,
+  corporate: CATALOG.corporateGuinnessToast.src,
   private: CATALOG.guinnessGarden.src,
   stpatricks: CATALOG.beerCheers.src,
 } as const;
@@ -236,6 +240,7 @@ export const STOCK_GALLERY_IMAGES: LandingImage[] = dedupeById([
   CATALOG.irishWhiskeyStore,
   CATALOG.potatoGravy,
   CATALOG.pubInteriorHero,
+  CATALOG.whiskeyTasting,
   CATALOG.moodyTruckNight,
   CATALOG.nightTruckCustomers,
 ]);
