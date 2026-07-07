@@ -3,12 +3,12 @@
 @source "../../src/**/*.{ts,tsx}";
 
 :root {
-  --background: #070b09;
-  --foreground: #f0fdf4;
-  --emerald: #10b981;
-  --emerald-dark: #059669;
-  --emerald-glow: rgba(16, 185, 129, 0.15);
-  --gold: #d4af37;
+  --background: #052f17;
+  --foreground: #f5f0e6;
+  --emerald: #166534;
+  --emerald-dark: #052f17;
+  --emerald-glow: rgba(181, 142, 61, 0.12);
+  --gold: #b58e3d;
   --admin-bg: #09090b;
   --admin-surface: #111113;
   --admin-surface-elevated: #18181b;

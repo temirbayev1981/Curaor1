@@ -1,6 +1,5 @@
 /**
- * Irish pub photography — locally hosted assets verified for theme accuracy.
- * Unsplash CDN IDs are unreliable (same slug can serve unrelated images).
+ * Irish pub photography — locally hosted assets with strict per-page de-duplication.
  */
 
 export interface LandingImage {
@@ -15,11 +14,15 @@ function img(file: string, alt: string): LandingImage {
   return { id: file.replace(/\.jpg$/, ''), src: `${BASE}/${file}`, alt };
 }
 
-/** Master catalog — each file verified visually for Irish pub theme. */
+/** Master catalog — each file used once on the landing page. */
 const CATALOG = {
-  pubInteriorHero: img(
-    'hero-pub-interior.jpg',
-    'Cozy Irish pub interior with wooden benches and warm ambient lighting'
+  heroMobileBarTruck: img(
+    'hero-mobile-bar-truck.jpg',
+    'Vintage mobile bar food truck glowing with warm string lights at night'
+  ),
+  foodTruckStringLights: img(
+    'food-truck-string-lights.jpg',
+    'Outdoor mobile bar with Edison string lights serving guests at night'
   ),
   guinnessMacro: img(
     'guinness-macro.jpg',
@@ -65,6 +68,10 @@ const CATALOG = {
     'beer-cheers.jpg',
     'Friends toasting with beer bottles at golden hour'
   ),
+  eventToastGlasses: img(
+    'event-toast-glasses.jpg',
+    'Guests raising glasses in a warm candlelit celebration toast'
+  ),
   whiskeyCocktail: img(
     'whiskey-cocktail.jpg',
     'Handcrafted whiskey cocktail poured at a polished pub bar'
@@ -80,6 +87,10 @@ const CATALOG = {
   whiskeyWall: img(
     'jameson-bottles.jpg',
     'Jameson Irish whiskey bottles lined up on the bar'
+  ),
+  whiskeyTasting: img(
+    'whiskey-tasting.jpg',
+    'Premium Irish whiskey tasting flight on a dark wooden bar'
   ),
   irishWhiskeyTray: img(
     'irish-whiskey-tray.jpg',
@@ -109,6 +120,10 @@ const CATALOG = {
     'breakfast-plate.jpg',
     'Full Irish breakfast with eggs, bacon, black pudding and soda bread'
   ),
+  fullBreakfast: img(
+    'full-breakfast.jpg',
+    'Hearty Irish breakfast spread with eggs, sausage and grilled tomato'
+  ),
   fishAndChips: img(
     'fish-and-chips.jpg',
     'Classic Irish pub fish and chips with lemon and tartar sauce'
@@ -119,36 +134,45 @@ const CATALOG = {
   ),
   shepherdPie: img(
     'shepherds-pie.jpg',
-    'Classic Irish shepherd\'s pie with golden mashed potato crust in a cast-iron skillet'
+    "Classic Irish shepherd's pie with golden mashed potato crust in a cast-iron skillet"
   ),
   potatoGravy: img(
     'potato-gravy.jpg',
     'Creamy mashed potatoes with gravy — classic pub side dish'
+  ),
+  plateWooden: img(
+    'plate-wooden.jpg',
+    'Artisan pub fare served on a rustic wooden board'
+  ),
+  pubInteriorHero: img(
+    'hero-pub-interior.jpg',
+    'Cozy Irish pub interior with wooden benches and warm ambient lighting'
   ),
 } as const;
 
 export { CATALOG };
 
 export const LANDING_IMAGES = {
-  hero: CATALOG.pubInteriorHero,
+  hero: CATALOG.heroMobileBarTruck,
   heroAccent: CATALOG.guinnessMacro,
   guinness: CATALOG.guinnessWood,
   about: CATALOG.vintageWhiskeyBar,
+  aboutAccent: CATALOG.jamesonPour,
 } as const;
 
 export const GALLERY_STRIP_IMAGES: LandingImage[] = [
   CATALOG.guinnessDublin,
   CATALOG.whiskeyNeat,
   CATALOG.guinnessCandlelit,
-  CATALOG.irishWhiskeyStore,
+  CATALOG.irishWhiskeyTray,
 ];
 
 export const EXPERIENCE_IMAGES: LandingImage[] = [
   CATALOG.irishPubExterior,
+  CATALOG.foodTruckStringLights,
   CATALOG.stoutOnBar,
-  CATALOG.irishWhiskeyTray,
   CATALOG.guinnessPour,
-  CATALOG.whiskeyCocktail,
+  CATALOG.pubSausages,
   CATALOG.pubBarEvening,
 ];
 
@@ -161,40 +185,36 @@ export const FOOD_IMAGES: LandingImage[] = [
 
 export const MENU_CATEGORY_IMAGES = {
   beer: CATALOG.guinnessTable,
-  whiskey: CATALOG.whiskeyNeat,
+  whiskey: CATALOG.whiskeyWall,
   cocktails: CATALOG.whiskeyCocktail,
-  food: CATALOG.shepherdPie,
+  food: CATALOG.pubBurger,
 } as const;
 
 export const SERVICE_IMAGES = {
-  weddings: CATALOG.beerCheers.src,
-  corporate: CATALOG.pubBarEvening.src,
-  private: CATALOG.irishWhiskeyStore.src,
-  stpatricks: CATALOG.stoutOnBar.src,
+  weddings: CATALOG.eventToastGlasses.src,
+  corporate: CATALOG.whiskeyTasting.src,
+  private: CATALOG.guinnessGarden.src,
+  stpatricks: CATALOG.beerCheers.src,
 } as const;
 
 export const TESTIMONIAL_IMAGES = {
-  t1: CATALOG.fishAndChips.src,
-  t2: CATALOG.irishBreakfast.src,
-  t3: CATALOG.whiskeyNeat.src,
+  t1: CATALOG.plateWooden.src,
+  t2: CATALOG.fullBreakfast.src,
+  t3: CATALOG.guinnessSign.src,
 } as const;
 
 export const STOCK_GALLERY_IMAGES: LandingImage[] = dedupeById([
   ...GALLERY_STRIP_IMAGES,
   ...EXPERIENCE_IMAGES,
   ...FOOD_IMAGES,
-  CATALOG.pubInteriorHero,
+  CATALOG.heroMobileBarTruck,
   CATALOG.guinnessMacro,
   CATALOG.guinnessWood,
-  CATALOG.guinnessGarden,
   CATALOG.guinnessSign,
   CATALOG.vintageWhiskeyBar,
-  CATALOG.whiskeyWall,
-  CATALOG.jamesonPour,
-  CATALOG.pubBurger,
-  CATALOG.pubSausages,
+  CATALOG.irishWhiskeyStore,
   CATALOG.potatoGravy,
-  CATALOG.beerCheers,
+  CATALOG.pubInteriorHero,
 ]);
 
 function dedupeById(images: LandingImage[]): LandingImage[] {
@@ -206,19 +226,23 @@ function dedupeById(images: LandingImage[]): LandingImage[] {
   });
 }
 
+/** Every image shown on the home page — must be unique. */
 export function getLandingPageImageIds(): string[] {
   const fromSrc = (src: string) => src.split('/').pop()?.replace('.jpg', '') ?? src;
 
-  return [...new Set([
+  return [
     LANDING_IMAGES.hero.id,
     LANDING_IMAGES.heroAccent.id,
     LANDING_IMAGES.guinness.id,
+    LANDING_IMAGES.about.id,
+    LANDING_IMAGES.aboutAccent.id,
     ...GALLERY_STRIP_IMAGES.map((i) => i.id),
     ...EXPERIENCE_IMAGES.map((i) => i.id),
     ...FOOD_IMAGES.map((i) => i.id),
     ...Object.values(MENU_CATEGORY_IMAGES).map((i) => i.id),
     ...Object.values(SERVICE_IMAGES).map(fromSrc),
-  ])];
+    ...Object.values(TESTIMONIAL_IMAGES).map(fromSrc),
+  ];
 }
 
 export const STOCK_GALLERY_COUNT = STOCK_GALLERY_IMAGES.length;

@@ -50,10 +50,10 @@ export async function generateMetadata({
       url: absoluteUrl(`/${locale}`),
       images: [
         {
-          url: absoluteUrl('/images/irish-pub/guinness-macro.jpg'),
+          url: absoluteUrl('/images/irish-pub/hero-mobile-bar-truck.jpg'),
           width: 1200,
           height: 630,
-          alt: 'Pint of Guinness stout',
+          alt: 'The Emerald Pour mobile Irish pub food truck at night',
         },
       ],
     },

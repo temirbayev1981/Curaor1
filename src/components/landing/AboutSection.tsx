@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Clover } from 'lucide-react';
-import { LANDING_IMAGES, CATALOG } from '@/lib/media/landing-images';
+import { LANDING_IMAGES } from '@/lib/media/landing-images';
 import type { Locale } from '@/lib/i18n/config';
 
 export function AboutSection({ locale }: { locale: Locale }) {
@@ -48,8 +48,8 @@ export function AboutSection({ locale }: { locale: Locale }) {
           </div>
           <div className="relative aspect-square overflow-hidden rounded-2xl border border-white/10">
             <Image
-              src={CATALOG.whiskeyCocktail.src}
-              alt={CATALOG.whiskeyCocktail.alt}
+              src={LANDING_IMAGES.aboutAccent.src}
+              alt={LANDING_IMAGES.aboutAccent.alt}
               fill
               unoptimized
               className="object-cover"
