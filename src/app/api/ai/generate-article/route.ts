@@ -4,10 +4,9 @@ import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { requireStaff, AuthError } from '@/lib/auth/rbac';
 import { isOpenAiConfigured } from '@/lib/config/env';
-import { aiContentService } from '@/domain/ai/ai-content.service';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60;
+export const maxDuration = 10;
 
 const generateSchema = z.object({
   citySlug: z.string().min(1),
@@ -41,11 +40,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const article = await aiContentService.generateSeoArticle(
-      ctx.tenantId,
-      parsed.data.citySlug,
-      parsed.data.locale
-    );
+    const article = await (async () => {
+      const { aiContentService } = await import('@/domain/ai/ai-content.service');
+      return aiContentService.generateSeoArticle(
+        ctx.tenantId,
+        parsed.data.citySlug,
+        parsed.data.locale
+      );
+    })();
 
     return Response.json(apiSuccess(article, requestId), { status: 201 });
   } catch (err) {

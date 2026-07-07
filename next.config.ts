@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['openai', 'sanitize-html'],
   images: {
     remotePatterns: [
       {
