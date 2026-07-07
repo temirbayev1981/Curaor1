@@ -96,6 +96,9 @@ describe('env config', () => {
     process.env.MAPBOX_ACCESS_TOKEN = 'pk.test';
     expect(isOpenAiConfigured()).toBe(true);
     expect(isMapboxConfigured()).toBe(true);
+
+    process.env.OPENAI_API_KEY = '   ';
+    expect(isOpenAiConfigured()).toBe(false);
   });
 
   it('throws when required secrets are missing', async () => {
