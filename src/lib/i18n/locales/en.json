@@ -11,7 +11,9 @@
     "faq": "FAQ",
     "articles": "Resources",
     "menu": "Menu",
-    "contact": "Contact"
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "gallery": {
     "subtitle": "Moments from events across the Carolinas",
@@ -218,6 +220,9 @@
     "city": "City",
     "state": "State",
     "deposit": "Deposit Option",
+    "deposit25": "25% deposit",
+    "deposit50": "50% deposit",
+    "deposit100": "100% full payment",
     "submit": "Request Booking",
     "submitPay": "Continue to Secure Your Date",
     "paymentSuccess": "Payment received! Your event is confirmed.",
@@ -440,6 +445,8 @@
     "noActivity": "No recent activity",
     "viewAll": "View all",
     "panelTitle": "Admin Panel",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "welcomeBack": "Welcome back",
     "lastUpdated": "Last updated",
     "dashboardDesc": "Business overview and recent activity",
@@ -584,9 +591,18 @@
       "qty": "Qty",
       "unitCost": "Unit Cost",
       "unitPrice": "Unit Price",
-      "actions": "Adjust",
+      "actions": "Actions",
       "empty": "No inventory items",
-      "totalCogs": "Total COGS"
+      "totalCogs": "Total COGS",
+      "addItem": "Add inventory item",
+      "saveItem": "Save",
+      "editItem": "Edit",
+      "deleteItem": "Delete",
+      "cancel": "Cancel",
+      "confirmDelete": "Delete this inventory item?",
+      "reorderLevel": "Reorder level",
+      "createError": "Failed to create item",
+      "updateError": "Failed to update item"
     },
     "auditTable": {
       "time": "Time",

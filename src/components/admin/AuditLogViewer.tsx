@@ -22,8 +22,8 @@ export function AuditLogViewer() {
   if (loading) return <div className="skeleton h-48 rounded-xl" />;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-admin-border bg-admin-surface">
-      <table className="w-full text-left text-sm">
+    <div className="overflow-x-auto rounded-2xl border border-admin-border bg-admin-surface">
+      <table className="w-full min-w-[720px] text-left text-sm">
         <thead className="border-b border-admin-border bg-admin-bg">
           <tr>
             <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-zinc-500">

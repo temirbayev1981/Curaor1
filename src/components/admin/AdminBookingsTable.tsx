@@ -127,8 +127,8 @@ export function AdminBookingsTable({ locale }: { locale: Locale }) {
           {t('admin.bookingsTable.export')}
         </button>
       </div>
-    <div className="overflow-hidden rounded-2xl border border-admin-border bg-admin-surface">
-      <table className="w-full text-left text-sm">
+    <div className="overflow-x-auto rounded-2xl border border-admin-border bg-admin-surface">
+      <table className="w-full min-w-[900px] text-left text-sm">
         <thead className="border-b border-admin-border bg-admin-bg">
           <tr>
             <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-zinc-500">

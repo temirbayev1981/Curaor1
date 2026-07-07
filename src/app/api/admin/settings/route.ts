@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import { apiSuccess, apiError } from '@/lib/api/response';
-import { requireStaff, AuthError } from '@/lib/auth/rbac';
+import { requireRole, requireStaff, AuthError } from '@/lib/auth/rbac';
 import { tenantService } from '@/domain/tenant/tenant.service';
 import { updateSettingsSchema } from '@/domain/tenant/tenant.schema';
 import { auditService } from '@/domain/audit/audit.service';
@@ -35,7 +35,7 @@ export async function PATCH(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
 
   try {
-    const ctx = await requireStaff();
+    const ctx = await requireRole(['owner', 'admin']);
     const body: unknown = await request.json();
     const parsed = patchSchema.safeParse(body);
 
