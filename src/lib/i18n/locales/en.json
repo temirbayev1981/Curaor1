@@ -175,10 +175,22 @@
     "stpatricksDesc": "The ultimate St. Paddy's celebration with traditional Irish fare and drinks."
   },
   "stats": {
-    "events": "Events Served",
-    "cities": "Cities Covered",
-    "rating": "Average Rating",
-    "years": "Years of Excellence"
+    "newlyOpened": {
+      "title": "Newly Opened",
+      "desc": "Launching in 2026"
+    },
+    "serving": {
+      "title": "Serving North Carolina",
+      "desc": "Available for private events"
+    },
+    "premium": {
+      "title": "Premium Service",
+      "desc": "Focused on exceptional guest experiences"
+    },
+    "booking": {
+      "title": "Now Booking",
+      "desc": "Reserve your preferred date"
+    }
   },
   "testimonials": {
     "title": "What Our Clients Say",
