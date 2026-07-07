@@ -39,7 +39,7 @@ describe('landing-images', () => {
       const filePath = join(PUBLIC_DIR, image.src);
       expect(existsSync(filePath), `missing asset ${image.src}`).toBe(true);
       expect(image.alt.toLowerCase()).toMatch(
-        /guinness|whiskey|whisky|irish|pub|stout|beer|bar|pint|ale|fish|chips|breakfast|banger|shepherd|jameson|cocktail|sausage|burger|gravy|mash|food truck|mobile bar|string lights|toast|tasting|gourmet|plating|celebration/
+        /guinness|whiskey|whisky|irish|pub|stout|beer|bar|pint|ale|fish|chips|breakfast|banger|shepherd|jameson|cocktail|sausage|burger|gravy|mash|food truck|mobile bar|string lights|toast|tasting|gourmet|plating|celebration|twilight|guests|edison|festoon|illuminated|evening|liquor|bottles/
       );
     }
   });

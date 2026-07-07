@@ -18,11 +18,31 @@ function img(file: string, alt: string): LandingImage {
 const CATALOG = {
   heroMobileBarTruck: img(
     'hero-mobile-bar-truck.jpg',
-    'Vintage mobile bar food truck glowing with warm string lights at night'
+    'Guests gathering at a mobile bar food truck under warm Edison string lights at twilight'
   ),
   foodTruckStringLights: img(
     'food-truck-string-lights.jpg',
-    'Outdoor mobile bar with Edison string lights serving guests at night'
+    'Outdoor mobile bar cart glowing with festoon string lights against a dark evening sky'
+  ),
+  illuminatedBarTruckEvening: img(
+    'illuminated-bar-truck-evening.jpg',
+    'Warmly illuminated mobile bar truck with outdoor seating under tree branches at evening'
+  ),
+  outdoorEventStringLights: img(
+    'outdoor-event-string-lights.jpg',
+    'Elegant outdoor evening event with warm string lights and intimate bar atmosphere'
+  ),
+  nightTruckCustomers: img(
+    'night-truck-customers.jpg',
+    'Mobile food truck serving guests at night under cozy amber bar lighting'
+  ),
+  moodyTruckNight: img(
+    'moody-truck-night.jpg',
+    'Moody nighttime mobile bar truck with customers under warm street lights'
+  ),
+  whiskeyBarShelf: img(
+    'whiskey-bar-shelf.jpg',
+    'Premium whiskey and liquor bottles beautifully lit on a warm wooden bar shelf'
   ),
   guinnessMacro: img(
     'guinness-macro.jpg',
@@ -154,26 +174,26 @@ export { CATALOG };
 
 export const LANDING_IMAGES = {
   hero: CATALOG.heroMobileBarTruck,
-  heroAccent: CATALOG.guinnessMacro,
+  heroAccent: CATALOG.whiskeyBarShelf,
   guinness: CATALOG.guinnessWood,
   about: CATALOG.vintageWhiskeyBar,
   aboutAccent: CATALOG.jamesonPour,
 } as const;
 
 export const GALLERY_STRIP_IMAGES: LandingImage[] = [
-  CATALOG.guinnessDublin,
-  CATALOG.whiskeyNeat,
-  CATALOG.guinnessCandlelit,
-  CATALOG.irishWhiskeyTray,
+  CATALOG.outdoorEventStringLights,
+  CATALOG.illuminatedBarTruckEvening,
+  CATALOG.foodTruckStringLights,
+  CATALOG.nightTruckCustomers,
 ];
 
 export const EXPERIENCE_IMAGES: LandingImage[] = [
   CATALOG.irishPubExterior,
-  CATALOG.foodTruckStringLights,
+  CATALOG.moodyTruckNight,
   CATALOG.stoutOnBar,
   CATALOG.guinnessPour,
-  CATALOG.pubSausages,
   CATALOG.pubBarEvening,
+  CATALOG.pubSausages,
 ];
 
 export const FOOD_IMAGES: LandingImage[] = [
@@ -208,6 +228,7 @@ export const STOCK_GALLERY_IMAGES: LandingImage[] = dedupeById([
   ...EXPERIENCE_IMAGES,
   ...FOOD_IMAGES,
   CATALOG.heroMobileBarTruck,
+  CATALOG.whiskeyBarShelf,
   CATALOG.guinnessMacro,
   CATALOG.guinnessWood,
   CATALOG.guinnessSign,
@@ -215,6 +236,8 @@ export const STOCK_GALLERY_IMAGES: LandingImage[] = dedupeById([
   CATALOG.irishWhiskeyStore,
   CATALOG.potatoGravy,
   CATALOG.pubInteriorHero,
+  CATALOG.moodyTruckNight,
+  CATALOG.nightTruckCustomers,
 ]);
 
 function dedupeById(images: LandingImage[]): LandingImage[] {
