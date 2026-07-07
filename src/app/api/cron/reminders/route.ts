@@ -14,13 +14,7 @@ function isAuthorized(request: NextRequest): boolean {
   return auth === `Bearer ${secret}`;
 }
 
-export async function POST(request: NextRequest) {
-  const requestId = randomUUID();
-
-  if (!isAuthorized(request)) {
-    return Response.json({ error: 'Unauthorized', requestId }, { status: 401 });
-  }
-
+async function runReminders(requestId: string) {
   if (!isSupabaseConfigured()) {
     return Response.json({ error: 'Not configured', requestId }, { status: 503 });
   }
@@ -68,4 +62,24 @@ export async function POST(request: NextRequest) {
   }
 
   return Response.json({ requestId, sent, checked: bookings?.length ?? 0 });
+}
+
+export async function GET(request: NextRequest) {
+  const requestId = randomUUID();
+
+  if (!isAuthorized(request)) {
+    return Response.json({ error: 'Unauthorized', requestId }, { status: 401 });
+  }
+
+  return runReminders(requestId);
+}
+
+export async function POST(request: NextRequest) {
+  const requestId = randomUUID();
+
+  if (!isAuthorized(request)) {
+    return Response.json({ error: 'Unauthorized', requestId }, { status: 401 });
+  }
+
+  return runReminders(requestId);
 }

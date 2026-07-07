@@ -49,9 +49,10 @@ export function BookingForm({ locale }: { locale: Locale }) {
     venueCity: searchParams.get('city') ?? '',
     venueState: 'NC' as 'NC' | 'SC',
     packageTier: initialPackage(searchParams),
+    depositPercent: 25 as 25 | 50 | 100,
   });
 
-  const depositPercent = 25 as const;
+  const { depositPercent } = form;
 
   const paid = searchParams.get('paid') === '1';
 
@@ -295,6 +296,21 @@ export function BookingForm({ locale }: { locale: Locale }) {
                       >
                         <option value="NC">North Carolina</option>
                         <option value="SC">South Carolina</option>
+                      </Select>
+                    </Field>
+                    <Field label={t('booking.deposit')}>
+                      <Select
+                        value={form.depositPercent}
+                        onChange={(e) =>
+                          setForm({
+                            ...form,
+                            depositPercent: Number(e.target.value) as 25 | 50 | 100,
+                          })
+                        }
+                      >
+                        <option value={25}>{t('booking.deposit25')}</option>
+                        <option value={50}>{t('booking.deposit50')}</option>
+                        <option value={100}>{t('booking.deposit100')}</option>
                       </Select>
                     </Field>
                   </div>

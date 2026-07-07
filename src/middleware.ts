@@ -26,12 +26,36 @@ function redirectWithCookies(url: URL, sessionResponse: NextResponse) {
   return response;
 }
 
+function pathWithoutLocale(pathname: string): string {
+  const segments = pathname.split('/').filter(Boolean);
+  if (segments[0] && isValidLocale(segments[0])) {
+    return '/' + segments.slice(1).join('/');
+  }
+  return pathname;
+}
+
 /** Skip auth guards when Supabase env is missing or still has placeholder values. */
 function finishWithoutSupabase(
   request: NextRequest,
   pathname: string,
   response: NextResponse
 ): NextResponse {
+  if (process.env.NODE_ENV === 'production') {
+    const bare = pathWithoutLocale(pathname);
+    if (
+      bare.startsWith('/admin') ||
+      bare.startsWith('/portal') ||
+      (isApiRoute(pathname) && pathname.startsWith('/api/admin'))
+    ) {
+      if (isApiRoute(pathname)) {
+        return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+      }
+      const url = request.nextUrl.clone();
+      url.pathname = `/${defaultLocale}`;
+      return NextResponse.redirect(url);
+    }
+  }
+
   if (isApiRoute(pathname)) {
     return response;
   }

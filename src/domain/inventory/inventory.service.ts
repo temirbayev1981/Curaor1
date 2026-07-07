@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { InventoryItem } from '@/types/database';
+import type { CreateInventoryItemInput, UpdateInventoryItemInput } from './inventory.schema';
 
 export class InventoryService {
   async list(tenantId: string): Promise<InventoryItem[]> {
@@ -42,6 +43,66 @@ export class InventoryService {
 
     if (error || !updated) throw new Error(error?.message ?? 'Update failed');
     return updated as InventoryItem;
+  }
+
+  async create(tenantId: string, input: CreateInventoryItemInput): Promise<InventoryItem> {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('inventory_items')
+      .insert({
+        tenant_id: tenantId,
+        name: input.name,
+        sku: input.sku,
+        category: input.category,
+        quantity: input.quantity,
+        unit_cost: input.unitCost,
+        unit_price: input.unitPrice,
+        reorder_level: input.reorderLevel,
+      })
+      .select()
+      .single();
+
+    if (error || !data) throw new Error(error?.message ?? 'Create failed');
+    return data as InventoryItem;
+  }
+
+  async update(
+    tenantId: string,
+    itemId: string,
+    input: UpdateInventoryItemInput
+  ): Promise<InventoryItem> {
+    const supabase = createAdminClient();
+    const patch: Record<string, unknown> = {};
+
+    if (input.name !== undefined) patch.name = input.name;
+    if (input.sku !== undefined) patch.sku = input.sku;
+    if (input.category !== undefined) patch.category = input.category;
+    if (input.quantity !== undefined) patch.quantity = input.quantity;
+    if (input.unitCost !== undefined) patch.unit_cost = input.unitCost;
+    if (input.unitPrice !== undefined) patch.unit_price = input.unitPrice;
+    if (input.reorderLevel !== undefined) patch.reorder_level = input.reorderLevel;
+
+    const { data, error } = await supabase
+      .from('inventory_items')
+      .update(patch)
+      .eq('id', itemId)
+      .eq('tenant_id', tenantId)
+      .select()
+      .single();
+
+    if (error || !data) throw new Error(error?.message ?? 'Update failed');
+    return data as InventoryItem;
+  }
+
+  async delete(tenantId: string, itemId: string): Promise<void> {
+    const supabase = createAdminClient();
+    const { error } = await supabase
+      .from('inventory_items')
+      .delete()
+      .eq('id', itemId)
+      .eq('tenant_id', tenantId);
+
+    if (error) throw new Error(error.message);
   }
 
   calculateCogs(items: InventoryItem[]): number {

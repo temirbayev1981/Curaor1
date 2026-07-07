@@ -37,7 +37,13 @@ const navItems = [
   { href: '/admin/settings', icon: Settings, key: 'settings' },
 ] as const;
 
-export function AdminSidebar({ locale }: { locale: Locale }) {
+export function AdminSidebar({
+  locale,
+  onNavigate,
+}: {
+  locale: Locale;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
   const { t } = useTranslation();
 
@@ -55,6 +61,7 @@ export function AdminSidebar({ locale }: { locale: Locale }) {
             <Link
               key={key}
               href={fullHref}
+              onClick={onNavigate}
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition',
                 active
