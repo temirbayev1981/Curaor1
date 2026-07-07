@@ -156,6 +156,10 @@ export function MediaLibrary() {
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [folderFilter, setFolderFilter] = useState<'all' | 'root' | string>('all');
   const [ready, setReady] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [error, setError] = useState('');
   const [reloadToken, setReloadToken] = useState(0);
 
   const reload = () => setReloadToken((n) => n + 1);
@@ -287,6 +291,29 @@ export function MediaLibrary() {
     }
   }
 
+  async function moveSelectedToFolder(targetFolderId: string | null) {
+    if (selectedIds.size === 0) return;
+    setError('');
+
+    const res = await fetch('/api/media/move', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assetIds: [...selectedIds],
+        folderId: targetFolderId,
+      }),
+    });
+
+    if (!res.ok) {
+      setError(t('admin.mediaLibrary.moveError'));
+      return;
+    }
+
+    setSelectedIds(new Set());
+    setSelectionMode(false);
+    reload();
+  }
+
   function toggleSelect(asset: MediaAsset) {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -357,11 +384,21 @@ export function MediaLibrary() {
             key={folder.id}
             type="button"
             onClick={() => setFolderFilter(folder.id)}
+            onDragOver={(e) => {
+              if (selectionMode && selectedIds.size > 0) e.preventDefault();
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (selectionMode && selectedIds.size > 0) {
+                void moveSelectedToFolder(folder.id);
+              }
+            }}
             className={`rounded-lg px-3 py-1.5 text-sm transition ${
               folderFilter === folder.id
                 ? 'bg-emerald-500/20 text-emerald-400'
                 : 'text-zinc-400 hover:bg-white/5 hover:text-white'
-            }`}
+            } ${selectionMode && selectedIds.size > 0 ? 'ring-1 ring-dashed ring-emerald-500/40' : ''}`}
+            title={selectionMode ? t('admin.mediaLibrary.moveHere') : undefined}
           >
             {folder.name}
           </button>
@@ -398,9 +435,29 @@ export function MediaLibrary() {
           {selectionMode ? t('admin.mediaLibrary.cancelSelect') : t('admin.mediaLibrary.selectMode')}
         </Button>
         {selectionMode && selectedIds.size > 0 && (
-          <Button size="sm" onClick={bulkTag}>
-            {t('admin.mediaLibrary.tagSelected')} ({selectedIds.size})
-          </Button>
+          <>
+            <Button size="sm" onClick={bulkTag}>
+              {t('admin.mediaLibrary.tagSelected')} ({selectedIds.size})
+            </Button>
+            <select
+              className="rounded-lg border border-admin-border bg-admin-bg px-3 py-2 text-sm text-white"
+              defaultValue=""
+              onChange={(e) => {
+                const value = e.target.value;
+                if (!value) return;
+                void moveSelectedToFolder(value === 'root' ? null : value);
+                e.target.value = '';
+              }}
+            >
+              <option value="">{t('admin.mediaLibrary.moveToFolder')}</option>
+              <option value="root">{t('admin.mediaLibrary.uncategorized')}</option>
+              {folders.map((folder) => (
+                <option key={folder.id} value={folder.id}>
+                  {folder.name}
+                </option>
+              ))}
+            </select>
+          </>
         )}
       </div>
 

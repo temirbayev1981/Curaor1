@@ -16,7 +16,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Field, Input, Select } from '@/components/ui/Input';
 import type { Locale } from '@/lib/i18n/config';
-import { DEFAULT_TENANT_ID } from '@/lib/tenant/constants';
+import { useTenantId } from '@/components/providers/TenantProvider';
 import {
   isPackageTierId,
   PACKAGE_TIER_IDS,
@@ -32,6 +32,7 @@ function initialPackage(searchParams: ReturnType<typeof useSearchParams>): Packa
 
 export function BookingForm({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
+  const tenantId = useTenantId();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -71,7 +72,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          tenantId: DEFAULT_TENANT_ID,
+          tenantId,
           locale,
           fullName: form.fullName,
           email: form.email,

@@ -1,14 +1,13 @@
 import { DEFAULT_TENANT_ID, DEFAULT_TENANT_SLUG } from '@/lib/tenant/constants';
+import { resolveTenantSlug } from '@/lib/tenant/extract-slug';
 
+/** @deprecated Use tenantService.resolveIdBySlug or getPublicTenantId instead */
 export function resolveTenantId(
   hostname?: string,
   slug?: string | null
 ): string {
-  if (slug === DEFAULT_TENANT_SLUG || !slug) {
-    return DEFAULT_TENANT_ID;
-  }
-  // Future: lookup tenant by slug from DB
-  if (hostname?.startsWith('localhost') || hostname?.includes('vercel.app')) {
+  const resolvedSlug = resolveTenantSlug(hostname ?? '', slug, null);
+  if (resolvedSlug === DEFAULT_TENANT_SLUG) {
     return DEFAULT_TENANT_ID;
   }
   return DEFAULT_TENANT_ID;

@@ -509,7 +509,10 @@
       "tagPrompt": "Tag name (e.g. gallery, wedding)",
       "tagError": "Failed to apply tag",
       "altText": "Alt text",
-      "altTextShort": "Alt"
+      "altTextShort": "Alt",
+      "moveToFolder": "Move to folder",
+      "moveHere": "Move here",
+      "moveError": "Failed to move files"
     },
     "bookingsTrend": "{{completed}}/{{total}} bookings",
     "metricsGuide": {

@@ -497,7 +497,10 @@
       "tagPrompt": "Имя тега (напр. gallery, wedding)",
       "tagError": "Не удалось применить тег",
       "altText": "Alt-текст",
-      "altTextShort": "Alt"
+      "altTextShort": "Alt",
+      "moveToFolder": "Переместить в папку",
+      "moveHere": "Переместить сюда",
+      "moveError": "Не удалось переместить файлы"
     },
     "bookingsTrend": "{{completed}}/{{total}} бронирований",
     "metricsGuide": {
