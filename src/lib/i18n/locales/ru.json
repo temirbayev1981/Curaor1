@@ -623,6 +623,7 @@
       "generateFailed": "Не удалось сгенерировать статью",
       "notConfiguredTitle": "OpenAI не подключён",
       "notConfigured": "Для генерации статей нужен API-ключ OpenAI. Добавьте его в Vercel, пересоберите проект и повторите попытку.",
+      "quotaExceeded": "Исчерпана квота OpenAI. Пополните баланс или подключите оплату на platform.openai.com.",
       "articleCreated": "Статья «{{title}}» создана со статусом: {{status}}. Ожидает одобрения."
     },
     "seo": {
