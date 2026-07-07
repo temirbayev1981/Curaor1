@@ -67,19 +67,19 @@ ALTER TABLE purchase_orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE purchase_order_items ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY staff_members_staff ON staff_members FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY staff_shifts_staff ON staff_shifts FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY purchase_orders_staff ON purchase_orders FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY purchase_order_items_staff ON purchase_order_items FOR ALL
   USING (
     purchase_order_id IN (
       SELECT id FROM purchase_orders
-      WHERE tenant_id = auth.user_tenant_id()
-        AND auth.user_role() IN ('owner', 'admin', 'staff')
+      WHERE tenant_id = public.user_tenant_id()
+        AND public.user_role() IN ('owner', 'admin', 'staff')
     )
   );
