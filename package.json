@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "bootstrap": "tsx --env-file=.env.local scripts/bootstrap-dev.ts",
+    "db:push": "tsx --env-file=.env.local scripts/db-push.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -45,6 +46,7 @@
     "@testing-library/react": "^16.3.2",
     "@types/dompurify": "^3.0.5",
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^10.0.0",
@@ -52,6 +54,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "jsdom": "^29.1.1",
+    "pg": "^8.22.0",
+    "supabase": "^2.109.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
     "typescript": "^5",

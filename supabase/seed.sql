@@ -12,8 +12,8 @@ ON CONFLICT (tenant_id, sku) DO NOTHING;
 
 -- Sample customers (no user_id — link after auth signup)
 INSERT INTO customers (id, tenant_id, email, full_name, phone) VALUES
-  ('c1000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', 'customer@example.com', 'Sarah Mitchell', '+17045550101'),
-  ('c1000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000001', 'corp@techcorp.com', 'Mike Johnson', '+17045550102')
+  ('a1000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', 'customer@example.com', 'Sarah Mitchell', '+17045550101'),
+  ('a1000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000001', 'corp@techcorp.com', 'Mike Johnson', '+17045550102')
 ON CONFLICT (tenant_id, email) DO NOTHING;
 
 -- Sample bookings
@@ -25,7 +25,7 @@ INSERT INTO bookings (
   (
     'b1000000-0000-4000-8000-000000000001',
     'a0000000-0000-4000-8000-000000000001',
-    'c1000000-0000-4000-8000-000000000001',
+    'a1000000-0000-4000-8000-000000000001',
     '2026-09-15 18:00:00+00', '2026-09-15 23:00:00+00',
     'deposit_paid', 'wedding', 120,
     '1000 Wedding Lane', 'Charlotte', 'NC', 15.0,
@@ -34,7 +34,7 @@ INSERT INTO bookings (
   (
     'b1000000-0000-4000-8000-000000000002',
     'a0000000-0000-4000-8000-000000000001',
-    'c1000000-0000-4000-8000-000000000002',
+    'a1000000-0000-4000-8000-000000000002',
     '2026-10-20 17:00:00+00', '2026-10-20 21:00:00+00',
     'pending', 'corporate', 80,
     '500 Business Park Dr', 'Raleigh', 'NC', 120.0,
@@ -45,13 +45,13 @@ ON CONFLICT DO NOTHING;
 -- Sample payments (powers admin financial dashboard)
 INSERT INTO payments (id, tenant_id, booking_id, amount, payment_type, status, stripe_payment_intent_id) VALUES
   (
-    'p1000000-0000-4000-8000-000000000001',
+    'a1000000-0000-4000-8000-000000000010',
     'a0000000-0000-4000-8000-000000000001',
     'b1000000-0000-4000-8000-000000000001',
     384.38, 'deposit', 'succeeded', 'pi_seed_deposit_001'
   ),
   (
-    'p1000000-0000-4000-8000-000000000002',
+    'a1000000-0000-4000-8000-000000000011',
     'a0000000-0000-4000-8000-000000000001',
     'b1000000-0000-4000-8000-000000000001',
     1153.12, 'balance', 'succeeded', 'pi_seed_balance_001'

@@ -13,7 +13,7 @@ export default async function AdminStaffPage({
 
   return (
     <div>
-      <AdminPageHeader title={t.admin.staff.title} description={t.admin.staff.desc} />
+      <AdminPageHeader title={t.admin.staffTools.title} description={t.admin.staffTools.desc} />
       <StaffScheduler />
     </div>
   );

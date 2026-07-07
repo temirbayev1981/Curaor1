@@ -96,8 +96,11 @@ export class StaffService {
     if (error) throw new Error(error.message);
 
     return (data ?? []).map((row) => {
-      const shift = row as StaffShift & { staff_members: StaffMember };
+      const shift = row as StaffShift & { staff_members: StaffMember | null };
       const member = shift.staff_members;
+      if (!member) {
+        throw new Error(`Shift ${shift.id} is missing staff member ${shift.staff_member_id}`);
+      }
       const hours = calculateShiftHours(shift.shift_start, shift.shift_end);
       return {
         ...shift,

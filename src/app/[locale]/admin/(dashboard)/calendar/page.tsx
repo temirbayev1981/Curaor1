@@ -13,7 +13,7 @@ export default async function AdminCalendarPage({
 
   return (
     <div className="space-y-6">
-      <AdminPageHeader title={t.admin.calendar.title} description={t.admin.calendar.desc} />
+      <AdminPageHeader title={t.admin.operationsCalendar.title} description={t.admin.operationsCalendar.desc} />
       <OperationsCalendar locale={locale as Locale} />
     </div>
   );

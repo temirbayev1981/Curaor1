@@ -84,14 +84,14 @@ CREATE TABLE bookings (
   CONSTRAINT booking_time_valid CHECK (booking_end > booking_start),
   EXCLUDE USING gist (
     tenant_id WITH =,
-    tsrange(booking_start, booking_end) WITH &&
+    tstzrange(booking_start, booking_end) WITH &&
   ) WHERE (status NOT IN ('cancelled'))
 );
 
 CREATE INDEX idx_bookings_tenant_id ON bookings(tenant_id);
 CREATE INDEX idx_bookings_customer_id ON bookings(customer_id);
 CREATE INDEX idx_bookings_status ON bookings(tenant_id, status);
-CREATE INDEX idx_bookings_calendar ON bookings USING gist (tenant_id, tsrange(booking_start, booking_end));
+CREATE INDEX idx_bookings_calendar ON bookings USING gist (tenant_id, tstzrange(booking_start, booking_end));
 
 -- ============================================================
 -- PAYMENTS
@@ -286,19 +286,19 @@ CREATE TRIGGER seo_articles_updated_at BEFORE UPDATE ON seo_articles
 -- ============================================================
 -- HELPER: get user's tenant_id
 -- ============================================================
-CREATE OR REPLACE FUNCTION auth.user_tenant_id()
+CREATE OR REPLACE FUNCTION public.user_tenant_id()
 RETURNS UUID AS $$
   SELECT tenant_id FROM tenant_users
   WHERE user_id = auth.uid()
   LIMIT 1;
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public;
 
-CREATE OR REPLACE FUNCTION auth.user_role()
+CREATE OR REPLACE FUNCTION public.user_role()
 RETURNS TEXT AS $$
   SELECT role FROM tenant_users
   WHERE user_id = auth.uid()
   LIMIT 1;
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public;
 
 -- ============================================================
 -- ROW LEVEL SECURITY
@@ -318,49 +318,49 @@ ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 
 -- Tenants: users see their own tenant
 CREATE POLICY tenants_select ON tenants FOR SELECT
-  USING (id = auth.user_tenant_id());
+  USING (id = public.user_tenant_id());
 
 -- Tenant users: see members of own tenant
 CREATE POLICY tenant_users_select ON tenant_users FOR SELECT
-  USING (tenant_id = auth.user_tenant_id());
+  USING (tenant_id = public.user_tenant_id());
 
 CREATE POLICY tenant_users_admin ON tenant_users FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin'));
 
 -- Customers: staff+ see all, customers see own
 CREATE POLICY customers_staff_select ON customers FOR SELECT
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY customers_self_select ON customers FOR SELECT
-  USING (tenant_id = auth.user_tenant_id() AND user_id = auth.uid());
+  USING (tenant_id = public.user_tenant_id() AND user_id = auth.uid());
 
 CREATE POLICY customers_staff_write ON customers FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 -- Bookings: staff+ full access, customers see own
 CREATE POLICY bookings_staff ON bookings FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY bookings_customer_select ON bookings FOR SELECT
   USING (
-    tenant_id = auth.user_tenant_id()
+    tenant_id = public.user_tenant_id()
     AND customer_id IN (SELECT id FROM customers WHERE user_id = auth.uid())
   );
 
 CREATE POLICY bookings_customer_update ON bookings FOR UPDATE
   USING (
-    tenant_id = auth.user_tenant_id()
+    tenant_id = public.user_tenant_id()
     AND customer_id IN (SELECT id FROM customers WHERE user_id = auth.uid())
     AND status IN ('pending', 'deposit_paid')
   );
 
 -- Payments
 CREATE POLICY payments_staff ON payments FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY payments_customer_select ON payments FOR SELECT
   USING (
-    tenant_id = auth.user_tenant_id()
+    tenant_id = public.user_tenant_id()
     AND booking_id IN (
       SELECT b.id FROM bookings b
       JOIN customers c ON c.id = b.customer_id
@@ -370,22 +370,22 @@ CREATE POLICY payments_customer_select ON payments FOR SELECT
 
 -- Inventory: staff+ only
 CREATE POLICY inventory_staff ON inventory_items FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 -- Media: staff+ manage, public read via signed URLs (service role)
 CREATE POLICY media_staff ON media_assets FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY media_folders_staff ON media_folders FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 -- Contracts
 CREATE POLICY contracts_staff ON contracts FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY contracts_customer ON contracts FOR SELECT
   USING (
-    tenant_id = auth.user_tenant_id()
+    tenant_id = public.user_tenant_id()
     AND booking_id IN (
       SELECT b.id FROM bookings b
       JOIN customers c ON c.id = b.customer_id
@@ -395,18 +395,18 @@ CREATE POLICY contracts_customer ON contracts FOR SELECT
 
 -- Domain events: staff read
 CREATE POLICY events_staff_select ON domain_events FOR SELECT
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 -- SEO articles: public read published, staff manage
 CREATE POLICY seo_public_read ON seo_articles FOR SELECT
   USING (status = 'published');
 
 CREATE POLICY seo_staff ON seo_articles FOR ALL
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 -- Audit logs: admin read
 CREATE POLICY audit_admin ON audit_logs FOR SELECT
-  USING (tenant_id = auth.user_tenant_id() AND auth.user_role() IN ('owner', 'admin'));
+  USING (tenant_id = public.user_tenant_id() AND public.user_role() IN ('owner', 'admin'));
 
 -- ============================================================
 -- STORAGE BUCKETS
@@ -418,13 +418,13 @@ VALUES
 ON CONFLICT (id) DO NOTHING;
 
 CREATE POLICY media_tenant_upload ON storage.objects FOR INSERT
-  WITH CHECK (bucket_id = 'media' AND auth.user_role() IN ('owner', 'admin', 'staff'));
+  WITH CHECK (bucket_id = 'media' AND public.user_role() IN ('owner', 'admin', 'staff'));
 
 CREATE POLICY media_tenant_select ON storage.objects FOR SELECT
-  USING (bucket_id = 'media' AND auth.user_tenant_id() IS NOT NULL);
+  USING (bucket_id = 'media' AND public.user_tenant_id() IS NOT NULL);
 
 CREATE POLICY contracts_tenant ON storage.objects FOR ALL
-  USING (bucket_id = 'contracts' AND auth.user_tenant_id() IS NOT NULL);
+  USING (bucket_id = 'contracts' AND public.user_tenant_id() IS NOT NULL);
 
 -- ============================================================
 -- SEED: Default tenant

@@ -13,8 +13,8 @@ export const updateStaffMemberSchema = createStaffMemberSchema.partial().extend(
 export const createStaffShiftSchema = z.object({
   staffMemberId: z.string().uuid(),
   bookingId: z.string().uuid().nullable().optional(),
-  shiftStart: z.string().datetime(),
-  shiftEnd: z.string().datetime(),
+  shiftStart: z.string().min(1),
+  shiftEnd: z.string().min(1),
   notes: z.string().max(500).optional(),
 });
 

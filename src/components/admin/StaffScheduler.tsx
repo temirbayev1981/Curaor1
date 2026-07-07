@@ -68,7 +68,7 @@ export function StaffScheduler() {
       );
       setBookings(bookingsJson.data ?? []);
     } catch {
-      setError(t('admin.staff.fetchError'));
+      setError(t('admin.staffTools.fetchError'));
     } finally {
       setLoading(false);
     }
@@ -103,7 +103,7 @@ export function StaffScheduler() {
         );
         setBookings(bookingsJson.data ?? []);
       } catch {
-        if (!cancelled) setError(t('admin.staff.fetchError'));
+        if (!cancelled) setError(t('admin.staffTools.fetchError'));
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -185,7 +185,7 @@ export function StaffScheduler() {
           <Users className="h-8 w-8 text-emerald-400" />
           <div>
             <p className="text-xs uppercase tracking-wider text-zinc-500">
-              {t('admin.staff.activeMembers')}
+              {t('admin.staffTools.activeMembers')}
             </p>
             <p className="text-2xl font-bold text-white">
               {members.filter((m) => m.is_active).length}
@@ -196,7 +196,7 @@ export function StaffScheduler() {
           <Clock className="h-8 w-8 text-emerald-400" />
           <div>
             <p className="text-xs uppercase tracking-wider text-zinc-500">
-              {t('admin.staff.monthHours')}
+              {t('admin.staffTools.monthHours')}
             </p>
             <p className="text-2xl font-bold text-white">{summary.totalHours.toFixed(1)}h</p>
           </div>
@@ -205,7 +205,7 @@ export function StaffScheduler() {
           <DollarSign className="h-8 w-8 text-emerald-400" />
           <div>
             <p className="text-xs uppercase tracking-wider text-zinc-500">
-              {t('admin.staff.monthPay')}
+              {t('admin.staffTools.monthPay')}
             </p>
             <p className="text-2xl font-bold text-white">{formatCurrency(summary.totalPay)}</p>
           </div>
@@ -214,18 +214,18 @@ export function StaffScheduler() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <h2 className="mb-4 font-semibold text-white">{t('admin.staff.addMember')}</h2>
+          <h2 className="mb-4 font-semibold text-white">{t('admin.staffTools.addMember')}</h2>
           <form onSubmit={addMember} className="space-y-3">
             <Input
               required
               value={newMember.fullName}
               onChange={(e) => setNewMember((s) => ({ ...s, fullName: e.target.value }))}
-              placeholder={t('admin.staff.memberName')}
+              placeholder={t('admin.staffTools.memberName')}
             />
             <Input
               value={newMember.role}
               onChange={(e) => setNewMember((s) => ({ ...s, role: e.target.value }))}
-              placeholder={t('admin.staff.memberRole')}
+              placeholder={t('admin.staffTools.memberRole')}
             />
             <Input
               type="number"
@@ -234,17 +234,17 @@ export function StaffScheduler() {
               required
               value={newMember.hourlyRate}
               onChange={(e) => setNewMember((s) => ({ ...s, hourlyRate: e.target.value }))}
-              placeholder={t('admin.staff.hourlyRate')}
+              placeholder={t('admin.staffTools.hourlyRate')}
             />
             <Button type="submit" loading={saving} className="w-full">
               <Plus className="h-4 w-4" />
-              {t('admin.staff.addMember')}
+              {t('admin.staffTools.addMember')}
             </Button>
           </form>
         </Card>
 
         <Card>
-          <h2 className="mb-4 font-semibold text-white">{t('admin.staff.addShift')}</h2>
+          <h2 className="mb-4 font-semibold text-white">{t('admin.staffTools.addShift')}</h2>
           <form onSubmit={addShift} className="space-y-3">
             <select
               required
@@ -252,7 +252,7 @@ export function StaffScheduler() {
               onChange={(e) => setNewShift((s) => ({ ...s, staffMemberId: e.target.value }))}
               className="w-full rounded-lg border border-admin-border bg-admin-bg px-3 py-2 text-sm text-white"
             >
-              <option value="">{t('admin.staff.selectMember')}</option>
+              <option value="">{t('admin.staffTools.selectMember')}</option>
               {members
                 .filter((m) => m.is_active)
                 .map((m) => (
@@ -266,7 +266,7 @@ export function StaffScheduler() {
               onChange={(e) => setNewShift((s) => ({ ...s, bookingId: e.target.value }))}
               className="w-full rounded-lg border border-admin-border bg-admin-bg px-3 py-2 text-sm text-white"
             >
-              <option value="">{t('admin.staff.noBooking')}</option>
+              <option value="">{t('admin.staffTools.noBooking')}</option>
               {bookings.map((b) => (
                 <option key={b.id} value={b.id}>
                   {new Date(b.booking_start).toLocaleDateString()} — {b.venue_city}
@@ -286,16 +286,16 @@ export function StaffScheduler() {
               onChange={(e) => setNewShift((s) => ({ ...s, shiftEnd: e.target.value }))}
             />
             <Button type="submit" loading={saving} className="w-full">
-              {t('admin.staff.addShift')}
+              {t('admin.staffTools.addShift')}
             </Button>
           </form>
         </Card>
       </div>
 
       <Card>
-        <h2 className="mb-4 font-semibold text-white">{t('admin.staff.shiftsThisMonth')}</h2>
+        <h2 className="mb-4 font-semibold text-white">{t('admin.staffTools.shiftsThisMonth')}</h2>
         {shifts.length === 0 ? (
-          <p className="text-sm text-zinc-500">{t('admin.staff.noShifts')}</p>
+          <p className="text-sm text-zinc-500">{t('admin.staffTools.noShifts')}</p>
         ) : (
           <div className="space-y-2">
             {shifts.map((shift) => (

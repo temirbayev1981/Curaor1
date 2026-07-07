@@ -53,7 +53,7 @@ export function DistanceCalculatorTool() {
       error?: { message: string };
     };
     if (!res.ok || json.error) {
-      setError(json.error?.message ?? t('admin.distance.error'));
+      setError(json.error?.message ?? t('admin.distanceTools.error'));
     } else {
       setResult(json.data);
     }
@@ -75,11 +75,11 @@ export function DistanceCalculatorTool() {
   return (
     <div className="space-y-6">
       <Card>
-        <h2 className="mb-4 font-semibold text-white">{t('admin.distance.title')}</h2>
+        <h2 className="mb-4 font-semibold text-white">{t('admin.distanceTools.title')}</h2>
         <div className="space-y-3">
           <div>
             <label className="mb-1 block text-xs text-zinc-500">
-              {t('admin.distance.origin')}
+              {t('admin.distanceTools.origin')}
             </label>
             <Input
               value={origin}
@@ -89,24 +89,24 @@ export function DistanceCalculatorTool() {
           </div>
           <div>
             <label className="mb-1 block text-xs text-zinc-500">
-              {t('admin.distance.destination')}
+              {t('admin.distanceTools.destination')}
             </label>
             <Input
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              placeholder={t('admin.distance.destinationPlaceholder')}
+              placeholder={t('admin.distanceTools.destinationPlaceholder')}
             />
           </div>
           <div>
             <label className="mb-1 block text-xs text-zinc-500">
-              {t('admin.distance.saveToBooking')}
+              {t('admin.distanceTools.saveToBooking')}
             </label>
             <select
               value={bookingId}
               onChange={(e) => fillFromBooking(e.target.value)}
               className="w-full rounded-lg border border-admin-border bg-admin-bg px-3 py-2 text-sm text-white"
             >
-              <option value="">{t('admin.distance.noBooking')}</option>
+              <option value="">{t('admin.distanceTools.noBooking')}</option>
               {bookings.map((b) => (
                 <option key={b.id} value={b.id}>
                   {new Date(b.booking_start).toLocaleDateString()} — {b.venue_city}
@@ -116,7 +116,7 @@ export function DistanceCalculatorTool() {
           </div>
           <Button onClick={calculate} loading={loading} className="w-full sm:w-auto">
             <Route className="h-4 w-4" />
-            {t('admin.distance.calculate')}
+            {t('admin.distanceTools.calculate')}
           </Button>
           {error && <p className="text-sm text-red-400">{error}</p>}
         </div>
@@ -126,21 +126,21 @@ export function DistanceCalculatorTool() {
         <Card>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <p className="text-xs uppercase text-zinc-500">{t('admin.distance.miles')}</p>
+              <p className="text-xs uppercase text-zinc-500">{t('admin.distanceTools.miles')}</p>
               <p className="text-2xl font-bold text-white">{result.distanceMiles}</p>
             </div>
             <div>
-              <p className="text-xs uppercase text-zinc-500">{t('admin.distance.duration')}</p>
+              <p className="text-xs uppercase text-zinc-500">{t('admin.distanceTools.duration')}</p>
               <p className="text-2xl font-bold text-white">{result.durationMinutes} min</p>
             </div>
             <div>
-              <p className="text-xs uppercase text-zinc-500">{t('admin.distance.rate')}</p>
+              <p className="text-xs uppercase text-zinc-500">{t('admin.distanceTools.rate')}</p>
               <p className="text-2xl font-bold text-white">
                 ${result.pricePerMile.toFixed(2)}/mi
               </p>
             </div>
             <div>
-              <p className="text-xs uppercase text-zinc-500">{t('admin.distance.cost')}</p>
+              <p className="text-xs uppercase text-zinc-500">{t('admin.distanceTools.cost')}</p>
               <p className="text-2xl font-bold text-emerald-400">
                 {formatCurrency(result.deliveryCost)}
               </p>
@@ -156,7 +156,7 @@ export function DistanceCalculatorTool() {
           </div>
           {result.booking && (
             <p className="mt-4 text-sm text-emerald-400">
-              {t('admin.distance.savedToBooking')}
+              {t('admin.distanceTools.savedToBooking')}
             </p>
           )}
         </Card>
