@@ -2,37 +2,41 @@
 
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Calendar, MapPin, Star, Award } from 'lucide-react';
+import { Calendar, Clover, MapPin, Star } from 'lucide-react';
 
 const items = [
-  { key: 'events', value: '500+', icon: Calendar },
-  { key: 'cities', value: '9+', icon: MapPin },
-  { key: 'rating', value: '4.9', icon: Star },
-  { key: 'years', value: '8+', icon: Award },
+  { key: 'newlyOpened', icon: Clover },
+  { key: 'serving', icon: MapPin },
+  { key: 'premium', icon: Star },
+  { key: 'booking', icon: Calendar },
 ] as const;
 
 export function StatsSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative border-y border-border bg-features py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {items.map(({ key, value, icon: Icon }, i) => (
-            <motion.div
-              key={key}
-              initial={false}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="text-center"
-            >
-              <Icon className="mx-auto mb-3 h-6 w-6 text-irish" />
-              <p className="text-3xl font-bold text-white sm:text-4xl">{value}</p>
-              <p className="mt-1 text-sm text-muted-secondary">{t(`stats.${key}`)}</p>
-            </motion.div>
-          ))}
-        </div>
+    <section className="relative border-y border-border bg-background py-14">
+      <div className="mx-auto grid max-w-7xl gap-5 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+        {items.map(({ key, icon: Icon }, i) => (
+          <motion.div
+            key={key}
+            initial={false}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.08 }}
+            className="rounded-xl border border-border bg-card/50 px-4 py-6 text-center"
+          >
+            <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-irish/10">
+              <Icon className="h-5 w-5 text-irish" strokeWidth={1.75} />
+            </div>
+            <h3 className="mb-1.5 text-sm font-bold uppercase tracking-wide text-white">
+              {t(`stats.${key}.title`)}
+            </h3>
+            <p className="text-sm leading-relaxed text-muted-caption">
+              {t(`stats.${key}.desc`)}
+            </p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
