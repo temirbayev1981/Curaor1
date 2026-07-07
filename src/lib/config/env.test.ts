@@ -69,6 +69,7 @@ describe('env config', () => {
   it('reads optional integrations and defaults', async () => {
     const {
       isMapboxConfigured,
+      isOpenAiConfigured,
       isStripeConfigured,
       getBusinessPhone,
       getGoogleReviewsUrl,
@@ -76,11 +77,13 @@ describe('env config', () => {
     } = await import('./env');
 
     delete process.env.MAPBOX_ACCESS_TOKEN;
+    delete process.env.OPENAI_API_KEY;
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.NEXT_PUBLIC_BUSINESS_PHONE;
     delete process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID;
 
     expect(isMapboxConfigured()).toBe(false);
+    expect(isOpenAiConfigured()).toBe(false);
     expect(isStripeConfigured()).toBe(false);
     expect(getBusinessPhone()).toBe('+1-704-555-0199');
     expect(getGoogleReviewsUrl()).toContain('google.com/maps');
@@ -88,6 +91,11 @@ describe('env config', () => {
 
     process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID = 'ChIJ-test';
     expect(getGoogleReviewsUrl()).toContain('ChIJ-test');
+
+    process.env.OPENAI_API_KEY = 'sk-test';
+    process.env.MAPBOX_ACCESS_TOKEN = 'pk.test';
+    expect(isOpenAiConfigured()).toBe(true);
+    expect(isMapboxConfigured()).toBe(true);
   });
 
   it('throws when required secrets are missing', async () => {

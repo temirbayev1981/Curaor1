@@ -5,6 +5,7 @@ import { apiSuccess, apiError } from '@/lib/api/response';
 import { requireStaff, AuthError } from '@/lib/auth/rbac';
 import { calculateDistanceBetween } from '@/domain/maps/distance.service';
 import { calculateDeliveryCost } from '@/lib/config/hierarchy';
+import { isMapboxConfigured } from '@/lib/config/env';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { Tenant } from '@/types/database';
 import { resolveConfig } from '@/lib/config/hierarchy';
@@ -21,6 +22,18 @@ export async function POST(request: NextRequest) {
 
   try {
     const ctx = await requireStaff();
+
+    if (!isMapboxConfigured()) {
+      return Response.json(
+        apiError(
+          'NOT_CONFIGURED',
+          'Mapbox is not configured. Add MAPBOX_ACCESS_TOKEN in Vercel environment variables.',
+          requestId
+        ),
+        { status: 503 }
+      );
+    }
+
     const body = schema.parse(await request.json());
 
     const supabase = createAdminClient();

@@ -1,12 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Field, AdminSelect } from '@/components/ui/Input';
+import { IntegrationNotice } from '@/components/admin/IntegrationNotice';
 import { CAROLINA_CITIES } from '@/domain/ai/ai-content.service';
 import type { Locale } from '@/lib/i18n/config';
+
+interface IntegrationStatus {
+  mapbox: boolean;
+  openai: boolean;
+  stripe: boolean;
+}
 
 export function AiAssistant({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
@@ -14,6 +21,14 @@ export function AiAssistant({ locale }: { locale: Locale }) {
   const [articleLocale, setArticleLocale] = useState<Locale>(locale);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [integrations, setIntegrations] = useState<IntegrationStatus | null>(null);
+
+  useEffect(() => {
+    fetch('/api/admin/integrations')
+      .then((res) => res.json())
+      .then((json: { data: IntegrationStatus | null }) => setIntegrations(json.data))
+      .catch(() => setIntegrations(null));
+  }, []);
 
   async function handleGenerate() {
     setStatus('loading');
@@ -31,12 +46,16 @@ export function AiAssistant({ locale }: { locale: Locale }) {
 
       const json = (await res.json()) as {
         data: { title: string; status: string } | null;
-        error: { message: string } | null;
+        error: { code?: string; message: string } | null;
       };
 
-      if (json.error) {
+      if (!res.ok || json.error) {
         setStatus('error');
-        setMessage(json.error.message);
+        setMessage(
+          json.error?.code === 'NOT_CONFIGURED'
+            ? t('admin.aiAssistant.notConfigured')
+            : (json.error?.message ?? t('admin.aiAssistant.generateFailed'))
+        );
         return;
       }
 
@@ -55,6 +74,13 @@ export function AiAssistant({ locale }: { locale: Locale }) {
 
   return (
     <div className="rounded-2xl border border-admin-border bg-admin-surface p-6">
+      {integrations && !integrations.openai && (
+        <IntegrationNotice
+          title={t('admin.aiAssistant.notConfiguredTitle')}
+          description={t('admin.aiAssistant.notConfigured')}
+          envVar="OPENAI_API_KEY"
+        />
+      )}
       <div className="mb-6 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
           <Sparkles className="h-5 w-5 text-emerald-400" />
@@ -90,7 +116,11 @@ export function AiAssistant({ locale }: { locale: Locale }) {
         </Field>
       </div>
 
-      <Button onClick={handleGenerate} loading={status === 'loading'}>
+      <Button
+        onClick={handleGenerate}
+        loading={status === 'loading'}
+        disabled={integrations !== null && !integrations.openai}
+      >
         <Sparkles className="h-4 w-4" />
         {status === 'loading'
           ? t('admin.aiAssistant.generating')
