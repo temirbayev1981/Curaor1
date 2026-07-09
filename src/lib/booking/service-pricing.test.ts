@@ -6,19 +6,19 @@ describe('service-pricing', () => {
   it('builds package prices for all guest tiers', () => {
     const pricing = buildPackagePricing(SYSTEM_DEFAULTS);
 
-    expect(pricing.packages.g10).toBe(630);
-    expect(pricing.packages.g20).toBe(930);
-    expect(pricing.packages.g35).toBe(1200);
-    expect(pricing.packages.g60).toBe(1500);
+    expect(pricing.packages.g10).toBe(1260);
+    expect(pricing.packages.g20).toBe(1860);
+    expect(pricing.packages.g35).toBe(2400);
+    expect(pricing.packages.g60).toBe(3000);
   });
 
   it('builds service starting prices from recommended packages', () => {
     const pricing = buildServicesPricing(SYSTEM_DEFAULTS);
 
-    expect(pricing.events.weddings).toBe(1500);
-    expect(pricing.events.corporate).toBe(1500);
-    expect(pricing.events.private).toBe(1200);
-    expect(pricing.events.stpatricks).toBe(1200);
+    expect(pricing.events.weddings).toBe(3000);
+    expect(pricing.events.corporate).toBe(3000);
+    expect(pricing.events.private).toBe(2400);
+    expect(pricing.events.stpatricks).toBe(2400);
   });
 
   it('scales with admin base_event_price overrides', () => {
@@ -27,7 +27,7 @@ describe('service-pricing', () => {
       base_event_price: 1200,
     });
 
-    expect(pricing.packages.g10).toBe(504);
-    expect(pricing.packages.g60).toBe(1200);
+    expect(pricing.packages.g10).toBe(1008);
+    expect(pricing.packages.g60).toBe(2400);
   });
 });

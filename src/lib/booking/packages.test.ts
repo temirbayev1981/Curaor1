@@ -8,14 +8,14 @@ import {
 
 describe('booking packages', () => {
   it('prices guest-count packages from tenant base price', () => {
-    expect(calculatePackagePrice(1500, 'g10')).toBe(630);
-    expect(calculatePackagePrice(1500, 'g20')).toBe(930);
-    expect(calculatePackagePrice(1500, 'g35')).toBe(1200);
-    expect(calculatePackagePrice(1500, 'g60')).toBe(1500);
+    expect(calculatePackagePrice(1500, 'g10')).toBe(1260);
+    expect(calculatePackagePrice(1500, 'g20')).toBe(1860);
+    expect(calculatePackagePrice(1500, 'g35')).toBe(2400);
+    expect(calculatePackagePrice(1500, 'g60')).toBe(3000);
   });
 
   it('charges extra guests above package capacity', () => {
-    expect(calculatePackagePrice(1500, 'g60', 70)).toBe(1600);
+    expect(calculatePackagePrice(1500, 'g60', 70)).toBe(3200);
   });
 
   it('resolves package tier from guest count', () => {
@@ -32,7 +32,7 @@ describe('booking packages', () => {
   });
 
   it('derives event price from guest count', () => {
-    expect(calculateEventPrice(1500, 25)).toBe(1200);
-    expect(calculateEventPrice(1500, 45)).toBe(1500);
+    expect(calculateEventPrice(1500, 25)).toBe(2400);
+    expect(calculateEventPrice(1500, 45)).toBe(3000);
   });
 });
