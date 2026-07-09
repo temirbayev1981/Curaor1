@@ -27,7 +27,7 @@ export default async function ServicesPage({
 
   return (
     <PublicSubpageLayout locale={locale as Locale}>
-      <ServicesSection />
+      <ServicesSection locale={locale as Locale} />
       <OccasionsSection />
       <PricingPackagesSection locale={locale as Locale} />
     </PublicSubpageLayout>

@@ -172,7 +172,18 @@
     "private": "Private Parties",
     "privateDesc": "Birthdays, anniversaries, and celebrations — we bring the pub to you.",
     "stpatricks": "St. Patrick's Day",
-    "stpatricksDesc": "The ultimate St. Paddy's celebration with traditional Irish fare and drinks."
+    "stpatricksDesc": "The ultimate St. Paddy's celebration with traditional Irish fare and drinks.",
+    "packagesTitle": "Intimate Gatherings",
+    "packagesSubtitle": "Smaller packages for backyard parties, milestone birthdays, and cozy celebrations.",
+    "g10": "Up to 10 Guests",
+    "g10Desc": "A compact setup ideal for backyard gatherings and small family celebrations.",
+    "g15": "Up to 15 Guests",
+    "g15Desc": "Perfect for dinner parties, rehearsal dinners, and close friends.",
+    "g20": "Up to 20 Guests",
+    "g20Desc": "Great for milestone birthdays, engagement parties, and neighborhood get-togethers.",
+    "g30": "Up to 30 Guests",
+    "g30Desc": "Our most popular small event size — enough craic for a lively but intimate crowd.",
+    "bookPackage": "Book This Size"
   },
   "stats": {
     "newlyOpened": {

@@ -30,6 +30,17 @@ function initialPackage(searchParams: ReturnType<typeof useSearchParams>): Packa
   return pkg && isPackageTierId(pkg) ? pkg : 'shamrock';
 }
 
+function initialGuestCount(searchParams: ReturnType<typeof useSearchParams>): number {
+  const guests = searchParams.get('guests');
+  if (!guests) return 50;
+
+  const count = Number(guests);
+  if (!Number.isFinite(count)) return 50;
+  if (count < 10) return 10;
+  if (count > 500) return 500;
+  return Math.round(count);
+}
+
 export function BookingForm({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
   const tenantId = useTenantId();
@@ -42,7 +53,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
     email: '',
     phone: '',
     eventType: searchParams.get('event') ?? 'wedding',
-    guestCount: 50,
+    guestCount: initialGuestCount(searchParams),
     date: '',
     startTime: '18:00',
     endTime: '23:00',

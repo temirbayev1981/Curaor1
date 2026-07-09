@@ -128,7 +128,7 @@ export default async function HomePage({
         <PricingPackagesSection locale={locale as Locale} />
         <MenuPreviewSection />
         <FoodShowcaseSection />
-        <ServicesSection />
+        <ServicesSection locale={locale as Locale} />
         <GalleryStripSection locale={locale as Locale} />
         <ExperienceGridSection />
         <TestimonialsSection />
