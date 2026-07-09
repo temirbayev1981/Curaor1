@@ -221,13 +221,6 @@ export const SERVICE_IMAGES = {
   stpatricks: CATALOG.beerCheers.src,
 } as const;
 
-export const GUEST_PACKAGE_IMAGES = {
-  g10: CATALOG.guinnessMacro.src,
-  g15: CATALOG.guinnessCandlelit.src,
-  g20: CATALOG.irishWhiskeyStore.src,
-  g30: CATALOG.whiskeyTasting.src,
-} as const;
-
 export const TESTIMONIAL_IMAGES = {
   t1: CATALOG.plateWooden.src,
   t2: CATALOG.fullBreakfast.src,
@@ -276,7 +269,6 @@ export function getLandingPageImageIds(): string[] {
     ...FOOD_IMAGES.map((i) => i.id),
     ...Object.values(MENU_CATEGORY_IMAGES).map((i) => i.id),
     ...Object.values(SERVICE_IMAGES).map(fromSrc),
-    ...Object.values(GUEST_PACKAGE_IMAGES).map(fromSrc),
     ...Object.values(TESTIMONIAL_IMAGES).map(fromSrc),
   ];
 }

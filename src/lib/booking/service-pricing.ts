@@ -1,52 +1,54 @@
 import { resolveConfig, SYSTEM_DEFAULTS, type ConfigContext } from '@/lib/config/hierarchy';
 import {
-  calculateEventPrice,
-  INTIMATE_GUEST_TIERS,
+  calculatePackagePrice,
+  PACKAGE_TIER_IDS,
   type PackageTierId,
 } from '@/lib/booking/packages';
 import type { TenantSettings } from '@/types/database';
 
-export const SERVICE_EVENT_QUOTES = {
-  weddings: { tier: 'emerald', guestCount: 80 },
-  corporate: { tier: 'emerald', guestCount: 60 },
-  private: { tier: 'shamrock', guestCount: 30 },
-  stpatricks: { tier: 'shamrock', guestCount: 40 },
-} as const satisfies Record<
-  string,
-  { tier: PackageTierId; guestCount: number }
->;
+export const SERVICE_EVENT_PACKAGES: Record<string, PackageTierId> = {
+  weddings: 'g60',
+  corporate: 'g60',
+  private: 'g35',
+  stpatricks: 'g35',
+};
 
-export type ServiceEventKey = keyof typeof SERVICE_EVENT_QUOTES;
+export type ServiceEventKey = keyof typeof SERVICE_EVENT_PACKAGES;
+
+export interface PackagePricing {
+  currency: string;
+  packages: Record<PackageTierId, number>;
+}
 
 export interface ServicesPricing {
   currency: string;
   events: Record<ServiceEventKey, number>;
-  guestPackages: Record<(typeof INTIMATE_GUEST_TIERS)[number], number>;
+}
+
+export function buildPackagePricing(settings: TenantSettings): PackagePricing {
+  const packages = {} as PackagePricing['packages'];
+  for (const id of PACKAGE_TIER_IDS) {
+    packages[id] = calculatePackagePrice(settings.base_event_price, id);
+  }
+
+  return {
+    currency: settings.currency,
+    packages,
+  };
 }
 
 export function buildServicesPricing(settings: TenantSettings): ServicesPricing {
   const events = {} as ServicesPricing['events'];
-  for (const [key, quote] of Object.entries(SERVICE_EVENT_QUOTES)) {
-    events[key as ServiceEventKey] = calculateEventPrice(
+  for (const [key, packageId] of Object.entries(SERVICE_EVENT_PACKAGES)) {
+    events[key as ServiceEventKey] = calculatePackagePrice(
       settings.base_event_price,
-      quote.tier,
-      quote.guestCount
-    );
-  }
-
-  const guestPackages = {} as ServicesPricing['guestPackages'];
-  for (const guests of INTIMATE_GUEST_TIERS) {
-    guestPackages[guests] = calculateEventPrice(
-      settings.base_event_price,
-      'shamrock',
-      guests
+      packageId
     );
   }
 
   return {
     currency: settings.currency,
     events,
-    guestPackages,
   };
 }
 
@@ -54,6 +56,14 @@ export function buildServicesPricingFromContext(ctx: ConfigContext = {}): Servic
   return buildServicesPricing(resolveConfig(ctx));
 }
 
+export function buildPackagePricingFromContext(ctx: ConfigContext = {}): PackagePricing {
+  return buildPackagePricing(resolveConfig(ctx));
+}
+
 export function getDefaultServicesPricing(): ServicesPricing {
   return buildServicesPricing(SYSTEM_DEFAULTS);
+}
+
+export function getDefaultPackagePricing(): PackagePricing {
+  return buildPackagePricing(SYSTEM_DEFAULTS);
 }

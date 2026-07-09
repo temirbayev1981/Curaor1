@@ -57,14 +57,14 @@ describe('buildBookingQuote', () => {
     const quote = await buildBookingQuote({
       tenantId: 'a0000000-0000-4000-8000-000000000001',
       guestCount: 80,
-      packageTier: 'shamrock',
+      packageTier: 'g35',
       venueAddress: '123 Main',
       venueCity: 'Charlotte',
       venueState: 'NC',
       date: '2026-12-01',
     });
 
-    expect(quote.packageTier).toBe('shamrock');
+    expect(quote.packageTier).toBe('g35');
     expect(quote.deliveryCost).toBe(25);
     expect(quote.subtotal).toBeGreaterThan(0);
     expect(quote.depositPercent).toBe(25);

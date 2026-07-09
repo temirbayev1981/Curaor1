@@ -1,29 +1,38 @@
 import { describe, expect, it } from 'vitest';
 import {
   calculateEventPrice,
-  calculateIntimatePackagePrice,
-  calculatePackageBasePrice,
+  calculatePackagePrice,
+  normalizePackageTier,
+  resolveGuestPackage,
 } from './packages';
 
 describe('booking packages', () => {
-  it('scales price by tier and extra guests', () => {
-    expect(calculatePackageBasePrice(1500, 'shamrock', 50)).toBe(1500);
-    expect(calculatePackageBasePrice(1500, 'shamrock', 60)).toBe(1620);
-    expect(calculatePackageBasePrice(1500, 'emerald', 100)).toBe(2025);
-    expect(calculatePackageBasePrice(1500, 'legend', 200)).toBe(2625);
+  it('prices guest-count packages from tenant base price', () => {
+    expect(calculatePackagePrice(1500, 'g10')).toBe(630);
+    expect(calculatePackagePrice(1500, 'g20')).toBe(930);
+    expect(calculatePackagePrice(1500, 'g35')).toBe(1200);
+    expect(calculatePackagePrice(1500, 'g60')).toBe(1500);
   });
 
-  it('applies intimate launch pricing for small guest counts', () => {
-    expect(calculateIntimatePackagePrice(1500, 10)).toBe(630);
-    expect(calculateIntimatePackagePrice(1500, 15)).toBe(780);
-    expect(calculateIntimatePackagePrice(1500, 20)).toBe(930);
-    expect(calculateIntimatePackagePrice(1500, 30)).toBe(1125);
-    expect(calculateIntimatePackagePrice(1500, 31)).toBeNull();
+  it('charges extra guests above package capacity', () => {
+    expect(calculatePackagePrice(1500, 'g60', 70)).toBe(1600);
   });
 
-  it('prefers intimate pricing over package tiers for ≤30 guests', () => {
-    expect(calculateEventPrice(1500, 'emerald', 25)).toBe(1125);
-    expect(calculateEventPrice(1500, 'legend', 30)).toBe(1125);
-    expect(calculateEventPrice(1500, 'shamrock', 50)).toBe(1500);
+  it('resolves package tier from guest count', () => {
+    expect(resolveGuestPackage(8)).toBe('g10');
+    expect(resolveGuestPackage(18)).toBe('g20');
+    expect(resolveGuestPackage(30)).toBe('g35');
+    expect(resolveGuestPackage(55)).toBe('g60');
+  });
+
+  it('maps legacy package names to new tiers', () => {
+    expect(normalizePackageTier('shamrock', 40)).toBe('g35');
+    expect(normalizePackageTier('emerald', 40)).toBe('g60');
+    expect(normalizePackageTier('legend', 40)).toBe('g60');
+  });
+
+  it('derives event price from guest count', () => {
+    expect(calculateEventPrice(1500, 25)).toBe(1200);
+    expect(calculateEventPrice(1500, 45)).toBe(1500);
   });
 });

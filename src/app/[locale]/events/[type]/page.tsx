@@ -77,7 +77,7 @@ export default async function EventTypePage({
             </ul>
           </Card>
 
-          <Link href={`/${loc}/book?package=emerald&event=${type}`}>
+          <Link href={`/${loc}/book?package=g60&guests=60&event=${type}`}>
             <Button size="lg">
               {t.eventPages[type].cta}
               <ArrowRight className="h-4 w-4" />
