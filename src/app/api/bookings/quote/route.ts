@@ -6,11 +6,16 @@ import { buildBookingQuote } from '@/lib/booking/quote.service';
 import { checkQuoteRateLimit } from '@/lib/api/rate-limit';
 import { assertPublicTenantId } from '@/lib/tenant/validate-tenant';
 
+import { PACKAGE_TIER_IDS } from '@/lib/booking/packages';
+import type { PackageTierId } from '@/lib/booking/packages';
+
+const packageTierSchema = z.enum(PACKAGE_TIER_IDS as [PackageTierId, ...PackageTierId[]]);
+
 const quoteSchema = z.object({
   tenantId: z.string().uuid(),
   guestCount: z.coerce.number().int().positive().max(500),
   depositPercent: z.coerce.number().pipe(z.union([z.literal(25), z.literal(50), z.literal(100)])).optional(),
-  packageTier: z.enum(['shamrock', 'emerald', 'legend']).optional(),
+  packageTier: packageTierSchema.optional(),
   venueAddress: z.string().max(500).optional(),
   venueCity: z.string().max(100).optional(),
   venueState: z.string().length(2).optional(),

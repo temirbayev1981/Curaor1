@@ -14,7 +14,7 @@ test.describe('Booking flow', () => {
   });
 
   test('package tier is reflected in URL params', async ({ page }) => {
-    await page.goto('/en/book?package=shamrock&event=wedding&city=Charlotte');
+    await page.goto('/en/book?package=g35&event=wedding&city=Charlotte');
     await expect(page.getByRole('heading', { name: /Book Your Event/i })).toBeVisible();
   });
 });

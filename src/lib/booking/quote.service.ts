@@ -7,8 +7,8 @@ import {
 } from '@/lib/config/hierarchy';
 import { calculateDistance } from '@/domain/maps/distance.service';
 import {
-  calculatePackageBasePrice,
-  isPackageTierId,
+  calculatePackagePrice,
+  normalizePackageTier,
   type PackageTierId,
 } from './packages';
 import type { Tenant } from '@/types/database';
@@ -62,13 +62,10 @@ export async function buildBookingQuote(input: QuoteInput): Promise<QuoteResult>
     adminOverrides: typedTenant.admin_overrides as Record<string, unknown>,
   });
 
-  const packageTier =
-    input.packageTier && isPackageTierId(input.packageTier)
-      ? input.packageTier
-      : 'shamrock';
+  const packageTier = normalizePackageTier(input.packageTier, input.guestCount);
 
   const depositPercent = getDepositPercent(config, input.depositPercent);
-  const packageBasePrice = calculatePackageBasePrice(
+  const packageBasePrice = calculatePackagePrice(
     config.base_event_price,
     packageTier,
     input.guestCount

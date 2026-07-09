@@ -18,6 +18,7 @@ import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
 import { GoogleReviewsSection } from '@/components/landing/GoogleReviewsSection';
 import { TrustBadgesSection } from '@/components/landing/TrustBadgesSection';
 import { CTASection } from '@/components/landing/CTASection';
+import { getPublicPackagePricing, getPublicServicesPricing } from '@/lib/booking/service-pricing.server';
 import type { Locale } from '@/lib/i18n/config';
 import { absoluteUrl, getBusinessPhone } from '@/lib/config/env';
 import { getTranslations } from '@/lib/i18n/server';
@@ -67,6 +68,8 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   const t = getTranslations(locale as Locale);
+  const servicesPricing = await getPublicServicesPricing();
+  const packagePricing = await getPublicPackagePricing();
 
   const jsonLdBusiness = {
     '@context': 'https://schema.org',
@@ -125,10 +128,10 @@ export default async function HomePage({
         <AboutSection locale={locale as Locale} />
         <TrustBadgesSection />
         <OccasionsSection />
-        <PricingPackagesSection locale={locale as Locale} />
+        <PricingPackagesSection locale={locale as Locale} pricing={packagePricing} />
         <MenuPreviewSection />
         <FoodShowcaseSection />
-        <ServicesSection />
+        <ServicesSection locale={locale as Locale} pricing={servicesPricing} />
         <GalleryStripSection locale={locale as Locale} />
         <ExperienceGridSection />
         <TestimonialsSection />

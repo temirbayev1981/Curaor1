@@ -18,8 +18,11 @@ import { Field, Input, Select } from '@/components/ui/Input';
 import type { Locale } from '@/lib/i18n/config';
 import { useTenantId } from '@/components/providers/TenantProvider';
 import {
+  getPackageGuestCount,
   isPackageTierId,
+  normalizePackageTier,
   PACKAGE_TIER_IDS,
+  resolveGuestPackage,
   type PackageTierId,
 } from '@/lib/booking/packages';
 
@@ -27,7 +30,27 @@ const EVENT_TYPES = ['wedding', 'corporate', 'private', 'stpatricks'] as const;
 
 function initialPackage(searchParams: ReturnType<typeof useSearchParams>): PackageTierId {
   const pkg = searchParams.get('package');
-  return pkg && isPackageTierId(pkg) ? pkg : 'shamrock';
+  const guests = initialGuestCount(searchParams);
+  return normalizePackageTier(pkg, guests);
+}
+
+function initialGuestCount(searchParams: ReturnType<typeof useSearchParams>): number {
+  const guests = searchParams.get('guests');
+  if (guests) {
+    const count = Number(guests);
+    if (Number.isFinite(count)) {
+      if (count < 10) return 10;
+      if (count > 500) return 500;
+      return Math.round(count);
+    }
+  }
+
+  const pkg = searchParams.get('package');
+  if (pkg && isPackageTierId(pkg)) {
+    return getPackageGuestCount(pkg);
+  }
+
+  return 35;
 }
 
 export function BookingForm({ locale }: { locale: Locale }) {
@@ -42,7 +65,7 @@ export function BookingForm({ locale }: { locale: Locale }) {
     email: '',
     phone: '',
     eventType: searchParams.get('event') ?? 'wedding',
-    guestCount: 50,
+    guestCount: initialGuestCount(searchParams),
     date: '',
     startTime: '18:00',
     endTime: '23:00',
@@ -193,16 +216,19 @@ export function BookingForm({ locale }: { locale: Locale }) {
                     <Field label={t('booking.package')}>
                       <Select
                         value={form.packageTier}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const packageTier = e.target.value as PackageTierId;
                           setForm({
                             ...form,
-                            packageTier: e.target.value as PackageTierId,
-                          })
-                        }
+                            packageTier,
+                            guestCount: getPackageGuestCount(packageTier),
+                          });
+                        }}
                       >
                         {PACKAGE_TIER_IDS.map((tier) => (
                           <option key={tier} value={tier}>
-                            {t(`landing.pricing.tiers.${tier}.name`)}
+                            {t(`landing.pricing.tiers.${tier}.name`)} —{' '}
+                            {t(`landing.pricing.tiers.${tier}.guests`)}
                           </option>
                         ))}
                       </Select>
@@ -227,9 +253,14 @@ export function BookingForm({ locale }: { locale: Locale }) {
                           min={10}
                           max={500}
                           value={form.guestCount}
-                          onChange={(e) =>
-                            setForm({ ...form, guestCount: Number(e.target.value) })
-                          }
+                          onChange={(e) => {
+                            const guestCount = Number(e.target.value);
+                            setForm({
+                              ...form,
+                              guestCount,
+                              packageTier: resolveGuestPackage(guestCount),
+                            });
+                          }}
                         />
                       </Field>
                     </div>

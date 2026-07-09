@@ -6,8 +6,8 @@ import {
   resolveConfig,
 } from '@/lib/config/hierarchy';
 import {
-  calculatePackageBasePrice,
-  isPackageTierId,
+  calculatePackagePrice,
+  normalizePackageTier,
   type PackageTierId,
 } from '@/lib/booking/packages';
 import { eventBus } from '@/domain/events/event-bus';
@@ -44,11 +44,8 @@ export class BookingService {
       ? calculateDeliveryCost(input.deliveryDistanceMiles, config.price_per_mile)
       : 0;
 
-    const packageTier: PackageTierId =
-      input.packageTier && isPackageTierId(input.packageTier)
-        ? input.packageTier
-        : 'shamrock';
-    const packageBasePrice = calculatePackageBasePrice(
+    const packageTier = normalizePackageTier(input.packageTier, input.guestCount);
+    const packageBasePrice = calculatePackagePrice(
       config.base_event_price,
       packageTier,
       input.guestCount
@@ -207,9 +204,8 @@ export class BookingService {
 
     const packageMatch = booking.notes?.match(/package:(\w+)/);
     const matchedTier = packageMatch?.[1];
-    const packageTier =
-      matchedTier && isPackageTierId(matchedTier) ? matchedTier : 'shamrock';
-    const packageBasePrice = calculatePackageBasePrice(
+    const packageTier = normalizePackageTier(matchedTier, booking.guest_count);
+    const packageBasePrice = calculatePackagePrice(
       config.base_event_price,
       packageTier,
       booking.guest_count
