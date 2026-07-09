@@ -7,7 +7,7 @@ import {
 } from '@/lib/config/hierarchy';
 import { calculateDistance } from '@/domain/maps/distance.service';
 import {
-  calculatePackageBasePrice,
+  calculateEventPrice,
   isPackageTierId,
   type PackageTierId,
 } from './packages';
@@ -68,7 +68,7 @@ export async function buildBookingQuote(input: QuoteInput): Promise<QuoteResult>
       : 'shamrock';
 
   const depositPercent = getDepositPercent(config, input.depositPercent);
-  const packageBasePrice = calculatePackageBasePrice(
+  const packageBasePrice = calculateEventPrice(
     config.base_event_price,
     packageTier,
     input.guestCount

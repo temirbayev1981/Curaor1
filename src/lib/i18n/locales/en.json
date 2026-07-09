@@ -183,7 +183,10 @@
     "g20Desc": "Great for milestone birthdays, engagement parties, and neighborhood get-togethers.",
     "g30": "Up to 30 Guests",
     "g30Desc": "Our most popular small event size — enough craic for a lively but intimate crowd.",
-    "bookPackage": "Book This Size"
+    "bookPackage": "Book This Size",
+    "priceFrom": "From {{price}}",
+    "priceExact": "{{price}}",
+    "priceNote": "2026 launch pricing · delivery added at checkout"
   },
   "stats": {
     "newlyOpened": {

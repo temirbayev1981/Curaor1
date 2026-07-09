@@ -6,7 +6,7 @@ import {
   resolveConfig,
 } from '@/lib/config/hierarchy';
 import {
-  calculatePackageBasePrice,
+  calculateEventPrice,
   isPackageTierId,
   type PackageTierId,
 } from '@/lib/booking/packages';
@@ -48,7 +48,7 @@ export class BookingService {
       input.packageTier && isPackageTierId(input.packageTier)
         ? input.packageTier
         : 'shamrock';
-    const packageBasePrice = calculatePackageBasePrice(
+    const packageBasePrice = calculateEventPrice(
       config.base_event_price,
       packageTier,
       input.guestCount
@@ -209,7 +209,7 @@ export class BookingService {
     const matchedTier = packageMatch?.[1];
     const packageTier =
       matchedTier && isPackageTierId(matchedTier) ? matchedTier : 'shamrock';
-    const packageBasePrice = calculatePackageBasePrice(
+    const packageBasePrice = calculateEventPrice(
       config.base_event_price,
       packageTier,
       booking.guest_count
